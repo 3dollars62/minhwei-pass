@@ -10,8 +10,8 @@
     body { margin: 0; background: #f1f5f9; color: #0f172a; padding: 14px; }
     .box { max-width: 480px; margin: 0 auto; background: #fff; border-radius: 18px; padding: 18px; box-shadow: 0 8px 20px rgba(0,0,0,0.06); }
     h2 { margin: 0 0 14px; font-size: 20px; text-align: center; }
-    input, select { width: 100%; padding: 11px 12px; border: 1.5px solid #cbd5e1; border-radius: 10px; font-size: 15px; margin-bottom: 10px; background: #fff; outline: none; }
-    input:focus, select:focus { border-color: #0284c7; }
+    input[type="text"], input[type="password"], select { width: 100%; padding: 11px 12px; border: 1.5px solid #cbd5e1; border-radius: 10px; font-size: 15px; margin-bottom: 10px; background: #fff; outline: none; }
+    input[type="text"]:focus, input[type="password"]:focus, select:focus { border-color: #0284c7; }
     button { width: 100%; padding: 12px; border: none; border-radius: 10px; background: #0284c7; color: #fff; font-size: 16px; font-weight: 700; cursor: pointer; }
     button:disabled { background: #94a3b8; }
     .tabs { display: flex; gap: 8px; margin-bottom: 14px; }
@@ -22,8 +22,10 @@
     .batch-box { background: #f0f9ff; border: 1.5px solid #bae6fd; border-radius: 12px; padding: 12px; margin-bottom: 14px; }
     .batch-title { display: flex; justify-content: space-between; align-items: center; font-size: 14px; font-weight: 800; color: #0369a1; margin-bottom: 8px; }
     .btn-clear-all { width: auto; padding: 4px 10px; font-size: 12px; background: #e0f2fe; color: #0369a1; border-radius: 6px; }
+    .sync-opt { display: flex; align-items: center; gap: 8px; background: #ffffff; border: 1px solid #7dd3fc; border-radius: 8px; padding: 9px 10px; margin-bottom: 10px; font-size: 13.5px; font-weight: 700; color: #0f172a; cursor: pointer; }
+    .sync-opt input[type="checkbox"] { width: 18px; height: 18px; margin: 0; accent-color: #0284c7; flex-shrink: 0; }
     .batch-row { display: flex; gap: 6px; margin-bottom: 8px; }
-    .batch-row input, .batch-row select { margin-bottom: 0; flex: 1; font-size: 14px; padding: 9px 10px; }
+    .batch-row input[type="text"], .batch-row select { margin-bottom: 0; flex: 1; font-size: 14px; padding: 9px 10px; }
     .btn-add-book { width: auto; padding: 0 14px; font-size: 14px; background: #0284c7; flex-shrink: 0; }
     .chip-wrap { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
     .book-chip { display: inline-flex; align-items: center; gap: 6px; background: #0284c7; color: #fff; padding: 6px 10px; border-radius: 99px; font-size: 13px; font-weight: 700; }
@@ -42,9 +44,11 @@
 
     /* 結果卡片 */
     .res-card { background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 14px; margin-top: 14px; }
-    .ok-banner { background: #dcfce7; color: #166534; padding: 10px; border-radius: 8px; font-weight: 800; text-align: center; margin-bottom: 10px; font-size: 15px; line-height: 1.4; }
-    .warn-banner { background: #fef3c7; color: #92400e; padding: 10px; border-radius: 8px; font-weight: 700; text-align: center; margin-bottom: 10px; font-size: 14px; line-height: 1.4; }
+    .ok-banner { background: #dcfce7; color: #166534; padding: 10px; border-radius: 8px; font-weight: 800; text-align: center; margin-bottom: 8px; font-size: 15px; line-height: 1.4; }
+    .warn-banner { background: #fef3c7; color: #92400e; padding: 10px; border-radius: 8px; font-weight: 700; text-align: center; margin-bottom: 8px; font-size: 14px; line-height: 1.4; }
     .err-banner { background: #fee2e2; color: #991b1b; padding: 10px; border-radius: 8px; font-weight: 700; text-align: center; margin-top: 10px; font-size: 14px; }
+    .checkin-pill { background: #e0f2fe; color: #0369a1; padding: 7px 10px; border-radius: 8px; font-size: 13px; font-weight: 700; text-align: center; margin-bottom: 10px; }
+    .checkin-pill.dup { background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; }
     .detail-list { font-size: 13px; line-height: 1.6; margin-top: 8px; padding-top: 8px; border-top: 1px dashed #cbd5e1; }
     .stu-header { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
     .stu-thumb { width: 52px; height: 52px; border-radius: 10px; object-fit: cover; background: #e2e8f0; flex-shrink: 0; }
@@ -60,7 +64,7 @@
 <body>
   <div id="loginBox" class="box">
     <h2>行政管理後台登入</h2>
-    <input type="password" id="adminPass" placeholder="請輸入管理密碼（預設 1150）" onkeydown="if(event.key==='Enter') doAdminLogin()">
+    <input type="password" id="adminPass" placeholder="請輸入管理密碼" onkeydown="if(event.key==='Enter') doAdminLogin()">
     <button id="loginBtn" onclick="doAdminLogin()">進入後台</button>
     <div id="loginErr" class="err-banner" style="display:none;"></div>
   </div>
@@ -72,12 +76,18 @@
       <button id="tBook" class="tab" onclick="setMode('book')">發放講義登記</button>
     </div>
 
-    <!-- 發放講義專用：本次發書清單（支援 1 本或多本） -->
+    <!-- 發放講義專用：本次發書清單與同步點名開關 -->
     <div id="batchBookSection" class="batch-box" style="display:none;">
       <div class="batch-title">
         <span>Step 1｜本次發放講義清單（可選 1～多本）</span>
         <button type="button" id="btnClearBatch" class="btn-clear-all" style="display:none;" onclick="clearBatchBooks()">清空清單</button>
       </div>
+
+      <label class="sync-opt">
+        <input type="checkbox" id="syncCheckinChk" checked>
+        <span>領書時同步完成「敏惠校內班」點名報到</span>
+      </label>
+
       <div class="batch-row">
         <select id="bookDropdown" onchange="addBookFromDropdown()">
           <option value="">-- 從書單下拉選擇講義加入 --</option>
@@ -124,7 +134,7 @@
     let lastScan = '';
     let lastScanTime = 0;
     let catalogBooks = [];
-    let batchBooks = []; // [{ code, name }]
+    let batchBooks = [];
     let currentStudent = null;
     let html5QrCode = null;
     let isScanning = false;
@@ -261,7 +271,6 @@
       renderBatchList();
     }
 
-    // === 發書清單管理 ===
     function addBookToBatch(rawCode) {
       const clean = String(rawCode || '').trim().toUpperCase();
       if (!clean) return;
@@ -505,22 +514,22 @@
       }
 
       // === 分頁 2：發放講義登記 ===
-      // 1. 先判斷掃到的是不是講義書號/條碼（比對本地書單快取）
       const matchedCatalogBook = catalogBooks.find(b => b.code === cleanCode || (b.barcode && b.barcode === cleanCode));
       if (matchedCatalogBook) {
         addBookToBatch(matchedCatalogBook.code);
         return;
       }
 
-      // 2. 如果上方「本次發書清單」有鎖定 1~多本講義 -> 視為掃描學生學號，執行整批自動領取
       if (batchBooks.length > 0) {
+        const syncFlag = document.getElementById('syncCheckinChk').checked ? '1' : '0';
         area.innerHTML = '<div class="res-card">正在登記領取 ' + batchBooks.length + ' 本講義...</div>';
         try {
           const res = await callGasJsonp({
             action: 'adminBatchIssue',
             pass: savedPass,
             studentCode: cleanCode,
-            bookCodes: batchBooks.map(b => b.code).join(',')
+            bookCodes: batchBooks.map(b => b.code).join(','),
+            syncCheckin: syncFlag
           });
           if (!res || !res.ok) {
             area.innerHTML = '<div class="err-banner">' + ((res && res.message) || '登記失敗') + '</div>';
@@ -534,7 +543,7 @@
         return;
       }
 
-      // 3. 若上方清單為空 -> 查詢該學號（若後端判定為講義條碼則自動加入清單，若為學生則顯示個人書單）
+      // 若上方清單為空 -> 查詢個別學生書單（不自動點名）
       area.innerHTML = '<div class="res-card">查詢處理中...</div>';
       try {
         const res = await callGasJsonp({
@@ -572,7 +581,14 @@
       } else if (oldCount > 0) {
         bannerHtml = '<div class="warn-banner">' + st.name + '｜這 ' + oldCount + ' 本先前都已領取過囉！</div>';
       } else {
-        bannerHtml = '<div class="err-banner" style="margin-top:0;margin-bottom:10px;">' + st.name + '｜書單中無此批講義（班別不符）</div>';
+        bannerHtml = '<div class="err-banner" style="margin-top:0;margin-bottom:8px;">' + st.name + '｜書單中無此批講義（班別不符）</div>';
+      }
+
+      let checkinHtml = '';
+      if (res.checkinStatus === 'checked_in') {
+        checkinHtml = '<div class="checkin-pill">已同步完成「敏惠校內班」點名報到（' + res.checkinTime + '）</div>';
+      } else if (res.checkinStatus === 'already_checked_in') {
+        checkinHtml = '<div class="checkin-pill dup">今日稍早已點名過（' + res.checkinTime + '），本次不重複紀錄</div>';
       }
 
       let details = [];
@@ -582,10 +598,11 @@
 
       area.innerHTML = '<div class="res-card">' +
         bannerHtml +
+        checkinHtml +
         '<div class="stu-header">' +
           '<img class="stu-thumb" referrerpolicy="no-referrer" src="' + getAvatarUrl(st.avatar) + '">' +
           '<div>' +
-            '<div><b>' + st.name + '</b>（' + st.studentId + '）</div>' +
+            '<div><b>' + st.name + '</b>（' + st.mainId + '）</div>' +
             '<div style="font-size:13px;color:#475569;">' + (st.className || st.mainClass || '') + '</div>' +
           '</div>' +
         '</div>' +
