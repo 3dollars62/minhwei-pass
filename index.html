@@ -274,7 +274,7 @@
       }
 
       const fallbackAvatar = 'data:image/svg+xml;utf8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#e2e8f0"/><circle cx="50" cy="38" r="18" fill="#94a3b8"/><path d="M20 88c0-17 13-28 30-28s30 11 30 28" fill="#94a3b8"/></svg>');
-      document.getElementById('stuAvatar').src = studentData.avatar || studentData.pictureUrl || fallbackAvatar;
+      const rawAvatar = studentData.avatar || studentData.pictureUrl || '';    const fileIdMatch = rawAvatar.match(/[-\w]{25,}/);    const avatarEl = document.getElementById('stuAvatar');    avatarEl.referrerPolicy = 'no-referrer';    avatarEl.onerror = function() { this.onerror = null; this.src = fallbackAvatar; };    avatarEl.src = (fileIdMatch && (rawAvatar.includes('drive.google.com') || rawAvatar.includes('googleusercontent.com')))      ? ('https://lh3.googleusercontent.com/d/' + fileIdMatch[0] + '=s400')      : (rawAvatar || fallbackAvatar);
       document.getElementById('stuName').textContent = studentData.name || '同學';
 
       const activeId = isErji ? (studentData.erjiId || studentData.studentId) : (studentData.studentId || '');
