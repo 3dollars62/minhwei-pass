@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>敏惠校內班｜數位上課證</title>
-  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <style>
     * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Noto Sans TC", sans-serif; }
@@ -50,19 +49,21 @@
     .btn-primary:disabled { background: #94a3b8; }
     .err-msg { color: #dc2626; font-size: 13px; font-weight: 600; text-align: center; margin-top: 12px; }
     .center-msg { text-align: center; padding: 48px 20px; font-weight: 700; color: #475569; }
+    .logout-wrap { text-align: center; padding: 4px 0 20px; }
+    .btn-logout { background: transparent; border: none; color: #64748b; font-size: 13px; text-decoration: underline; cursor: pointer; }
   </style>
 </head>
 <body>
   <div class="container">
-    <div id="loadingView" class="card center-msg">正在驗證 LINE 身分與載入上課證...</div>
+    <div id="loadingView" class="card center-msg" style="display:none;">正在載入數位上課證...</div>
 
-    <div id="bindView" class="card" style="display:none;">
+    <div id="bindView" class="card">
       <div class="header-bar">
-        <h1>敏惠校內班｜學籍綁定</h1>
+        <h1>敏惠校內班｜數位上課證</h1>
       </div>
       <div class="bind-box">
-        <p class="bind-title">首次使用｜學籍驗證</p>
-        <p class="bind-sub">請輸入報名時登記的手機號碼與身分證末四碼，完成後即可開啟專屬數位上課證。</p>
+        <p class="bind-title">學籍登入驗證</p>
+        <p class="bind-sub">請輸入報名時登記的手機號碼與身分證末四碼，開啟專屬數位上課證。</p>
         <div class="form-group">
           <label>手機號碼</label>
           <input type="tel" id="bindPhone" placeholder="例如：0912345678" maxlength="10">
@@ -71,7 +72,7 @@
           <label>身分證末四碼</label>
           <input type="text" id="bindIdLast4" placeholder="例如：1234" maxlength="4">
         </div>
-        <button id="bindBtn" class="btn-primary" onclick="submitBind()">確認綁定學籍</button>
+        <button id="bindBtn" class="btn-primary" onclick="submitLogin()">開啟數位上課證</button>
         <div id="bindError" class="err-msg"></div>
       </div>
     </div>
@@ -111,15 +112,17 @@
         </div>
         <div id="bookList"></div>
       </div>
+
+      <div class="logout-wrap">
+        <button class="btn-logout" onclick="logoutStudent()">切換學生 / 重新登入</button>
+      </div>
     </div>
   </div>
 
   <script>
-    const LIFF_ID = '2012705627-LJcTGNbH';
     const GAS_URL = 'https://script.google.com/macros/s/AKfycbyFgNkKqzT9vA7ysXlqdXjHIX7EWa94B4lu84EpUvDINu8H8BvLS9dUEw8mRLIGKKDmVg/exec';
+    const STORAGE_KEY = 'minhwei_pass_saved_user';
 
-    let currentUserId = '';
-    let linePictureUrl = '';
     let studentData = null;
     let currentMode = 'main';
 
@@ -133,66 +136,110 @@
       setInterval(update, 1000);
     }
 
-    async function callGasApi(paramsObj) {
-      const qs = new URLSearchParams(paramsObj).toString();
-      const resp = await fetch(GAS_URL + '?' + qs);
-      if (!resp.ok) throw new Error('伺服器連線異常 (' + resp.status + ')');
-      return await resp.json();
+    function callGasJsonp(paramsObj) {
+      return new Promise((resolve, reject) => {
+        const cbName = 'gasCb_' + Date.now() + '_' + Math.floor(Math.random() * 10000);
+        const script = document.createElement('script');
+        let isDone = false;
+
+        const cleanup = () => {
+          delete window[cbName];
+          if (script.parentNode) script.parentNode.removeChild(script);
+        };
+
+        const timer = setTimeout(() => {
+          if (!isDone) {
+            isDone = true;
+            cleanup();
+            reject(new Error('連線逾時，請確認網路狀態後再試一次'));
+          }
+        }, 15000);
+
+        window[cbName] = (data) => {
+          if (!isDone) {
+            isDone = true;
+            clearTimeout(timer);
+            cleanup();
+            resolve(data);
+          }
+        };
+
+        script.onerror = () => {
+          if (!isDone) {
+            isDone = true;
+            clearTimeout(timer);
+            cleanup();
+            reject(new Error('無法連線至資料庫，請確認後台是否已發布最新版本'));
+          }
+        };
+
+        const query = new URLSearchParams(Object.assign({}, paramsObj, { callback: cbName })).toString();
+        script.src = GAS_URL + '?' + query;
+        document.body.appendChild(script);
+      });
     }
 
-    async function loadStudentProfile(uid) {
+    async function performLogin(phone, idLast4, isAuto) {
+      const errEl = document.getElementById('bindError');
+      const btn = document.getElementById('bindBtn');
+
+      if (isAuto) {
+        document.getElementById('bindView').style.display = 'none';
+        document.getElementById('loadingView').style.display = 'block';
+      } else {
+        errEl.textContent = '';
+        btn.disabled = true;
+        btn.textContent = '查詢學籍中...';
+      }
+
       try {
-        const res = await callGasApi({ action: 'getStudent', uid: uid });
+        const res = await callGasJsonp({ action: 'login', phone: phone, idLast4: idLast4 });
         document.getElementById('loadingView').style.display = 'none';
+
         if (res && res.found && res.student) {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify({ phone: phone, idLast4: idLast4 }));
           studentData = res.student;
           document.getElementById('bindView').style.display = 'none';
           document.getElementById('passView').style.display = 'block';
           renderPass();
         } else {
+          localStorage.removeItem(STORAGE_KEY);
+          document.getElementById('passView').style.display = 'none';
           document.getElementById('bindView').style.display = 'block';
+          if (!isAuto) {
+            errEl.textContent = (res && res.message) ? res.message : '查無符合的學籍資料，請確認輸入是否正確';
+          }
         }
       } catch (err) {
-        document.getElementById('loadingView').innerHTML = '<div class="err-msg">資料讀取失敗：' + err.message + '</div>';
+        document.getElementById('loadingView').style.display = 'none';
+        document.getElementById('bindView').style.display = 'block';
+        errEl.textContent = err.message;
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '開啟數位上課證';
       }
     }
 
-    async function submitBind() {
+    function submitLogin() {
       const phone = document.getElementById('bindPhone').value.trim();
       const idLast4 = document.getElementById('bindIdLast4').value.trim().toUpperCase();
       const errEl = document.getElementById('bindError');
-      const btn = document.getElementById('bindBtn');
 
       if (!phone || !idLast4) {
         errEl.textContent = '請完整輸入手機號碼與身分證末四碼';
         return;
       }
-      errEl.textContent = '';
-      btn.disabled = true;
-      btn.textContent = '驗證綁定中...';
+      performLogin(phone, idLast4, false);
+    }
 
-      try {
-        const res = await callGasApi({
-          action: 'bindStudent',
-          uid: currentUserId,
-          phone: phone,
-          idLast4: idLast4,
-          pictureUrl: linePictureUrl
-        });
-        if (res && (res.success || res.ok || res.found)) {
-          document.getElementById('bindView').style.display = 'none';
-          document.getElementById('loadingView').style.display = 'block';
-          document.getElementById('loadingView').textContent = '綁定成功！正在開啟數位上課證...';
-          await loadStudentProfile(currentUserId);
-        } else {
-          errEl.textContent = (res && res.message) ? res.message : '查無符合的學籍資料，請確認輸入是否正確';
-        }
-      } catch (err) {
-        errEl.textContent = '連線失敗，請稍後再試：' + err.message;
-      } finally {
-        btn.disabled = false;
-        btn.textContent = '確認綁定學籍';
-      }
+    function logoutStudent() {
+      localStorage.removeItem(STORAGE_KEY);
+      studentData = null;
+      document.getElementById('bindPhone').value = '';
+      document.getElementById('bindIdLast4').value = '';
+      document.getElementById('bindError').textContent = '';
+      document.getElementById('passView').style.display = 'none';
+      document.getElementById('bindView').style.display = 'block';
     }
 
     function switchMode(mode) {
@@ -227,7 +274,7 @@
       }
 
       const fallbackAvatar = 'data:image/svg+xml;utf8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#e2e8f0"/><circle cx="50" cy="38" r="18" fill="#94a3b8"/><path d="M20 88c0-17 13-28 30-28s30 11 30 28" fill="#94a3b8"/></svg>');
-      document.getElementById('stuAvatar').src = studentData.avatar || studentData.pictureUrl || linePictureUrl || fallbackAvatar;
+      document.getElementById('stuAvatar').src = studentData.avatar || studentData.pictureUrl || fallbackAvatar;
       document.getElementById('stuName').textContent = studentData.name || '同學';
 
       const activeId = isErji ? (studentData.erjiId || studentData.studentId) : (studentData.studentId || '');
@@ -262,20 +309,15 @@
       }
     }
 
-    window.onload = async function() {
+    window.onload = function() {
       startClock();
       try {
-        await liff.init({ liffId: LIFF_ID });
-        if (!liff.isLoggedIn()) {
-          liff.login();
-          return;
+        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
+        if (saved && saved.phone && saved.idLast4) {
+          performLogin(saved.phone, saved.idLast4, true);
         }
-        const profile = await liff.getProfile();
-        currentUserId = profile.userId;
-        linePictureUrl = profile.pictureUrl || '';
-        await loadStudentProfile(currentUserId);
       } catch (e) {
-        document.getElementById('loadingView').innerHTML = '<div class="err-msg">LINE 驗證失敗，請從 LINE 重新開啟：<br>' + e.message + '</div>';
+        localStorage.removeItem(STORAGE_KEY);
       }
     };
   </script>
