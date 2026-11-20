@@ -2,20 +2,268 @@
 <html lang="zh-TW">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>正在開啟數位上課證...</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>敏惠校內班｜數位上課證</title>
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <style>
-    body { font-family: -apple-system, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background: #f0f4f8; color: #334155; font-weight: 700; }
+    * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Noto Sans TC", sans-serif; }
+    body { margin: 0; background: #f0f4f8; color: #1e293b; padding: 16px; }
+    .container { max-width: 440px; margin: 0 auto; }
+    .card { background: #fff; border-radius: 20px; box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08); overflow: hidden; margin-bottom: 16px; }
+    .header-bar { background: linear-gradient(135deg, #0284c7, #0369a1); color: #fff; padding: 16px 20px; text-align: center; transition: 0.25s; }
+    .header-bar.erji-theme { background: linear-gradient(135deg, #7c3aed, #5b21b6); }
+    .header-bar h1 { margin: 0; font-size: 18px; letter-spacing: 1px; }
+    .clock-bar { background: rgba(255,255,255,0.18); display: inline-block; padding: 4px 12px; border-radius: 99px; font-size: 13px; margin-top: 6px; font-variant-numeric: tabular-nums; font-weight: 600; }
+    .tab-switch { display: flex; background: #e2e8f0; border-radius: 12px; padding: 4px; margin: 14px 16px 0; }
+    .tab-btn { flex: 1; border: none; background: transparent; padding: 10px; border-radius: 9px; font-size: 14px; font-weight: 700; color: #475569; cursor: pointer; transition: 0.2s; }
+    .tab-btn.active { background: #fff; color: #0284c7; box-shadow: 0 2px 6px rgba(0,0,0,0.08); }
+    .tab-btn.active.erji { color: #7c3aed; }
+    .erji-badge { background: #f3e8ff; color: #6b21a8; border: 1px solid #d8b4fe; font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 99px; display: inline-block; margin-top: 10px; }
+    .profile-box { display: flex; align-items: center; padding: 20px; gap: 16px; border-bottom: 1px dashed #e2e8f0; }
+    .avatar { width: 84px; height: 84px; border-radius: 14px; object-fit: cover; border: 2px solid #e2e8f0; background: #f8fafc; flex-shrink: 0; }
+    .info h2 { margin: 0 0 4px; font-size: 21px; color: #0f172a; }
+    .info p { margin: 3px 0; font-size: 13px; color: #475569; }
+    .id-tag { display: inline-block; background: #e0f2fe; color: #0369a1; font-weight: 800; font-size: 15px; padding: 3px 10px; border-radius: 6px; margin-top: 4px; letter-spacing: 0.5px; }
+    .id-tag.erji { background: #f3e8ff; color: #6b21a8; }
+    .qr-section { text-align: center; padding: 20px; }
+    #qrcode { display: inline-block; padding: 12px; background: #fff; border: 2px solid #f1f5f9; border-radius: 14px; }
+    .qr-hint { font-size: 12px; color: #64748b; margin-top: 8px; }
+    .book-section { padding: 18px 20px; }
+    .book-title { font-size: 16px; font-weight: 700; margin: 0 0 12px; display: flex; justify-content: space-between; align-items: center; }
+    .book-count { font-size: 12px; background: #f1f5f9; color: #475569; padding: 3px 10px; border-radius: 99px; }
+    .book-item { display: flex; justify-content: space-between; align-items: center; padding: 11px 0; border-bottom: 1px solid #f1f5f9; }
+    .book-item:last-child { border-bottom: none; }
+    .book-name { font-size: 14px; font-weight: 600; color: #1e293b; }
+    .book-code { font-size: 11px; color: #94a3b8; display: block; margin-top: 2px; }
+    .status-pill { font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 99px; flex-shrink: 0; }
+    .status-yes { background: #dcfce7; color: #15803d; }
+    .status-no { background: #f1f5f9; color: #64748b; }
+    .bind-box { padding: 24px 20px; }
+    .bind-title { font-size: 18px; font-weight: 800; color: #0f172a; margin: 0 0 6px; }
+    .bind-sub { font-size: 13px; color: #64748b; margin: 0 0 20px; line-height: 1.5; }
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; font-size: 13px; font-weight: 700; color: #334155; margin-bottom: 6px; }
+    .form-group input { width: 100%; padding: 12px 14px; border: 1.5px solid #cbd5e1; border-radius: 12px; font-size: 16px; outline: none; transition: 0.2s; }
+    .form-group input:focus { border-color: #0284c7; }
+    .btn-primary { width: 100%; background: #0284c7; color: #fff; border: none; padding: 14px; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; }
+    .btn-primary:disabled { background: #94a3b8; }
+    .err-msg { color: #dc2626; font-size: 13px; font-weight: 600; text-align: center; margin-top: 12px; }
+    .center-msg { text-align: center; padding: 48px 20px; font-weight: 700; color: #475569; }
   </style>
 </head>
 <body>
-  <div>正在驗證 LINE 身分，請稍候...</div>
+  <div class="container">
+    <div id="loadingView" class="card center-msg">正在驗證 LINE 身分與載入上課證...</div>
+
+    <div id="bindView" class="card" style="display:none;">
+      <div class="header-bar">
+        <h1>敏惠校內班｜學籍綁定</h1>
+      </div>
+      <div class="bind-box">
+        <p class="bind-title">首次使用｜學籍驗證</p>
+        <p class="bind-sub">請輸入報名時登記的手機號碼與身分證末四碼，完成後即可開啟專屬數位上課證。</p>
+        <div class="form-group">
+          <label>手機號碼</label>
+          <input type="tel" id="bindPhone" placeholder="例如：0912345678" maxlength="10">
+        </div>
+        <div class="form-group">
+          <label>身分證末四碼</label>
+          <input type="text" id="bindIdLast4" placeholder="例如：1234" maxlength="4">
+        </div>
+        <button id="bindBtn" class="btn-primary" onclick="submitBind()">確認綁定學籍</button>
+        <div id="bindError" class="err-msg"></div>
+      </div>
+    </div>
+
+    <div id="passView" style="display:none;">
+      <div class="card">
+        <div id="headerBar" class="header-bar">
+          <h1 id="headerTitle">敏惠校內班｜數位上課證</h1>
+          <div id="liveClock" class="clock-bar">--/--/-- --:--:--</div>
+        </div>
+
+        <div id="tabSwitch" class="tab-switch" style="display:none;">
+          <button id="tabMain" class="tab-btn active" onclick="switchMode('main')">敏惠校內班</button>
+          <button id="tabErji" class="tab-btn" onclick="switchMode('erji')">二技衝刺班</button>
+        </div>
+
+        <div class="profile-box">
+          <img id="stuAvatar" class="avatar" src="" alt="大頭照">
+          <div class="info">
+            <h2 id="stuName">--</h2>
+            <div id="stuIdTag" class="id-tag">--</div>
+            <p id="stuMeta">--</p>
+            <div id="erjiBadge" class="erji-badge" style="display:none;"></div>
+          </div>
+        </div>
+
+        <div class="qr-section">
+          <div id="qrcode"></div>
+          <div class="qr-hint">點名報到或領取講義時，請向工作人員出示此條碼</div>
+        </div>
+      </div>
+
+      <div id="bookCard" class="card book-section">
+        <div class="book-title">
+          <span>講義領取紀錄</span>
+          <span id="bookCount" class="book-count">0 / 0</span>
+        </div>
+        <div id="bookList"></div>
+      </div>
+    </div>
+  </div>
+
   <script>
     const LIFF_ID = '2012705627-LJcTGNbH';
-    const GAS_URL = 'https://script.google.com/macros/s/AKfycbyFgNkKqzT9vA7ysXlqdXjHlX7EWa94B4lu84EpUvDINu8H8BvLS9dUEw8mRLIGkKOmVg/exec';
+    const GAS_URL = 'https://script.google.com/macros/s/AKfycbyFgNkKqzT9vA7ysXlqdXjHIX7EWa94B4lu84EpUvDINu8H8BvLS9dUEw8mRLIGKKDmVg/exec';
+
+    let currentUserId = '';
+    let linePictureUrl = '';
+    let studentData = null;
+    let currentMode = 'main';
+
+    function startClock() {
+      const el = document.getElementById('liveClock');
+      const update = () => {
+        const now = new Date();
+        el.textContent = now.toLocaleDateString('zh-TW') + ' ' + now.toTimeString().split(' ')[0];
+      };
+      update();
+      setInterval(update, 1000);
+    }
+
+    async function callGasApi(paramsObj) {
+      const qs = new URLSearchParams(paramsObj).toString();
+      const resp = await fetch(GAS_URL + '?' + qs);
+      if (!resp.ok) throw new Error('伺服器連線異常 (' + resp.status + ')');
+      return await resp.json();
+    }
+
+    async function loadStudentProfile(uid) {
+      try {
+        const res = await callGasApi({ action: 'getStudent', uid: uid });
+        document.getElementById('loadingView').style.display = 'none';
+        if (res && res.found && res.student) {
+          studentData = res.student;
+          document.getElementById('bindView').style.display = 'none';
+          document.getElementById('passView').style.display = 'block';
+          renderPass();
+        } else {
+          document.getElementById('bindView').style.display = 'block';
+        }
+      } catch (err) {
+        document.getElementById('loadingView').innerHTML = '<div class="err-msg">資料讀取失敗：' + err.message + '</div>';
+      }
+    }
+
+    async function submitBind() {
+      const phone = document.getElementById('bindPhone').value.trim();
+      const idLast4 = document.getElementById('bindIdLast4').value.trim().toUpperCase();
+      const errEl = document.getElementById('bindError');
+      const btn = document.getElementById('bindBtn');
+
+      if (!phone || !idLast4) {
+        errEl.textContent = '請完整輸入手機號碼與身分證末四碼';
+        return;
+      }
+      errEl.textContent = '';
+      btn.disabled = true;
+      btn.textContent = '驗證綁定中...';
+
+      try {
+        const res = await callGasApi({
+          action: 'bindStudent',
+          uid: currentUserId,
+          phone: phone,
+          idLast4: idLast4,
+          pictureUrl: linePictureUrl
+        });
+        if (res && (res.success || res.ok || res.found)) {
+          document.getElementById('bindView').style.display = 'none';
+          document.getElementById('loadingView').style.display = 'block';
+          document.getElementById('loadingView').textContent = '綁定成功！正在開啟數位上課證...';
+          await loadStudentProfile(currentUserId);
+        } else {
+          errEl.textContent = (res && res.message) ? res.message : '查無符合的學籍資料，請確認輸入是否正確';
+        }
+      } catch (err) {
+        errEl.textContent = '連線失敗，請稍後再試：' + err.message;
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '確認綁定學籍';
+      }
+    }
+
+    function switchMode(mode) {
+      currentMode = mode;
+      renderPass();
+    }
+
+    function renderPass() {
+      if (!studentData) return;
+      const isErji = (currentMode === 'erji' && studentData.hasErji);
+
+      document.getElementById('tabSwitch').style.display = studentData.hasErji ? 'flex' : 'none';
+      document.getElementById('tabMain').className = 'tab-btn' + (!isErji ? ' active' : '');
+      document.getElementById('tabErji').className = 'tab-btn' + (isErji ? ' active erji' : '');
+
+      const headerBar = document.getElementById('headerBar');
+      const headerTitle = document.getElementById('headerTitle');
+      const idTag = document.getElementById('stuIdTag');
+      const erjiBadge = document.getElementById('erjiBadge');
+
+      if (isErji) {
+        headerBar.classList.add('erji-theme');
+        headerTitle.textContent = '二技衝刺班｜數位上課證';
+        idTag.classList.add('erji');
+        erjiBadge.style.display = 'inline-block';
+        erjiBadge.textContent = studentData.erjiLabel || studentData.erjiType || '二技班別認證';
+      } else {
+        headerBar.classList.remove('erji-theme');
+        headerTitle.textContent = '敏惠校內班｜數位上課證';
+        idTag.classList.remove('erji');
+        erjiBadge.style.display = 'none';
+      }
+
+      const fallbackAvatar = 'data:image/svg+xml;utf8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#e2e8f0"/><circle cx="50" cy="38" r="18" fill="#94a3b8"/><path d="M20 88c0-17 13-28 30-28s30 11 30 28" fill="#94a3b8"/></svg>');
+      document.getElementById('stuAvatar').src = studentData.avatar || studentData.pictureUrl || linePictureUrl || fallbackAvatar;
+      document.getElementById('stuName').textContent = studentData.name || '同學';
+
+      const activeId = isErji ? (studentData.erjiId || studentData.studentId) : (studentData.studentId || '');
+      idTag.textContent = activeId || '--';
+
+      const metaParts = [studentData.school, studentData.dept, studentData.className].filter(Boolean);
+      document.getElementById('stuMeta').textContent = metaParts.join(' · ') || '敏惠醫護管理專科學校';
+
+      const qrEl = document.getElementById('qrcode');
+      qrEl.innerHTML = '';
+      if (activeId) {
+        new QRCode(qrEl, { text: String(activeId), width: 170, height: 170 });
+      }
+
+      const books = Array.isArray(studentData.books) ? studentData.books : [];
+      const bookListEl = document.getElementById('bookList');
+      const receivedCount = books.filter(b => b.received || b.claimed || b.isReceived).length;
+      document.getElementById('bookCount').textContent = '已領 ' + receivedCount + ' / ' + books.length + ' 本';
+
+      if (books.length === 0) {
+        bookListEl.innerHTML = '<div style="text-align:center;color:#94a3b8;font-size:13px;padding:12px 0;">目前尚無書單資料</div>';
+      } else {
+        bookListEl.innerHTML = books.map(b => {
+          const isGot = Boolean(b.received || b.claimed || b.isReceived);
+          const bName = b.name || b.title || b.code || '講義';
+          const bCode = b.code || b.id || '';
+          return '<div class="book-item">' +
+            '<div><span class="book-name">' + bName + '</span>' + (bCode ? '<span class="book-code">' + bCode + '</span>' : '') + '</div>' +
+            '<span class="status-pill ' + (isGot ? 'status-yes' : 'status-no') + '">' + (isGot ? '已領取' : '未領取') + '</span>' +
+          '</div>';
+        }).join('');
+      }
+    }
 
     window.onload = async function() {
+      startClock();
       try {
         await liff.init({ liffId: LIFF_ID });
         if (!liff.isLoggedIn()) {
@@ -23,9 +271,11 @@
           return;
         }
         const profile = await liff.getProfile();
-        window.location.replace(GAS_URL + '?uid=' + encodeURIComponent(profile.userId));
-      } catch (err) {
-        document.body.innerHTML = '<div style="padding:20px;text-align:center;">驗證失敗，請從 LINE 重新開啟：<br>' + err.message + '</div>';
+        currentUserId = profile.userId;
+        linePictureUrl = profile.pictureUrl || '';
+        await loadStudentProfile(currentUserId);
+      } catch (e) {
+        document.getElementById('loadingView').innerHTML = '<div class="err-msg">LINE 驗證失敗，請從 LINE 重新開啟：<br>' + e.message + '</div>';
       }
     };
   </script>
