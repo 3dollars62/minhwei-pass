@@ -7,31 +7,50 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
   <style>
     * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Noto Sans TC", sans-serif; }
-    body { margin: 0; background: #f1f5f9; color: #0f172a; padding: 16px; }
-    .box { max-width: 480px; margin: 0 auto; background: #fff; border-radius: 18px; padding: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.06); }
+    body { margin: 0; background: #f1f5f9; color: #0f172a; padding: 14px; }
+    .box { max-width: 480px; margin: 0 auto; background: #fff; border-radius: 18px; padding: 18px; box-shadow: 0 8px 20px rgba(0,0,0,0.06); }
     h2 { margin: 0 0 14px; font-size: 20px; text-align: center; }
-    input, select { width: 100%; padding: 12px; border: 1.5px solid #cbd5e1; border-radius: 10px; font-size: 16px; margin-bottom: 12px; background: #fff; outline: none; }
-    input:focus { border-color: #0284c7; }
+    input, select { width: 100%; padding: 11px 12px; border: 1.5px solid #cbd5e1; border-radius: 10px; font-size: 15px; margin-bottom: 10px; background: #fff; outline: none; }
+    input:focus, select:focus { border-color: #0284c7; }
     button { width: 100%; padding: 12px; border: none; border-radius: 10px; background: #0284c7; color: #fff; font-size: 16px; font-weight: 700; cursor: pointer; }
     button:disabled { background: #94a3b8; }
     .tabs { display: flex; gap: 8px; margin-bottom: 14px; }
-    .tab { flex: 1; background: #e2e8f0; color: #334155; }
+    .tab { flex: 1; background: #e2e8f0; color: #334155; font-size: 15px; }
     .tab.active { background: #0284c7; color: #fff; }
-    .cam-panel { background: #f8fafc; border: 1.5px dashed #cbd5e1; border-radius: 12px; padding: 12px; margin-bottom: 14px; text-align: center; }
+
+    /* 發書清單卡片 */
+    .batch-box { background: #f0f9ff; border: 1.5px solid #bae6fd; border-radius: 12px; padding: 12px; margin-bottom: 14px; }
+    .batch-title { display: flex; justify-content: space-between; align-items: center; font-size: 14px; font-weight: 800; color: #0369a1; margin-bottom: 8px; }
+    .btn-clear-all { width: auto; padding: 4px 10px; font-size: 12px; background: #e0f2fe; color: #0369a1; border-radius: 6px; }
+    .batch-row { display: flex; gap: 6px; margin-bottom: 8px; }
+    .batch-row input, .batch-row select { margin-bottom: 0; flex: 1; font-size: 14px; padding: 9px 10px; }
+    .btn-add-book { width: auto; padding: 0 14px; font-size: 14px; background: #0284c7; flex-shrink: 0; }
+    .chip-wrap { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+    .book-chip { display: inline-flex; align-items: center; gap: 6px; background: #0284c7; color: #fff; padding: 6px 10px; border-radius: 99px; font-size: 13px; font-weight: 700; }
+    .book-chip span { cursor: pointer; background: rgba(255,255,255,0.25); width: 18px; height: 18px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; }
+    .batch-hint { font-size: 12.5px; color: #0369a1; margin-top: 8px; line-height: 1.45; font-weight: 600; }
+    .batch-hint.empty { color: #64748b; font-weight: 400; }
+
+    /* 相機區 */
+    .cam-panel { background: #f8fafc; border: 1.5px dashed #cbd5e1; border-radius: 12px; padding: 12px; margin-bottom: 12px; text-align: center; }
     #reader { width: 100%; border-radius: 10px; overflow: hidden; }
     .cam-status { font-size: 13px; color: #475569; margin: 8px 0 10px; font-weight: 600; line-height: 1.4; }
     .cam-controls { display: flex; gap: 8px; flex-wrap: wrap; }
-    .cam-controls select { margin-bottom: 0; padding: 9px 10px; font-size: 13px; width: 100%; }
-    .btn-cam { flex: 1; padding: 10px; font-size: 13px; background: #0f172a; }
-    .btn-photo { flex: 1; padding: 10px; font-size: 13px; background: #0369a1; }
+    .cam-controls select { margin-bottom: 0; padding: 8px 10px; font-size: 13px; width: 100%; }
+    .btn-cam { flex: 1; padding: 9px; font-size: 13px; background: #0f172a; }
+    .btn-photo { flex: 1; padding: 9px; font-size: 13px; background: #0369a1; }
+
+    /* 結果卡片 */
     .res-card { background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 14px; margin-top: 14px; }
-    .ok-banner { background: #dcfce7; color: #166534; padding: 10px; border-radius: 8px; font-weight: 800; text-align: center; margin-bottom: 10px; font-size: 16px; }
-    .err-banner { background: #fee2e2; color: #991b1b; padding: 10px; border-radius: 8px; font-weight: 700; text-align: center; margin-top: 10px; }
-    .stu-header { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
-    .stu-thumb { width: 54px; height: 54px; border-radius: 10px; object-fit: cover; background: #e2e8f0; flex-shrink: 0; }
-    .book-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #e2e8f0; gap: 8px; }
+    .ok-banner { background: #dcfce7; color: #166534; padding: 10px; border-radius: 8px; font-weight: 800; text-align: center; margin-bottom: 10px; font-size: 15px; line-height: 1.4; }
+    .warn-banner { background: #fef3c7; color: #92400e; padding: 10px; border-radius: 8px; font-weight: 700; text-align: center; margin-bottom: 10px; font-size: 14px; line-height: 1.4; }
+    .err-banner { background: #fee2e2; color: #991b1b; padding: 10px; border-radius: 8px; font-weight: 700; text-align: center; margin-top: 10px; font-size: 14px; }
+    .detail-list { font-size: 13px; line-height: 1.6; margin-top: 8px; padding-top: 8px; border-top: 1px dashed #cbd5e1; }
+    .stu-header { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+    .stu-thumb { width: 52px; height: 52px; border-radius: 10px; object-fit: cover; background: #e2e8f0; flex-shrink: 0; }
+    .book-row { display: flex; justify-content: space-between; align-items: center; padding: 9px 0; border-bottom: 1px solid #e2e8f0; gap: 8px; font-size: 14px; }
     .book-row:last-child { border-bottom: none; }
-    .btn-sm { width: auto; padding: 7px 12px; font-size: 13px; flex-shrink: 0; }
+    .btn-sm { width: auto; padding: 6px 12px; font-size: 13px; flex-shrink: 0; }
     .btn-got { background: #16a34a; }
     .btn-wait { background: #64748b; }
     .logout-bar { text-align: center; margin-top: 16px; }
@@ -53,6 +72,27 @@
       <button id="tBook" class="tab" onclick="setMode('book')">發放講義登記</button>
     </div>
 
+    <!-- 發放講義專用：本次發書清單（支援 1 本或多本） -->
+    <div id="batchBookSection" class="batch-box" style="display:none;">
+      <div class="batch-title">
+        <span>Step 1｜本次發放講義清單（可選 1～多本）</span>
+        <button type="button" id="btnClearBatch" class="btn-clear-all" style="display:none;" onclick="clearBatchBooks()">清空清單</button>
+      </div>
+      <div class="batch-row">
+        <select id="bookDropdown" onchange="addBookFromDropdown()">
+          <option value="">-- 從書單下拉選擇講義加入 --</option>
+        </select>
+      </div>
+      <div class="batch-row">
+        <input type="text" id="bookCodeInput" placeholder="或手動輸入書號（如 SP25D1AF）" onkeydown="if(event.key==='Enter') addBookManual()">
+        <button type="button" class="btn-add-book" onclick="addBookManual()">加入</button>
+      </div>
+      <div id="batchChipWrap" class="chip-wrap"></div>
+      <div id="batchHint" class="batch-hint empty">
+        可直接用下方鏡頭掃講義條碼、手動輸入或下拉加入（1 本或 3 本皆可）；加入後再連續掃學生 QR Code 即可一次全領！
+      </div>
+    </div>
+
     <div class="cam-panel">
       <div id="reader"></div>
       <div id="fileReader" style="display:none;"></div>
@@ -65,8 +105,8 @@
       </div>
     </div>
 
-    <input type="text" id="manualCode" placeholder="或手動輸入學號後按查詢" onkeydown="if(event.key==='Enter') handleCode(this.value)">
-    <button onclick="handleCode(document.getElementById('manualCode').value)">送出查詢 / 登記</button>
+    <input type="text" id="manualCode" placeholder="掃描學生 QR Code，或手動輸入學號" onkeydown="if(event.key==='Enter') submitManual()">
+    <button id="mainSubmitBtn" onclick="submitManual()">送出點名報到</button>
 
     <div id="resultArea"></div>
 
@@ -83,7 +123,9 @@
     let mode = 'checkin';
     let lastScan = '';
     let lastScanTime = 0;
-    let activeStudentCode = '';
+    let catalogBooks = [];
+    let batchBooks = []; // [{ code, name }]
+    let currentStudent = null;
     let html5QrCode = null;
     let isScanning = false;
 
@@ -145,6 +187,20 @@
       });
     }
 
+    async function loadBookCatalog() {
+      try {
+        const res = await callGasJsonp({ action: 'adminGetBooks', pass: savedPass });
+        if (res && res.ok && Array.isArray(res.books)) {
+          catalogBooks = res.books;
+          const dd = document.getElementById('bookDropdown');
+          dd.innerHTML = '<option value="">-- 從書單下拉選擇講義加入 --</option>' +
+            catalogBooks.map(b =>
+              '<option value="' + b.code + '">' + b.code + '｜' + b.name + '</option>'
+            ).join('');
+        }
+      } catch (e) {}
+    }
+
     async function doAdminLogin(autoPass) {
       const p = autoPass || document.getElementById('adminPass').value.trim();
       const errEl = document.getElementById('loginErr');
@@ -162,6 +218,7 @@
           localStorage.setItem(ADMIN_KEY, p);
           document.getElementById('loginBox').style.display = 'none';
           document.getElementById('mainBox').style.display = 'block';
+          loadBookCatalog();
           initScanner();
         } else {
           localStorage.removeItem(ADMIN_KEY);
@@ -180,6 +237,8 @@
     function adminLogout() {
       localStorage.removeItem(ADMIN_KEY);
       savedPass = '';
+      currentStudent = null;
+      batchBooks = [];
       stopScannerIfRunning();
       document.getElementById('adminPass').value = '';
       document.getElementById('mainBox').style.display = 'none';
@@ -188,16 +247,107 @@
 
     function setMode(m) {
       mode = m;
+      currentStudent = null;
       document.getElementById('tCheckin').className = 'tab' + (m === 'checkin' ? ' active' : '');
       document.getElementById('tBook').className = 'tab' + (m === 'book' ? ' active' : '');
+      document.getElementById('batchBookSection').style.display = (m === 'book') ? 'block' : 'none';
+      document.getElementById('manualCode').placeholder = (m === 'checkin')
+        ? '掃描學生 QR Code，或手動輸入學號'
+        : 'Step 2｜掃描學生 QR Code，或手動輸入學號';
+      document.getElementById('mainSubmitBtn').textContent = (m === 'checkin')
+        ? '送出點名報到'
+        : '送出學號（發書 / 查詢）';
       document.getElementById('resultArea').innerHTML = '';
+      renderBatchList();
+    }
+
+    // === 發書清單管理 ===
+    function addBookToBatch(rawCode) {
+      const clean = String(rawCode || '').trim().toUpperCase();
+      if (!clean) return;
+      const found = catalogBooks.find(b => b.code === clean || (b.barcode && b.barcode === clean));
+      const bookItem = found
+        ? { code: found.code, name: found.name }
+        : { code: clean, name: clean };
+
+      if (batchBooks.some(b => b.code === bookItem.code)) {
+        showTempToast('warn', '「' + bookItem.name + '」已在本次發書清單中');
+        return;
+      }
+      batchBooks.push(bookItem);
+      playBeep();
+      renderBatchList();
+      showTempToast('ok', '已加入清單：' + bookItem.name + ' (' + bookItem.code + ')');
+    }
+
+    function removeBatchBook(code) {
+      batchBooks = batchBooks.filter(b => b.code !== code);
+      renderBatchList();
+    }
+
+    function clearBatchBooks() {
+      batchBooks = [];
+      renderBatchList();
+      document.getElementById('resultArea').innerHTML = '';
+    }
+
+    function addBookFromDropdown() {
+      const dd = document.getElementById('bookDropdown');
+      if (!dd.value) return;
+      addBookToBatch(dd.value);
+      dd.value = '';
+    }
+
+    function addBookManual() {
+      const inp = document.getElementById('bookCodeInput');
+      if (!inp.value.trim()) return;
+      addBookToBatch(inp.value);
+      inp.value = '';
+    }
+
+    function renderBatchList() {
+      const wrap = document.getElementById('batchChipWrap');
+      const hint = document.getElementById('batchHint');
+      const clearBtn = document.getElementById('btnClearBatch');
+
+      if (batchBooks.length === 0) {
+        wrap.innerHTML = '';
+        clearBtn.style.display = 'none';
+        hint.className = 'batch-hint empty';
+        hint.textContent = '可直接用下方鏡頭掃講義條碼、手動輸入或下拉加入（1 本或 3 本皆可）；加入後再連續掃學生 QR Code 即可一次全領！';
+        return;
+      }
+
+      clearBtn.style.display = 'inline-block';
+      wrap.innerHTML = batchBooks.map(b =>
+        '<div class="book-chip">' +
+          b.name + ' (' + b.code + ')' +
+          '<span onclick="removeBatchBook(\'' + b.code + '\')">✕</span>' +
+        '</div>'
+      ).join('');
+      hint.className = 'batch-hint';
+      hint.textContent = '已鎖定以上 ' + batchBooks.length + ' 本講義！現在請直接掃描排隊學生的 QR Code（或輸入學號），刷一位就自動領取全部 ' + batchBooks.length + ' 本。';
+    }
+
+    function showTempToast(type, text) {
+      const area = document.getElementById('resultArea');
+      const cls = type === 'ok' ? 'ok-banner' : 'warn-banner';
+      area.innerHTML = '<div class="res-card"><div class="' + cls + '" style="margin-bottom:0;">' + text + '</div></div>';
+    }
+
+    function submitManual() {
+      const input = document.getElementById('manualCode');
+      const val = input.value;
+      if (!val || !val.trim()) return;
+      input.value = '';
+      handleCode(val);
     }
 
     function onScanSuccess(decodedText) {
       const clean = String(decodedText || '').trim();
       if (!clean) return;
       const now = Date.now();
-      if (clean === lastScan && now - lastScanTime < 3000) return;
+      if (clean === lastScan && now - lastScanTime < 2500) return;
       lastScan = clean;
       lastScanTime = now;
       playBeep();
@@ -213,14 +363,29 @@
       }
     }
 
+    function createScannerInstance(elementId) {
+      const formats = (typeof Html5QrcodeSupportedFormats !== 'undefined') ? [
+        Html5QrcodeSupportedFormats.QR_CODE,
+        Html5QrcodeSupportedFormats.CODE_128,
+        Html5QrcodeSupportedFormats.CODE_39,
+        Html5QrcodeSupportedFormats.EAN_13,
+        Html5QrcodeSupportedFormats.EAN_8,
+        Html5QrcodeSupportedFormats.UPC_A,
+        Html5QrcodeSupportedFormats.UPC_E,
+        Html5QrcodeSupportedFormats.ITF,
+        Html5QrcodeSupportedFormats.CODABAR
+      ] : undefined;
+      return new Html5Qrcode(elementId, formats ? { formatsToSupport: formats, verbose: false } : false);
+    }
+
     async function startWithConfig(cameraConfig) {
       await stopScannerIfRunning();
       if (!html5QrCode) {
-        html5QrCode = new Html5Qrcode("reader");
+        html5QrCode = createScannerInstance("reader");
       }
       await html5QrCode.start(
         cameraConfig,
-        { fps: 10, qrbox: { width: 220, height: 220 } },
+        { fps: 10, qrbox: { width: 260, height: 150 } },
         onScanSuccess,
         () => {}
       );
@@ -234,7 +399,7 @@
 
       try {
         await startWithConfig({ facingMode: "environment" });
-        statusEl.textContent = '相機已就緒，請將 QR Code 對準框內';
+        statusEl.textContent = '相機已就緒，可掃描學生 QR Code 或講義條碼';
 
         try {
           const devices = await Html5Qrcode.getCameras();
@@ -258,13 +423,13 @@
             const chosenId = backCam ? backCam.id : devices[0].id;
             selectEl.value = chosenId;
             await startWithConfig(chosenId);
-            statusEl.textContent = '相機已就緒，請將 QR Code 對準框內';
+            statusEl.textContent = '相機已就緒，可掃描學生 QR Code 或講義條碼';
             return;
           }
         } catch (e2) {}
       }
 
-      statusEl.textContent = '無法直接開啟即時鏡頭，可點右側「拍照掃碼」或下方手動輸入學號';
+      statusEl.textContent = '無法直接開啟即時鏡頭，可點右側「拍照掃碼」或手動輸入';
     }
 
     async function switchCamera() {
@@ -274,7 +439,7 @@
       try {
         statusEl.textContent = '切換鏡頭中...';
         await startWithConfig(camId);
-        statusEl.textContent = '相機已就緒，請將 QR Code 對準框內';
+        statusEl.textContent = '相機已就緒，可掃描學生 QR Code 或講義條碼';
       } catch (e) {
         statusEl.textContent = '無法切換至此鏡頭，請改選其他鏡頭';
       }
@@ -285,13 +450,13 @@
       const statusEl = document.getElementById('camStatus');
       statusEl.textContent = '正在辨識照片中的條碼...';
       try {
-        const fileScanner = new Html5Qrcode("fileReader");
+        const fileScanner = createScannerInstance("fileReader");
         const decodedText = await fileScanner.scanFile(input.files[0], false);
         statusEl.textContent = '辨識成功：' + decodedText;
         playBeep();
         handleCode(decodedText);
       } catch (err) {
-        statusEl.textContent = '照片中未辨識到 QR Code，請對焦後再拍一次';
+        statusEl.textContent = '照片中未辨識到條碼，請對焦後再拍一次';
       } finally {
         input.value = '';
       }
@@ -310,12 +475,12 @@
     async function handleCode(code) {
       const cleanCode = String(code || '').trim().toUpperCase();
       if (!cleanCode) return;
-      activeStudentCode = cleanCode;
       const area = document.getElementById('resultArea');
-      area.innerHTML = '<div class="res-card">查詢處理中...</div>';
 
-      try {
-        if (mode === 'checkin') {
+      // === 分頁 1：掃碼點名報到 ===
+      if (mode === 'checkin') {
+        area.innerHTML = '<div class="res-card">報到處理中...</div>';
+        try {
           const res = await callGasJsonp({ action: 'adminCheckin', pass: savedPass, code: cleanCode });
           if (!res || !res.ok) {
             area.innerHTML = '<div class="err-banner">' + ((res && res.message) || '查詢失敗') + '</div>';
@@ -333,29 +498,112 @@
               '</div>' +
             '</div>' +
           '</div>';
-        } else {
-          const res = await callGasJsonp({ action: 'adminLookup', pass: savedPass, code: cleanCode });
+        } catch (err) {
+          area.innerHTML = '<div class="err-banner">' + err.message + '</div>';
+        }
+        return;
+      }
+
+      // === 分頁 2：發放講義登記 ===
+      // 1. 先判斷掃到的是不是講義書號/條碼（比對本地書單快取）
+      const matchedCatalogBook = catalogBooks.find(b => b.code === cleanCode || (b.barcode && b.barcode === cleanCode));
+      if (matchedCatalogBook) {
+        addBookToBatch(matchedCatalogBook.code);
+        return;
+      }
+
+      // 2. 如果上方「本次發書清單」有鎖定 1~多本講義 -> 視為掃描學生學號，執行整批自動領取
+      if (batchBooks.length > 0) {
+        area.innerHTML = '<div class="res-card">正在登記領取 ' + batchBooks.length + ' 本講義...</div>';
+        try {
+          const res = await callGasJsonp({
+            action: 'adminBatchIssue',
+            pass: savedPass,
+            studentCode: cleanCode,
+            bookCodes: batchBooks.map(b => b.code).join(',')
+          });
           if (!res || !res.ok) {
-            area.innerHTML = '<div class="err-banner">' + ((res && res.message) || '查詢失敗') + '</div>';
+            area.innerHTML = '<div class="err-banner">' + ((res && res.message) || '登記失敗') + '</div>';
             return;
           }
-          renderBooks(res.student);
+          playBeep();
+          renderBatchResult(res);
+        } catch (err) {
+          area.innerHTML = '<div class="err-banner">' + err.message + '</div>';
         }
+        return;
+      }
+
+      // 3. 若上方清單為空 -> 查詢該學號（若後端判定為講義條碼則自動加入清單，若為學生則顯示個人書單）
+      area.innerHTML = '<div class="res-card">查詢處理中...</div>';
+      try {
+        const res = await callGasJsonp({
+          action: 'adminLookup',
+          pass: savedPass,
+          code: cleanCode,
+          allowBook: '1'
+        });
+        if (!res || !res.ok) {
+          area.innerHTML = '<div class="err-banner">' + ((res && res.message) || '查詢失敗') + '</div>';
+          return;
+        }
+        if (res.targetType === 'book') {
+          addBookToBatch(res.book.code);
+          return;
+        }
+        currentStudent = res.student;
+        renderIndividualBooks(currentStudent);
       } catch (err) {
         area.innerHTML = '<div class="err-banner">' + err.message + '</div>';
       }
     }
 
-    function renderBooks(st) {
+    function renderBatchResult(res) {
+      const area = document.getElementById('resultArea');
+      const st = res.student;
+      const newCount = (res.newlyIssued || []).length;
+      const oldCount = (res.alreadyReceived || []).length;
+      const naCount = (res.notEligible || []).length;
+
+      let bannerHtml = '';
+      if (newCount > 0) {
+        bannerHtml = '<div class="ok-banner">' + st.name + '｜成功登記領取 ' + newCount + ' 本講義' +
+          (oldCount > 0 ? '（另有 ' + oldCount + ' 本先前已領）' : '') + '</div>';
+      } else if (oldCount > 0) {
+        bannerHtml = '<div class="warn-banner">' + st.name + '｜這 ' + oldCount + ' 本先前都已領取過囉！</div>';
+      } else {
+        bannerHtml = '<div class="err-banner" style="margin-top:0;margin-bottom:10px;">' + st.name + '｜書單中無此批講義（班別不符）</div>';
+      }
+
+      let details = [];
+      if (newCount > 0) details.push('<div style="color:#166534;"><b>本次新領：</b>' + res.newlyIssued.join('、') + '</div>');
+      if (oldCount > 0) details.push('<div style="color:#92400e;"><b>先前已領：</b>' + res.alreadyReceived.join('、') + '</div>');
+      if (naCount > 0) details.push('<div style="color:#64748b;"><b>非該生班別書單：</b>' + res.notEligible.join('、') + '</div>');
+
+      area.innerHTML = '<div class="res-card">' +
+        bannerHtml +
+        '<div class="stu-header">' +
+          '<img class="stu-thumb" referrerpolicy="no-referrer" src="' + getAvatarUrl(st.avatar) + '">' +
+          '<div>' +
+            '<div><b>' + st.name + '</b>（' + st.studentId + '）</div>' +
+            '<div style="font-size:13px;color:#475569;">' + (st.className || st.mainClass || '') + '</div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="detail-list">' + details.join('') + '</div>' +
+      '</div>';
+    }
+
+    function renderIndividualBooks(st) {
       const area = document.getElementById('resultArea');
       const rows = (st.books || []).map(b =>
         '<div class="book-row">' +
           '<span>' + b.name + ' <small style="color:#64748b;">(' + b.code + ')</small></span>' +
-          '<button class="btn-sm ' + (b.received ? 'btn-got' : 'btn-wait') + '" onclick="toggleBook(this,' + st.rowIndex + ',\'' + b.code + '\')">' +
+          '<button class="btn-sm ' + (b.received ? 'btn-got' : 'btn-wait') + '" onclick="toggleBookBtn(this,' + st.rowIndex + ',\'' + b.code + '\')">' +
             (b.received ? '已領取（點擊取消）' : '登記領取') +
           '</button>' +
         '</div>'
       ).join('');
+
       area.innerHTML = '<div class="res-card">' +
         '<div class="stu-header">' +
           '<img class="stu-thumb" referrerpolicy="no-referrer" src="' + getAvatarUrl(st.avatar) + '">' +
@@ -364,12 +612,12 @@
             '<div style="font-size:13px;color:#475569;">' + (st.className || st.mainClass || '') + '</div>' +
           '</div>' +
         '</div>' +
-        '<hr style="border:none;border-top:1px solid #e2e8f0;margin:10px 0;">' +
+        '<hr style="border:none;border-top:1px solid #e2e8f0;margin:8px 0;">' +
         (rows || '尚無書單資料') +
       '</div>';
     }
 
-    async function toggleBook(btn, rowIndex, bookCode) {
+    async function toggleBookBtn(btn, rowIndex, bookCode) {
       btn.disabled = true;
       btn.textContent = '更新中...';
       try {
@@ -379,9 +627,11 @@
           rowIndex: rowIndex,
           bookCode: bookCode
         });
-        if (res && res.ok) {
+        if (res && res.ok && currentStudent) {
           playBeep();
-          await handleCode(activeStudentCode);
+          const b = currentStudent.books.find(item => item.code === bookCode);
+          if (b) b.received = !b.received;
+          renderIndividualBooks(currentStudent);
         }
       } catch (e) {
         btn.disabled = false;
