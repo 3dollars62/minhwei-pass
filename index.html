@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>正在開啟數位上課證...</title>
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+  <style>
+    body { font-family: -apple-system, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background: #f0f4f8; color: #334155; font-weight: 700; }
+  </style>
+</head>
+<body>
+  <div>正在驗證 LINE 身分，請稍候...</div>
+  <script>
+    const LIFF_ID = '2012705627-LJcTGNbH';
+    const GAS_URL = 'https://script.google.com/macros/s/AKfycbyFgNkKqzT9vA7ysXlqdXjHIX7EWa94B4lu84EpUvDINu8H8BvLS9dUEw8mRLIGKKDmVg/exec';
+
+    window.onload = async function() {
+      try {
+        await liff.init({ liffId: LIFF_ID });
+        if (!liff.isLoggedIn()) {
+          liff.login();
+          return;
+        }
+        const profile = await liff.getProfile();
+        window.location.replace(GAS_URL + '?uid=' + encodeURIComponent(profile.userId));
+      } catch (err) {
+        document.body.innerHTML = '<div style="padding:20px;text-align:center;">驗證失敗，請從 LINE 重新開啟：<br>' + err.message + '</div>';
+      }
+    };
+  </script>
+</body>
+</html>
