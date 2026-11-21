@@ -9,12 +9,19 @@
     * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Noto Sans TC", sans-serif; }
     body { margin: 0; background: #f1f5f9; color: #0f172a; padding: 12px; }
     .box { max-width: 1460px; margin: 0 auto; background: #fff; border-radius: 18px; padding: 16px; box-shadow: 0 8px 20px rgba(0,0,0,0.06); }
-    .narrow-wrap { max-width: 480px; margin: 0 auto; }
-    h2 { margin: 0 0 12px; font-size: 20px; text-align: center; }
+    .narrow-wrap { max-width: 500px; margin: 0 auto; }
+    h2 { margin: 0 0 10px; font-size: 20px; text-align: center; }
     input[type="text"], input[type="password"], input[type="date"], select { width: 100%; padding: 10px 12px; border: 1.5px solid #cbd5e1; border-radius: 10px; font-size: 14.5px; margin-bottom: 10px; background: #fff; outline: none; }
     input:focus, select:focus { border-color: #0284c7; }
     button { width: 100%; padding: 11px; border: none; border-radius: 10px; background: #0284c7; color: #fff; font-size: 15px; font-weight: 700; cursor: pointer; }
     button:disabled { background: #94a3b8; cursor: not-allowed; }
+
+    /* 全域場次切換條 */
+    .session-bar { max-width: 680px; margin: 0 auto 12px; background: #eff6ff; border: 1.5px solid #93c5fd; border-radius: 12px; padding: 8px 10px; display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+    .session-label { font-size: 13px; font-weight: 800; color: #1e3a8a; }
+    .session-btns { display: flex; gap: 6px; }
+    .sess-btn { width: auto; padding: 6px 12px; font-size: 13px; border-radius: 8px; background: #dbeafe; color: #1e40af; }
+    .sess-btn.active { background: #1d4ed8; color: #fff; }
 
     /* 主分頁列 */
     .tabs { max-width: 680px; margin: 0 auto 14px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
@@ -61,55 +68,78 @@
     .btn-got { background: #16a34a; }
     .btn-wait { background: #64748b; }
 
-    /* === 分頁 3：座位表點名（靠左完整展開，不裁切前5欄） === */
-    .seat-toolbar { max-width: 680px; margin: 0 auto 10px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-    .cls-btn { flex: 1; padding: 9px; font-size: 14px; background: #e2e8f0; color: #334155; }
+    /* === 分頁 3：座位表點名 === */
+    .seat-toolbar { max-width: 780px; margin: 0 auto 10px; display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+    .cls-btn { flex: 1; min-width: 90px; padding: 9px; font-size: 14px; background: #e2e8f0; color: #334155; }
     .cls-btn.active { background: #1e3a8a; color: #fff; }
-    .btn-refresh { width: auto; padding: 9px 14px; font-size: 13px; background: #0f172a; }
-    .stat-strip { max-width: 680px; margin: 0 auto 10px; display: flex; justify-content: space-around; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 8px; font-size: 13px; font-weight: 700; }
-    .legend-row { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; font-size: 12px; margin-bottom: 8px; color: #475569; font-weight: 600; }
-    .leg-box { display: inline-block; width: 13px; height: 13px; border-radius: 3px; vertical-align: middle; margin-right: 4px; border: 1px solid #94a3b8; }
+    .btn-absent-batch { width: auto; padding: 9px 12px; font-size: 13px; background: #dc2626; }
+    .btn-refresh { width: auto; padding: 9px 12px; font-size: 13px; background: #0f172a; }
+    .stat-strip { max-width: 780px; margin: 0 auto 10px; display: flex; justify-content: space-around; flex-wrap: wrap; gap: 6px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 8px; font-size: 12.5px; font-weight: 800; }
+    .legend-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; font-size: 12px; margin-bottom: 8px; color: #475569; font-weight: 700; }
+    .leg-box { display: inline-block; width: 13px; height: 13px; border-radius: 3px; vertical-align: middle; margin-right: 3px; border: 1px solid #94a3b8; }
 
     .adm-map-scroll { overflow-x: auto; background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 12px; -webkit-overflow-scrolling: touch; }
     .adm-classroom { width: max-content; min-width: 100%; margin: 0 auto; }
-    .adm-wb { width: 100%; background: #334155; color: #fff; text-align: center; padding: 6px; border-radius: 7px; font-weight: 800; font-size: 13px; letter-spacing: 6px; margin-bottom: 10px; }
+    .adm-wb { width: 100%; background: #334155; color: #fff; text-align: center; padding: 6px; border-radius: 7px; font-weight: 800; font-size: 13px; letter-spacing: 5px; margin-bottom: 10px; }
     .adm-zones { display: flex; gap: 12px; justify-content: flex-start; }
     .adm-zone { background: #fff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 5px; flex-shrink: 0; }
     .adm-grid { display: grid; gap: 3px; }
-    .acell { height: 44px; border-radius: 5px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 10.5px; line-height: 1.15; padding: 2px; text-align: center; overflow: hidden; }
+    .acell { height: 48px; border-radius: 5px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 10.5px; line-height: 1.15; padding: 2px; text-align: center; overflow: hidden; }
     .acell.head { height: 20px; background: #e2e8f0; color: #475569; font-weight: 700; }
     .acell.aisle { background: transparent; }
     .acell.res { background: #e2e8f0; color: #94a3b8; border: 1px dashed #cbd5e1; font-size: 9.5px; }
     .acell.seat { cursor: pointer; border: 1.5px solid #cbd5e1; }
     .acell.seat.empty { background: #f8fafc; color: #94a3b8; }
-    .acell.seat.unverified { background: #ffffff; border-color: #3b82f6; color: #0f172a; }
-    .acell.seat.checked { background: #dcfce7; border-color: #16a34a; color: #14532d; }
-    .acell .scode { font-weight: 800; font-size: 10px; }
-    .acell .sname { font-weight: 800; font-size: 11px; white-space: nowrap; }
+    .acell.seat.unmarked { background: #ffffff; border-color: #64748b; color: #0f172a; }
+    .acell.seat.st-出席 { background: #dcfce7; border-color: #16a34a; color: #14532d; }
+    .acell.seat.st-遲到 { background: #ffedd5; border-color: #ea580c; color: #7c2d12; }
+    .acell.seat.st-早退 { background: #f3e8ff; border-color: #9333ea; color: #581c87; }
+    .acell.seat.st-請假 { background: #dbeafe; border-color: #2563eb; color: #1e3a8a; }
+    .acell.seat.st-未到 { background: #fee2e2; border-color: #dc2626; color: #7f1d1d; }
+    .acell .scode { font-weight: 800; font-size: 9.5px; }
+    .acell .sname { font-weight: 900; font-size: 11px; white-space: nowrap; }
+    .acell .sstat { font-size: 9px; font-weight: 800; }
     .acell .snote-dot { color: #dc2626; font-size: 9px; font-weight: 900; }
     .adm-doors { display: flex; justify-content: space-between; width: 100%; margin-top: 8px; font-size: 11px; font-weight: 800; color: #475569; }
     .adm-doors span { background: #e2e8f0; padding: 3px 10px; border-radius: 6px; }
 
-    /* === 分頁 4：紀錄搜尋 === */
-    .search-bar { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
-    .search-bar input, .search-bar select { margin-bottom: 0; }
-    .sub-tabs { display: flex; gap: 8px; margin: 12px 0 8px; }
-    .sub-tab { flex: 1; padding: 8px; font-size: 13px; background: #e2e8f0; color: #334155; }
+    /* === 分頁 4：統計與紀錄搜尋 === */
+    .sub-tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 12px; }
+    .sub-tab { padding: 9px 4px; font-size: 12.5px; background: #e2e8f0; color: #334155; }
     .sub-tab.active { background: #0f172a; color: #fff; }
+    .search-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
+    .search-grid input, .search-grid select { margin-bottom: 0; }
     .rec-item { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; font-size: 13px; }
-    .rec-top { display: flex; justify-content: space-between; font-weight: 800; margin-bottom: 4px; }
-    .badge-seat { background: #dbeafe; color: #1e40af; padding: 2px 8px; border-radius: 6px; font-size: 12px; }
+    .rec-top { display: flex; justify-content: space-between; align-items: center; font-weight: 800; margin-bottom: 4px; gap: 6px; }
+    .badge-seat { background: #e2e8f0; color: #334155; padding: 2px 7px; border-radius: 6px; font-size: 11.5px; }
+    .st-tag { font-size: 11.5px; font-weight: 800; padding: 2px 8px; border-radius: 99px; }
+    .st-tag.st-出席 { background: #dcfce7; color: #166534; }
+    .st-tag.st-遲到 { background: #ffedd5; color: #9a3412; }
+    .st-tag.st-早退 { background: #f3e8ff; color: #6b21a8; }
+    .st-tag.st-請假 { background: #dbeafe; color: #1e40af; }
+    .st-tag.st-未到 { background: #fee2e2; color: #991b1b; }
+    .full-badge { background: #16a34a; color: #fff; font-size: 11.5px; font-weight: 800; padding: 2px 8px; border-radius: 99px; }
+    .notfull-badge { background: #e2e8f0; color: #475569; font-size: 11.5px; font-weight: 700; padding: 2px 8px; border-radius: 99px; }
+    .mini-counts { display: flex; gap: 8px; flex-wrap: wrap; font-size: 12px; font-weight: 700; margin-top: 5px; }
 
-    /* === 座位核對彈窗 === */
+    /* === 彈窗（座位核對 & 一鍵未到確認） === */
     .modal-mask { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.65); z-index: 999; display: none; align-items: center; justify-content: center; padding: 12px; }
-    .modal-box { background: #fff; width: 100%; max-width: 440px; max-height: 90vh; overflow-y: auto; border-radius: 18px; padding: 18px; box-shadow: 0 20px 40px rgba(0,0,0,0.25); }
+    .modal-box { background: #fff; width: 100%; max-width: 460px; max-height: 90vh; overflow-y: auto; border-radius: 18px; padding: 18px; box-shadow: 0 20px 40px rgba(0,0,0,0.25); }
     .modal-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-    .modal-head h3 { margin: 0; font-size: 18px; }
+    .modal-head h3 { margin: 0; font-size: 17.5px; }
     .btn-x { width: 32px; height: 32px; border-radius: 50%; background: #e2e8f0; color: #334155; padding: 0; font-size: 16px; }
-    .verify-card { display: flex; gap: 14px; align-items: center; background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: 12px; margin-bottom: 12px; }
-    .verify-photo { width: 84px; height: 102px; border-radius: 10px; object-fit: cover; background: #e2e8f0; border: 1px solid #94a3b8; flex-shrink: 0; }
+    .verify-card { display: flex; gap: 14px; align-items: center; background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: 12px; margin-bottom: 10px; }
+    .verify-photo { width: 80px; height: 96px; border-radius: 10px; object-fit: cover; background: #e2e8f0; border: 1px solid #94a3b8; flex-shrink: 0; }
     .sec-label { font-size: 13px; font-weight: 800; color: #334155; margin: 12px 0 6px; }
-    .btn-green { background: #16a34a; margin-bottom: 8px; }
+    .status-5-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-bottom: 8px; }
+    .btn-st { padding: 10px 4px; font-size: 13.5px; font-weight: 900; border-radius: 10px; }
+    .btn-st.c-出席 { background: #16a34a; color: #fff; }
+    .btn-st.c-遲到 { background: #ea580c; color: #fff; }
+    .btn-st.c-早退 { background: #9333ea; color: #fff; }
+    .btn-st.c-請假 { background: #2563eb; color: #fff; }
+    .btn-st.c-未到 { background: #dc2626; color: #fff; }
+    .quick-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 8px; }
+    .q-tag { width: auto; padding: 4px 9px; font-size: 11.5px; font-weight: 700; background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; border-radius: 99px; }
     .btn-amber { background: #d97706; }
     .btn-slate { background: #475569; }
     .inline-act { display: flex; gap: 8px; }
@@ -130,11 +160,21 @@
 
   <div id="mainBox" class="box" style="display:none;">
     <h2>敏惠上課證｜行政作業後台</h2>
+
+    <!-- 全域場次切換（12:30場 / 17:00場） -->
+    <div class="session-bar">
+      <div class="session-label" id="sessionHintText">點名場次：12:30場</div>
+      <div class="session-btns">
+        <button type="button" id="sessBtn1230" class="sess-btn active" onclick="setSession('12:30場')">12:30 場</button>
+        <button type="button" id="sessBtn1700" class="sess-btn" onclick="setSession('17:00場')">17:00 場</button>
+      </div>
+    </div>
+
     <div class="tabs">
       <button id="tCheckin" class="tab active" onclick="setMode('checkin')">掃碼點名</button>
       <button id="tBook" class="tab" onclick="setMode('book')">發放講義</button>
       <button id="tSeat" class="tab" onclick="setMode('seat')">座位表點名</button>
-      <button id="tSearch" class="tab" onclick="setMode('search')">紀錄搜尋</button>
+      <button id="tSearch" class="tab" onclick="setMode('search')">統計與查詢</button>
     </div>
 
     <!-- === 分頁 1 & 2：掃碼點名 / 發放講義 === -->
@@ -147,7 +187,7 @@
 
         <label class="sync-opt">
           <input type="checkbox" id="syncCheckinChk" checked>
-          <span>領書時同步完成「敏惠校內班」點名報到</span>
+          <span>領書時同步完成「敏惠校內班」點名（依上方場次計算遲到）</span>
         </label>
 
         <div class="batch-row">
@@ -188,38 +228,80 @@
       <div class="seat-toolbar">
         <button id="btnClassA" class="cls-btn active" onclick="loadSeatDashboard('A')">校內 A 班</button>
         <button id="btnClassB" class="cls-btn" onclick="loadSeatDashboard('B')">校內 B 班</button>
+        <button class="btn-absent-batch" onclick="openBatchAbsentModal()">一鍵結算未到</button>
         <button class="btn-refresh" onclick="loadSeatDashboard(currentSeatGroup)">重新整理</button>
       </div>
       <div id="seatStatStrip" class="stat-strip">載入座位統計中...</div>
       <div class="legend-row">
-        <span><i class="leg-box" style="background:#dcfce7;border-color:#16a34a;"></i>今日已點名</span>
-        <span><i class="leg-box" style="background:#ffffff;border-color:#3b82f6;"></i>已劃位未點名</span>
-        <span><i class="leg-box" style="background:#f8fafc;border-color:#cbd5e1;"></i>空位</span>
-        <span><span style="color:#dc2626;font-weight:900;">●</span> 有備註</span>
+        <span><i class="leg-box" style="background:#dcfce7;border-color:#16a34a;"></i>出席</span>
+        <span><i class="leg-box" style="background:#ffedd5;border-color:#ea580c;"></i>遲到</span>
+        <span><i class="leg-box" style="background:#f3e8ff;border-color:#9333ea;"></i>早退</span>
+        <span><i class="leg-box" style="background:#dbeafe;border-color:#2563eb;"></i>請假</span>
+        <span><i class="leg-box" style="background:#fee2e2;border-color:#dc2626;"></i>未到</span>
+        <span><i class="leg-box" style="background:#ffffff;border-color:#64748b;"></i>未登記</span>
       </div>
       <div id="admMapScroll" class="adm-map-scroll">
         <div id="admClassroomWrap" class="adm-classroom"></div>
       </div>
     </div>
 
-    <!-- === 分頁 4：點名與備註搜尋 === -->
+    <!-- === 分頁 4：全勤統計與紀錄查詢 === -->
     <div id="searchModeSection" style="display:none;" class="narrow-wrap">
-      <div class="search-bar">
-        <input type="date" id="searchDate">
-        <select id="searchGroup">
-          <option value="ALL">全部班別（A+B班）</option>
-          <option value="A">僅看校內 A 班</option>
-          <option value="B">僅看校內 B 班</option>
-        </select>
-      </div>
-      <div class="batch-row">
-        <input type="text" id="searchKeyword" placeholder="搜尋姓名、學號、座號或備註..." onkeydown="if(event.key==='Enter') runRecordSearch()">
-        <button type="button" class="btn-add-book" onclick="runRecordSearch()">搜尋</button>
-      </div>
       <div class="sub-tabs">
-        <button id="subTabRec" class="sub-tab active" onclick="switchSearchSub('records')">點名與異動紀錄 (0)</button>
-        <button id="subTabAbs" class="sub-tab" onclick="switchSearchSub('absent')">當日未到名單 (0)</button>
+        <button id="subTabStats" class="sub-tab active" onclick="switchSearchSub('stats')">全班全勤統計</button>
+        <button id="subTabRec" class="sub-tab" onclick="switchSearchSub('records')">點名明細</button>
+        <button id="subTabAbs" class="sub-tab" onclick="switchSearchSub('unmarked')">當日未登記</button>
       </div>
+
+      <!-- 子頁 A：全班全勤統計 -->
+      <div id="statsFilterBox">
+        <div class="search-grid">
+          <select id="statsGroup" onchange="runStatsSearch()">
+            <option value="ALL">全部班別（A+B班）</option>
+            <option value="A">僅看校內 A 班</option>
+            <option value="B">僅看校內 B 班</option>
+          </select>
+          <select id="statsFullOnly" onchange="runStatsSearch()">
+            <option value="0">顯示全班所有人</option>
+            <option value="1">僅顯示「全勤獎勵」名單</option>
+          </select>
+        </div>
+        <div class="batch-row">
+          <input type="text" id="statsKeyword" placeholder="搜尋姓名、學號或座號..." onkeydown="if(event.key==='Enter') runStatsSearch()">
+          <button type="button" class="btn-add-book" onclick="runStatsSearch()">查詢</button>
+        </div>
+        <div id="statsBanner" class="checkin-pill" style="margin-bottom:10px;">載入統計中...</div>
+      </div>
+
+      <!-- 子頁 B & C：明細與未登記 -->
+      <div id="logFilterBox" style="display:none;">
+        <div class="search-grid">
+          <input type="date" id="searchDate">
+          <select id="searchSession">
+            <option value="ALL">全部場次</option>
+            <option value="12:30場">12:30 場</option>
+            <option value="17:00場">17:00 場</option>
+          </select>
+          <select id="searchGroup">
+            <option value="ALL">全部班別（A+B班）</option>
+            <option value="A">僅看校內 A 班</option>
+            <option value="B">僅看校內 B 班</option>
+          </select>
+          <select id="searchStatus">
+            <option value="ALL">全部狀態</option>
+            <option value="出席">出席</option>
+            <option value="遲到">遲到</option>
+            <option value="早退">早退</option>
+            <option value="請假">請假</option>
+            <option value="未到">未到</option>
+          </select>
+        </div>
+        <div class="batch-row">
+          <input type="text" id="searchKeyword" placeholder="搜尋姓名、學號、座號或備註..." onkeydown="if(event.key==='Enter') runRecordSearch()">
+          <button type="button" class="btn-add-book" onclick="runRecordSearch()">搜尋</button>
+        </div>
+      </div>
+
       <div id="searchResultWrap"></div>
     </div>
 
@@ -228,7 +310,7 @@
     </div>
   </div>
 
-  <!-- 座位核對與異動彈窗 -->
+  <!-- 通用互動彈窗（座位點名核對 / 一鍵未到確認） -->
   <div id="seatActionModal" class="modal-mask">
     <div class="modal-box">
       <div class="modal-head">
@@ -245,6 +327,7 @@
 
     let savedPass = '';
     let mode = 'checkin';
+    let currentSession = '12:30場';
     let lastScan = '';
     let lastScanTime = 0;
     let catalogBooks = [];
@@ -255,8 +338,8 @@
 
     let currentSeatGroup = 'A';
     let seatDashData = null;
-    let searchDataCache = { records: [], absentList: [] };
-    let searchSubTab = 'records';
+    let searchDataCache = { records: [], unmarkedList: [] };
+    let searchSubTab = 'stats';
 
     const ALL_SEAT_CODES = [
       'A1','A2','A3','A4','A5','A6','A7','A8','A9','A10','A11','A12','A13','A14','A15',
@@ -287,6 +370,32 @@
       ['D20', 'D21', 'D22', 'D23', 'D24', 'D25', 'D26', 'D27', 'D28'],
       ['E3',  'E4',  null,  null,  null,  null,  null,  null,  null ]
     ];
+
+    function initDefaultSessionAndClass() {
+      const now = new Date();
+      const day = now.getDay(); // 0=日, 1=一, 2=二, 3=三, 4=四
+      const hr = now.getHours();
+      const autoSess = hr < 15 ? '12:30場' : '17:00場';
+      setSession(autoSess, true);
+
+      // 依課表自動預選班別（一12:30 B / 一17:00 A / 二17:00 B / 三12:30 A / 三17:00 B / 四17:00 A）
+      if (day === 1) currentSeatGroup = (autoSess === '12:30場') ? 'B' : 'A';
+      else if (day === 2) currentSeatGroup = 'B';
+      else if (day === 3) currentSeatGroup = (autoSess === '12:30場') ? 'A' : 'B';
+      else if (day === 4) currentSeatGroup = 'A';
+    }
+
+    function setSession(sess, skipReload) {
+      currentSession = sess;
+      document.getElementById('sessBtn1230').className = 'sess-btn' + (sess === '12:30場' ? ' active' : '');
+      document.getElementById('sessBtn1700').className = 'sess-btn' + (sess === '17:00場' ? ' active' : '');
+      const graceNote = (sess === '12:30場') ? '（12:40前準時，12:41起遲到）' : '（17:10前準時，17:11起遲到）';
+      document.getElementById('sessionHintText').textContent = '目前點名：' + sess + ' ' + graceNote;
+
+      if (!skipReload && mode === 'seat') {
+        loadSeatDashboard(currentSeatGroup);
+      }
+    }
 
     function playBeep() {
       try {
@@ -359,6 +468,7 @@
           const today = new Date();
           document.getElementById('searchDate').value =
             today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
+          initDefaultSessionAndClass();
           loadBookCatalog();
           initScanner();
         } else {
@@ -413,10 +523,11 @@
       } else {
         stopScannerIfRunning();
         if (m === 'seat') loadSeatDashboard(currentSeatGroup);
-        if (m === 'search') runRecordSearch();
+        if (m === 'search') switchSearchSub(searchSubTab);
       }
     }
 
+    // === 發書清單管理 ===
     function addBookToBatch(rawCode) {
       const clean = String(rawCode || '').trim().toUpperCase();
       if (!clean) return;
@@ -618,16 +729,23 @@
       const area = document.getElementById('resultArea');
 
       if (mode === 'checkin') {
-        area.innerHTML = '<div class="res-card">報到處理中...</div>';
+        area.innerHTML = '<div class="res-card">報到處理中（' + currentSession + '）...</div>';
         try {
-          const res = await callGasJsonp({ action: 'adminCheckin', pass: savedPass, code: cleanCode });
+          const res = await callGasJsonp({ action: 'adminCheckin', pass: savedPass, code: cleanCode, session: currentSession });
           if (!res || !res.ok) {
             area.innerHTML = '<div class="err-banner">' + ((res && res.message) || '查詢失敗') + '</div>';
             return;
           }
           const st = res.student;
+          const isLate = (res.status === '遲到');
+          const isDup = (res.checkinStatus === 'already_checked_in');
+          const bannerCls = isDup ? 'warn-banner' : (isLate ? 'warn-banner' : 'ok-banner');
+          const bannerMsg = isDup
+            ? ('本場次（' + res.session + '）稍早已點名過（' + res.time + '｜狀態：' + res.status + '）')
+            : ('報到成功｜' + res.session + '【' + res.status + '】');
+
           area.innerHTML = '<div class="res-card">' +
-            '<div class="ok-banner">報到成功（' + res.scanType + '）</div>' +
+            '<div class="' + bannerCls + '">' + bannerMsg + '</div>' +
             '<div class="stu-header">' +
               '<img class="stu-thumb" referrerpolicy="no-referrer" src="' + getAvatarUrl(st.avatar) + '">' +
               '<div>' +
@@ -658,7 +776,8 @@
             pass: savedPass,
             studentCode: cleanCode,
             bookCodes: batchBooks.map(b => b.code).join(','),
-            syncCheckin: syncFlag
+            syncCheckin: syncFlag,
+            session: currentSession
           });
           if (!res || !res.ok) {
             area.innerHTML = '<div class="err-banner">' + ((res && res.message) || '登記失敗') + '</div>';
@@ -708,10 +827,10 @@
       }
 
       let checkinHtml = '';
-      if (res.checkinStatus === 'checked_in') {
-        checkinHtml = '<div class="checkin-pill">已同步完成「敏惠校內班」點名報到（' + res.checkinTime + '）</div>';
+      if (res.checkinStatus === 'checked_in' || res.checkinStatus === 'updated') {
+        checkinHtml = '<div class="checkin-pill">已同步點名（' + res.session + '【' + res.status + '】｜' + res.checkinTime + '）</div>';
       } else if (res.checkinStatus === 'already_checked_in') {
-        checkinHtml = '<div class="checkin-pill dup">今日稍早已點名過（' + res.checkinTime + '），本次不重複紀錄</div>';
+        checkinHtml = '<div class="checkin-pill dup">' + res.session + '稍早已點名（' + res.status + '｜' + res.checkinTime + '），本次不重複紀錄</div>';
       }
 
       let details = [];
@@ -781,10 +900,15 @@
 
       const wrap = document.getElementById('admClassroomWrap');
       const scrollEl = document.getElementById('admMapScroll');
-      wrap.innerHTML = '<div style="text-align:center;padding:30px;font-weight:700;color:#475569;">正在載入校內' + currentSeatGroup + '班座位表...</div>';
+      wrap.innerHTML = '<div style="text-align:center;padding:30px;font-weight:700;color:#475569;">正在載入校內' + currentSeatGroup + '班（' + currentSession + '）座位表...</div>';
 
       try {
-        const res = await callGasJsonp({ action: 'adminGetSeatDashboard', pass: savedPass, group: currentSeatGroup });
+        const res = await callGasJsonp({
+          action: 'adminGetSeatDashboard',
+          pass: savedPass,
+          group: currentSeatGroup,
+          session: currentSession
+        });
         if (!res || !res.ok) {
           wrap.innerHTML = '<div class="err-banner">' + ((res && res.message) || '載入失敗') + '</div>';
           return;
@@ -800,7 +924,7 @@
     function buildAdminZoneHtml(gridData, colCount, showLeftRowNum, showRightRowNum) {
       const seatMap = seatDashData.seatMap || {};
       let html = '<div class="adm-zone"><div class="adm-grid" style="grid-template-columns:' +
-        (showLeftRowNum ? '18px ' : '') + 'repeat(' + colCount + ', 44px)' + (showRightRowNum ? ' 18px' : '') + ';">';
+        (showLeftRowNum ? '18px ' : '') + 'repeat(' + colCount + ', 46px)' + (showRightRowNum ? ' 18px' : '') + ';">';
 
       if (showLeftRowNum) html += '<div class="acell head"></div>';
       for (let c = 1; c <= colCount; c++) {
@@ -824,9 +948,10 @@
               cls += 'empty';
               inner = '<span class="scode">' + code + '</span><span>空位</span>';
             } else {
-              cls += stu.checkedIn ? 'checked' : 'unverified';
-              const dot = stu.adminNote ? '<span class="snote-dot">●</span>' : '';
-              inner = '<span class="scode">' + code + dot + '</span><span class="sname">' + stu.name + '</span>';
+              cls += stu.status ? ('st-' + stu.status) : 'unmarked';
+              const dot = (stu.adminNote || stu.sessionNote) ? '<span class="snote-dot">●</span>' : '';
+              const stTag = stu.status ? ('<span class="sstat">' + stu.status + '</span>') : '<span class="sstat" style="opacity:0.5;">未點</span>';
+              inner = '<span class="scode">' + code + dot + '</span><span class="sname">' + stu.name + '</span>' + stTag;
             }
             html += '<div class="' + cls + '" onclick="openSeatActionModal(\'' + code + '\')">' + inner + '</div>';
           }
@@ -839,18 +964,24 @@
 
     function renderAdminClassroom() {
       const students = seatDashData.students || [];
-      const assigned = students.filter(s => s.seat).length;
-      const checked = students.filter(s => s.checkedIn).length;
-      const unverified = students.filter(s => s.seat && !s.checkedIn).length;
+      const cPresent = students.filter(s => s.status === '出席').length;
+      const cLate = students.filter(s => s.status === '遲到').length;
+      const cEarly = students.filter(s => s.status === '早退').length;
+      const cLeave = students.filter(s => s.status === '請假').length;
+      const cAbsent = students.filter(s => s.status === '未到').length;
+      const cUnmarked = students.filter(s => !s.status).length;
 
       document.getElementById('seatStatStrip').innerHTML =
         '<span>全班 ' + students.length + ' 人</span>' +
-        '<span style="color:#1d4ed8;">已劃位 ' + assigned + ' / 86</span>' +
-        '<span style="color:#16a34a;">今日已到 ' + checked + ' 人</span>' +
-        '<span style="color:#d97706;">劃位未到 ' + unverified + ' 人</span>';
+        '<span style="color:#16a34a;">出席 ' + cPresent + '</span>' +
+        '<span style="color:#ea580c;">遲到 ' + cLate + '</span>' +
+        '<span style="color:#9333ea;">早退 ' + cEarly + '</span>' +
+        '<span style="color:#2563eb;">請假 ' + cLeave + '</span>' +
+        '<span style="color:#dc2626;">未到 ' + cAbsent + '</span>' +
+        '<span style="color:#475569;">未登記 ' + cUnmarked + '</span>';
 
       document.getElementById('admClassroomWrap').innerHTML =
-        '<div class="adm-wb">白  板（校內 ' + currentSeatGroup + ' 班）</div>' +
+        '<div class="adm-wb">白  板（校內 ' + currentSeatGroup + ' 班｜' + currentSession + '）</div>' +
         '<div class="adm-zones">' +
           buildAdminZoneHtml(LEFT_GRID, 9, true, false) +
           buildAdminZoneHtml(MID_GRID, 12, false, false) +
@@ -859,10 +990,18 @@
         '<div class="adm-doors"><span>教室門口</span><span>教室門口</span></div>';
     }
 
+    function appendQuickTag(tagText) {
+      const inp = document.getElementById('modalNoteInput');
+      if (!inp) return;
+      const cur = inp.value.trim();
+      if (cur.includes(tagText)) return;
+      inp.value = cur ? (cur + ' ' + tagText) : tagText;
+    }
+
     function openSeatActionModal(seatCode) {
       if (!seatDashData) return;
       const stu = (seatDashData.seatMap || {})[seatCode];
-      document.getElementById('modalSeatHeader').textContent = '校內' + currentSeatGroup + '班｜座位【' + seatCode + '】';
+      document.getElementById('modalSeatHeader').textContent = '校內' + currentSeatGroup + '班｜座位【' + seatCode + '】（' + currentSession + '）';
       const bodyEl = document.getElementById('modalSeatBody');
 
       if (!stu) {
@@ -890,30 +1029,45 @@
           return '<option value="' + c + '">' + label + '</option>';
         }).join('');
 
+        const noteVal = (stu.sessionNote || stu.adminNote || '').replace(/"/g, '&quot;');
+
         bodyEl.innerHTML =
           '<div class="verify-card">' +
             '<img class="verify-photo" referrerpolicy="no-referrer" src="' + getAvatarUrl(stu.avatar) + '">' +
             '<div>' +
               '<div style="font-size:19px;font-weight:900;">' + stu.name + '</div>' +
-              '<div style="font-size:13.5px;font-weight:700;color:#0369a1;margin:3px 0;">' + stu.mainId + '</div>' +
-              '<div style="font-size:13px;color:#475569;">班級：' + (stu.className || '--') + '</div>' +
-              '<div style="font-size:12.5px;margin-top:4px;font-weight:800;color:' + (stu.checkedIn ? '#16a34a' : '#d97706') + ';">' +
-                (stu.checkedIn ? ('今日已點名（' + stu.checkinTime + '）') : '今日尚未點名') +
+              '<div style="font-size:13.5px;font-weight:700;color:#0369a1;margin:2px 0;">' + stu.mainId + '</div>' +
+              '<div style="font-size:12.5px;color:#475569;">班級：' + (stu.className || '--') + '</div>' +
+              '<div style="font-size:13px;margin-top:4px;font-weight:900;">' +
+                currentSession + '目前狀態：' +
+                (stu.status ? ('<span class="st-tag st-' + stu.status + '">' + stu.status + '</span>') : '<span style="color:#64748b;">尚未登記</span>') +
               '</div>' +
             '</div>' +
           '</div>' +
 
-          '<div class="sec-label">1. 行政備註（可記錄代坐、請假或現場狀況）：</div>' +
+          '<div class="sec-label">1. 選擇本場次出缺勤狀態（點擊即儲存並同步統計）：</div>' +
+          '<div class="status-5-grid">' +
+            '<button type="button" class="btn-st c-出席" onclick="execSetStatus(' + stu.rowIndex + ',\'出席\')">出席</button>' +
+            '<button type="button" class="btn-st c-遲到" onclick="execSetStatus(' + stu.rowIndex + ',\'遲到\')">遲到</button>' +
+            '<button type="button" class="btn-st c-早退" onclick="execSetStatus(' + stu.rowIndex + ',\'早退\')">早退</button>' +
+            '<button type="button" class="btn-st c-請假" onclick="execSetStatus(' + stu.rowIndex + ',\'請假\')">請假</button>' +
+            '<button type="button" class="btn-st c-未到" onclick="execSetStatus(' + stu.rowIndex + ',\'未到\')">未到</button>' +
+          '</div>' +
+
+          '<div class="sec-label">2. 事由快速標籤與備註（選填）：</div>' +
+          '<div class="quick-tags">' +
+            '<button type="button" class="q-tag" onclick="appendQuickTag(\'[事假]\')">+ 事假</button>' +
+            '<button type="button" class="q-tag" onclick="appendQuickTag(\'[病假]\')">+ 病假</button>' +
+            '<button type="button" class="q-tag" onclick="appendQuickTag(\'[公假/實習]\')">+ 公假/實習</button>' +
+            '<button type="button" class="q-tag" onclick="appendQuickTag(\'[學校活動]\')">+ 學校活動</button>' +
+            '<button type="button" class="q-tag" onclick="appendQuickTag(\'[身體不適早退]\')">+ 身體不適早退</button>' +
+          '</div>' +
           '<div class="inline-act" style="margin-bottom:10px;">' +
-            '<input type="text" id="modalNoteInput" value="' + (stu.adminNote || '').replace(/"/g, '&quot;') + '" placeholder="輸入備註文字...">' +
+            '<input type="text" id="modalNoteInput" value="' + noteVal + '" placeholder="輸入備註文字...">' +
             '<button type="button" class="btn-slate" onclick="execSaveNoteOnly(' + stu.rowIndex + ')">僅存備註</button>' +
           '</div>' +
 
-          '<button type="button" class="btn-green" onclick="execSeatCheckin(' + stu.rowIndex + ')">' +
-            (stu.checkedIn ? '已點名（點擊更新備註並確認）' : '確認本人｜完成今日點名') +
-          '</button>' +
-
-          '<div class="sec-label">2. 現場更換座位（支援移至空位或與同學對調）：</div>' +
+          '<div class="sec-label">3. 現場更換座位（支援移至空位或與同學對調）：</div>' +
           '<div class="inline-act">' +
             '<select id="moveSeatSelect">' +
               seatOptions +
@@ -926,15 +1080,72 @@
       document.getElementById('seatActionModal').style.display = 'flex';
     }
 
+    // 一鍵結算未到名單預覽彈窗
+    function openBatchAbsentModal() {
+      if (!seatDashData) return;
+      const unmarked = (seatDashData.students || []).filter(s => !s.status);
+      document.getElementById('modalSeatHeader').textContent = '一鍵結算未到（校內' + currentSeatGroup + '班｜' + currentSession + '）';
+      const bodyEl = document.getElementById('modalSeatBody');
+
+      if (unmarked.length === 0) {
+        bodyEl.innerHTML =
+          '<div class="ok-banner" style="margin:12px 0;">太棒了！校內' + currentSeatGroup + '班「' + currentSession + '」全班皆已完成狀態登記，沒有未登記的同學！</div>';
+        document.getElementById('seatActionModal').style.display = 'flex';
+        return;
+      }
+
+      const listHtml = unmarked.map(s =>
+        '<div style="padding:6px 8px;border-bottom:1px solid #e2e8f0;display:flex;justify-content:space-between;font-size:13.5px;">' +
+          '<span><b>' + s.name + '</b>（' + s.mainId + '）</span>' +
+          '<span class="badge-seat">' + (s.seat || '未劃位') + '</span>' +
+        '</div>'
+      ).join('');
+
+      const rowIds = unmarked.map(s => s.rowIndex).join(',');
+
+      bodyEl.innerHTML =
+        '<div class="warn-banner">以下共 <b>' + unmarked.length + '</b> 位同學在今日「' + currentSession + '」尚未點名、也未請假，確認後將批次登記為【未到】：</div>' +
+        '<div style="max-height:240px;overflow-y:auto;border:1px solid #cbd5e1;border-radius:10px;margin-bottom:14px;">' + listHtml + '</div>' +
+        '<button type="button" style="background:#dc2626;" onclick="execBatchMarkAbsent(this,\'' + rowIds + '\')">確定將這 ' + unmarked.length + ' 位登記為【未到】</button>';
+
+      document.getElementById('seatActionModal').style.display = 'flex';
+    }
+
+    async function execBatchMarkAbsent(btn, rowIdsStr) {
+      btn.disabled = true;
+      btn.textContent = '批次結算中...';
+      try {
+        const res = await callGasJsonp({
+          action: 'adminBatchMarkAbsent',
+          pass: savedPass,
+          group: currentSeatGroup,
+          session: currentSession,
+          rowIndexes: rowIdsStr
+        });
+        if (!res || !res.ok) { alert((res && res.message) || '結算失敗'); return; }
+        playBeep();
+        alert(res.message);
+        closeSeatActionModal();
+        loadSeatDashboard(currentSeatGroup);
+      } catch (err) { alert(err.message); }
+    }
+
     function closeSeatActionModal() {
       document.getElementById('seatActionModal').style.display = 'none';
     }
 
-    async function execSeatCheckin(rowIndex) {
+    async function execSetStatus(rowIndex, status) {
       const note = document.getElementById('modalNoteInput').value;
       try {
-        const res = await callGasJsonp({ action: 'adminSeatCheckin', pass: savedPass, rowIndex: rowIndex, note: note });
-        if (!res || !res.ok) { alert((res && res.message) || '點名失敗'); return; }
+        const res = await callGasJsonp({
+          action: 'adminSetSeatStatus',
+          pass: savedPass,
+          rowIndex: rowIndex,
+          session: currentSession,
+          status: status,
+          note: note
+        });
+        if (!res || !res.ok) { alert((res && res.message) || '登記失敗'); return; }
         playBeep();
         closeSeatActionModal();
         loadSeatDashboard(currentSeatGroup);
@@ -978,10 +1189,84 @@
       } catch (err) { alert(err.message); }
     }
 
-    // === 分頁 4：點名紀錄與未到搜尋 ===
+    // === 分頁 4：全勤統計與點名紀錄查詢 ===
+    function switchSearchSub(sub) {
+      searchSubTab = sub;
+      document.getElementById('subTabStats').className = 'sub-tab' + (sub === 'stats' ? ' active' : '');
+      document.getElementById('subTabRec').className = 'sub-tab' + (sub === 'records' ? ' active' : '');
+      document.getElementById('subTabAbs').className = 'sub-tab' + (sub === 'unmarked' ? ' active' : '');
+
+      document.getElementById('statsFilterBox').style.display = (sub === 'stats') ? 'block' : 'none';
+      document.getElementById('logFilterBox').style.display = (sub !== 'stats') ? 'block' : 'none';
+
+      if (sub === 'stats') {
+        runStatsSearch();
+      } else {
+        runRecordSearch();
+      }
+    }
+
+    async function runStatsSearch() {
+      const grp = document.getElementById('statsGroup').value;
+      const onlyFull = document.getElementById('statsFullOnly').value;
+      const kw = document.getElementById('statsKeyword').value;
+      const wrap = document.getElementById('searchResultWrap');
+      wrap.innerHTML = '<div style="text-align:center;padding:24px;color:#475569;font-weight:700;">計算出缺勤與全勤名單中...</div>';
+
+      try {
+        const res = await callGasJsonp({
+          action: 'adminGetAttendanceStats',
+          pass: savedPass,
+          group: grp,
+          onlyFull: onlyFull,
+          keyword: kw
+        });
+        if (!res || !res.ok) {
+          wrap.innerHTML = '<div class="err-banner">' + ((res && res.message) || '查詢失敗') + '</div>';
+          return;
+        }
+        document.getElementById('statsBanner').innerHTML =
+          '篩選範圍共 <b>' + res.classTotal + '</b> 人 ｜ 目前符合全勤資格：<b>' + res.fullCount + '</b> 人（已同步更新試算表「出缺勤統計」）';
+
+        const list = res.list || [];
+        if (list.length === 0) {
+          wrap.innerHTML = '<div style="text-align:center;padding:24px;color:#64748b;">查無符合條件的學生資料</div>';
+          return;
+        }
+
+        wrap.innerHTML = list.map(s => {
+          const c = s.counts;
+          const badge = s.totalSessions === 0
+            ? '<span class="notfull-badge">尚未開課</span>'
+            : (s.isFullAttendance
+                ? '<span class="full-badge">全勤資格</span>'
+                : '<span class="notfull-badge">未全勤</span>');
+          return '<div class="rec-item">' +
+            '<div class="rec-top">' +
+              '<span>' + s.name + ' <small style="color:#64748b;">(' + s.mainId + '｜校內' + s.seatGroup + '班 ' + (s.seat || '未劃位') + ')</small></span>' +
+              badge +
+            '</div>' +
+            '<div class="mini-counts">' +
+              '<span style="color:#16a34a;">出席 ' + c['出席'] + '</span>' +
+              '<span style="color:#ea580c;">遲到 ' + c['遲到'] + '</span>' +
+              '<span style="color:#9333ea;">早退 ' + c['早退'] + '</span>' +
+              '<span style="color:#2563eb;">請假 ' + c['請假'] + '</span>' +
+              '<span style="color:#dc2626;">未到 ' + c['未到'] + '</span>' +
+              '<span style="color:#475569;">（共 ' + s.totalSessions + ' 堂）</span>' +
+            '</div>' +
+            (s.adminNote ? ('<div style="color:#64748b;font-size:12px;margin-top:4px;">備註：' + s.adminNote + '</div>') : '') +
+          '</div>';
+        }).join('');
+      } catch (err) {
+        wrap.innerHTML = '<div class="err-banner">' + err.message + '</div>';
+      }
+    }
+
     async function runRecordSearch() {
       const dateVal = document.getElementById('searchDate').value;
+      const sessVal = document.getElementById('searchSession').value;
       const grpVal = document.getElementById('searchGroup').value;
+      const stVal = document.getElementById('searchStatus').value;
       const kwVal = document.getElementById('searchKeyword').value;
       const wrap = document.getElementById('searchResultWrap');
       wrap.innerHTML = '<div style="text-align:center;padding:20px;color:#475569;font-weight:700;">搜尋紀錄中...</div>';
@@ -991,7 +1276,9 @@
           action: 'adminSearchRecords',
           pass: savedPass,
           date: dateVal,
+          session: sessVal,
           group: grpVal,
+          status: stVal,
           keyword: kwVal
         });
         if (!res || !res.ok) {
@@ -999,22 +1286,15 @@
           return;
         }
         searchDataCache = res;
-        document.getElementById('subTabRec').textContent = '點名與異動紀錄 (' + res.records.length + ')';
-        document.getElementById('subTabAbs').textContent = '當日未到名單 (' + res.absentList.length + ')';
-        renderSearchResults();
+        document.getElementById('subTabRec').textContent = '點名明細 (' + res.records.length + ')';
+        document.getElementById('subTabAbs').textContent = '當日未登記 (' + res.unmarkedList.length + ')';
+        renderLogSubResults();
       } catch (err) {
         wrap.innerHTML = '<div class="err-banner">' + err.message + '</div>';
       }
     }
 
-    function switchSearchSub(sub) {
-      searchSubTab = sub;
-      document.getElementById('subTabRec').className = 'sub-tab' + (sub === 'records' ? ' active' : '');
-      document.getElementById('subTabAbs').className = 'sub-tab' + (sub === 'absent' ? ' active' : '');
-      renderSearchResults();
-    }
-
-    function renderSearchResults() {
+    function renderLogSubResults() {
       const wrap = document.getElementById('searchResultWrap');
       if (searchSubTab === 'records') {
         const list = searchDataCache.records || [];
@@ -1026,39 +1306,54 @@
           '<div class="rec-item">' +
             '<div class="rec-top">' +
               '<span>' + r.name + ' <small style="color:#64748b;">(' + r.studentId + ')</small></span>' +
-              '<span class="badge-seat">' + (r.seatGroup ? ('校內' + r.seatGroup + '班 ') : '') + (r.seat || '未劃位') + '</span>' +
+              '<div>' +
+                '<span class="badge-seat" style="margin-right:4px;">' + (r.seatGroup ? ('校內' + r.seatGroup + '班 ') : '') + (r.seat || '未劃位') + '</span>' +
+                '<span class="st-tag st-' + r.status + '">' + r.status + '</span>' +
+              '</div>' +
             '</div>' +
-            '<div style="color:#475569;font-size:12.5px;">時間：' + r.time + ' ｜ 方式：' + (r.method || r.scanType) + '</div>' +
+            '<div style="color:#475569;font-size:12.5px;">場次：<b>' + r.session + '</b> ｜ 時間：' + r.time + ' ｜ ' + (r.method || r.scanType) + '</div>' +
             (r.note ? ('<div style="color:#dc2626;font-size:12.5px;font-weight:700;margin-top:3px;">備註：' + r.note + '</div>') : '') +
           '</div>'
         ).join('');
       } else {
-        const list = searchDataCache.absentList || [];
+        const list = searchDataCache.unmarkedList || [];
         if (!document.getElementById('searchDate').value) {
-          wrap.innerHTML = '<div style="text-align:center;padding:24px;color:#64748b;">請先選擇日期以查詢當日未到名單</div>';
+          wrap.innerHTML = '<div style="text-align:center;padding:24px;color:#64748b;">請先選擇日期以查詢當日未登記名單</div>';
           return;
         }
         if (list.length === 0) {
-          wrap.innerHTML = '<div style="text-align:center;padding:24px;color:#16a34a;font-weight:700;">太棒了！當日全數到齊</div>';
+          wrap.innerHTML = '<div style="text-align:center;padding:24px;color:#16a34a;font-weight:700;">當日該篩選條件下全數已完成登記！</div>';
           return;
         }
         wrap.innerHTML = list.map(s =>
-          '<div class="rec-item" style="display:flex;justify-content:space-between;align-items:center;gap:8px;">' +
+          '<div class="rec-item" style="display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:wrap;">' +
             '<div>' +
               '<div style="font-weight:800;">' + s.name + ' <span class="badge-seat">校內' + s.seatGroup + '班 ' + (s.seat || '未劃位') + '</span></div>' +
               '<div style="font-size:12px;color:#64748b;margin-top:2px;">' + s.mainId + ' ｜ ' + s.className + '</div>' +
-              (s.adminNote ? ('<div style="font-size:12px;color:#dc2626;font-weight:700;">備註：' + s.adminNote + '</div>') : '') +
             '</div>' +
-            '<button class="btn-sm btn-got" onclick="quickCheckinFromAbsent(' + s.rowIndex + ')">補點名</button>' +
+            '<div style="display:flex;gap:4px;">' +
+              '<button class="btn-sm" style="background:#16a34a;padding:6px 9px;" onclick="quickSetFromSearch(' + s.rowIndex + ',\'出席\')">出席</button>' +
+              '<button class="btn-sm" style="background:#2563eb;padding:6px 9px;" onclick="quickSetFromSearch(' + s.rowIndex + ',\'請假\')">請假</button>' +
+              '<button class="btn-sm" style="background:#dc2626;padding:6px 9px;" onclick="quickSetFromSearch(' + s.rowIndex + ',\'未到\')">未到</button>' +
+            '</div>' +
           '</div>'
         ).join('');
       }
     }
 
-    async function quickCheckinFromAbsent(rowIndex) {
+    async function quickSetFromSearch(rowIndex, status) {
+      const targetSess = document.getElementById('searchSession').value === 'ALL'
+        ? currentSession
+        : document.getElementById('searchSession').value;
       try {
-        const res = await callGasJsonp({ action: 'adminSeatCheckin', pass: savedPass, rowIndex: rowIndex });
-        if (!res || !res.ok) { alert((res && res.message) || '補點名失敗'); return; }
+        const res = await callGasJsonp({
+          action: 'adminSetSeatStatus',
+          pass: savedPass,
+          rowIndex: rowIndex,
+          session: targetSess,
+          status: status
+        });
+        if (!res || !res.ok) { alert((res && res.message) || '操作失敗'); return; }
         playBeep();
         runRecordSearch();
       } catch (err) { alert(err.message); }
