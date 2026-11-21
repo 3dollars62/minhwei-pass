@@ -373,12 +373,11 @@
 
     function initDefaultSessionAndClass() {
       const now = new Date();
-      const day = now.getDay(); // 0=日, 1=一, 2=二, 3=三, 4=四
+      const day = now.getDay();
       const hr = now.getHours();
       const autoSess = hr < 15 ? '12:30場' : '17:00場';
       setSession(autoSess, true);
 
-      // 依課表自動預選班別（一12:30 B / 一17:00 A / 二17:00 B / 三12:30 A / 三17:00 B / 四17:00 A）
       if (day === 1) currentSeatGroup = (autoSess === '12:30場') ? 'B' : 'A';
       else if (day === 2) currentSeatGroup = 'B';
       else if (day === 3) currentSeatGroup = (autoSess === '12:30場') ? 'A' : 'B';
@@ -641,7 +640,19 @@
     async function startWithConfig(cameraConfig) {
       await stopScannerIfRunning();
       if (!html5QrCode) html5QrCode = createScannerInstance("reader");
-      await html5QrCode.start(cameraConfig, { fps: 10, qrbox: { width: 260, height: 150 } }, onScanSuccess, () => {});
+      await html5QrCode.start(
+        cameraConfig,
+        {
+          fps: 10,
+          qrbox: function(viewfinderWidth, viewfinderHeight) {
+            const minEdge = Math.min(viewfinderWidth, viewfinderHeight);
+            const size = Math.max(160, Math.floor(minEdge * 0.75));
+            return { width: size, height: size };
+          }
+        },
+        onScanSuccess,
+        () => {}
+      );
       isScanning = true;
     }
 
