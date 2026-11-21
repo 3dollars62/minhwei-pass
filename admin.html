@@ -8,7 +8,7 @@
   <style>
     * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Noto Sans TC", sans-serif; }
     body { margin: 0; background: #f1f5f9; color: #0f172a; padding: 12px; }
-    .box { max-width: 860px; margin: 0 auto; background: #fff; border-radius: 18px; padding: 16px; box-shadow: 0 8px 20px rgba(0,0,0,0.06); }
+    .box { max-width: 1460px; margin: 0 auto; background: #fff; border-radius: 18px; padding: 16px; box-shadow: 0 8px 20px rgba(0,0,0,0.06); }
     .narrow-wrap { max-width: 480px; margin: 0 auto; }
     h2 { margin: 0 0 12px; font-size: 20px; text-align: center; }
     input[type="text"], input[type="password"], input[type="date"], select { width: 100%; padding: 10px 12px; border: 1.5px solid #cbd5e1; border-radius: 10px; font-size: 14.5px; margin-bottom: 10px; background: #fff; outline: none; }
@@ -17,7 +17,7 @@
     button:disabled { background: #94a3b8; cursor: not-allowed; }
 
     /* 主分頁列 */
-    .tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 14px; }
+    .tabs { max-width: 680px; margin: 0 auto 14px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
     .tab { background: #e2e8f0; color: #334155; font-size: 13px; padding: 10px 4px; border-radius: 10px; }
     .tab.active { background: #0284c7; color: #fff; }
 
@@ -61,20 +61,20 @@
     .btn-got { background: #16a34a; }
     .btn-wait { background: #64748b; }
 
-    /* === 分頁 3：座位表點名 === */
-    .seat-toolbar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 10px; }
+    /* === 分頁 3：座位表點名（靠左完整展開，不裁切前5欄） === */
+    .seat-toolbar { max-width: 680px; margin: 0 auto 10px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
     .cls-btn { flex: 1; padding: 9px; font-size: 14px; background: #e2e8f0; color: #334155; }
     .cls-btn.active { background: #1e3a8a; color: #fff; }
     .btn-refresh { width: auto; padding: 9px 14px; font-size: 13px; background: #0f172a; }
-    .stat-strip { display: flex; justify-content: space-around; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 8px; margin-bottom: 10px; font-size: 13px; font-weight: 700; }
+    .stat-strip { max-width: 680px; margin: 0 auto 10px; display: flex; justify-content: space-around; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 8px; font-size: 13px; font-weight: 700; }
     .legend-row { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; font-size: 12px; margin-bottom: 8px; color: #475569; font-weight: 600; }
     .leg-box { display: inline-block; width: 13px; height: 13px; border-radius: 3px; vertical-align: middle; margin-right: 4px; border: 1px solid #94a3b8; }
 
     .adm-map-scroll { overflow-x: auto; background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 12px; -webkit-overflow-scrolling: touch; }
-    .adm-classroom { min-width: 780px; }
-    .adm-wb { background: #334155; color: #fff; text-align: center; padding: 6px; border-radius: 7px; font-weight: 800; font-size: 13px; letter-spacing: 6px; margin-bottom: 10px; }
-    .adm-zones { display: flex; gap: 12px; justify-content: center; }
-    .adm-zone { background: #fff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 5px; }
+    .adm-classroom { width: max-content; min-width: 100%; margin: 0 auto; }
+    .adm-wb { width: 100%; background: #334155; color: #fff; text-align: center; padding: 6px; border-radius: 7px; font-weight: 800; font-size: 13px; letter-spacing: 6px; margin-bottom: 10px; }
+    .adm-zones { display: flex; gap: 12px; justify-content: flex-start; }
+    .adm-zone { background: #fff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 5px; flex-shrink: 0; }
     .adm-grid { display: grid; gap: 3px; }
     .acell { height: 44px; border-radius: 5px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 10.5px; line-height: 1.15; padding: 2px; text-align: center; overflow: hidden; }
     .acell.head { height: 20px; background: #e2e8f0; color: #475569; font-weight: 700; }
@@ -87,7 +87,7 @@
     .acell .scode { font-weight: 800; font-size: 10px; }
     .acell .sname { font-weight: 800; font-size: 11px; white-space: nowrap; }
     .acell .snote-dot { color: #dc2626; font-size: 9px; font-weight: 900; }
-    .adm-doors { display: flex; justify-content: space-between; margin-top: 8px; font-size: 11px; font-weight: 800; color: #475569; }
+    .adm-doors { display: flex; justify-content: space-between; width: 100%; margin-top: 8px; font-size: 11px; font-weight: 800; color: #475569; }
     .adm-doors span { background: #e2e8f0; padding: 3px 10px; border-radius: 6px; }
 
     /* === 分頁 4：紀錄搜尋 === */
@@ -197,7 +197,7 @@
         <span><i class="leg-box" style="background:#f8fafc;border-color:#cbd5e1;"></i>空位</span>
         <span><span style="color:#dc2626;font-weight:900;">●</span> 有備註</span>
       </div>
-      <div class="adm-map-scroll">
+      <div id="admMapScroll" class="adm-map-scroll">
         <div id="admClassroomWrap" class="adm-classroom"></div>
       </div>
     </div>
@@ -417,7 +417,6 @@
       }
     }
 
-    // === 發書清單管理 ===
     function addBookToBatch(rawCode) {
       const clean = String(rawCode || '').trim().toUpperCase();
       if (!clean) return;
@@ -781,6 +780,7 @@
       document.getElementById('btnClassB').className = 'cls-btn' + (currentSeatGroup === 'B' ? ' active' : '');
 
       const wrap = document.getElementById('admClassroomWrap');
+      const scrollEl = document.getElementById('admMapScroll');
       wrap.innerHTML = '<div style="text-align:center;padding:30px;font-weight:700;color:#475569;">正在載入校內' + currentSeatGroup + '班座位表...</div>';
 
       try {
@@ -791,6 +791,7 @@
         }
         seatDashData = res;
         renderAdminClassroom();
+        if (scrollEl) scrollEl.scrollLeft = 0;
       } catch (err) {
         wrap.innerHTML = '<div class="err-banner">' + err.message + '</div>';
       }
@@ -865,7 +866,6 @@
       const bodyEl = document.getElementById('modalSeatBody');
 
       if (!stu) {
-        // 空位：允許行政直接把該班尚未劃位（或需調整）的同學安排進來
         const unseated = (seatDashData.students || []).filter(s => !s.seat);
         const optionsHtml = unseated.map(s =>
           '<option value="' + s.rowIndex + '">' + s.name + '（' + s.mainId + '｜' + s.className + '）</option>'
@@ -883,7 +883,6 @@
             '</div>'
           ) : '<div style="font-size:13px;color:#64748b;text-align:center;">本班同學皆已劃位完畢</div>');
       } else {
-        // 有人座位：顯示大頭照核對本人 + 點名 + 換位 + 備註
         const seatMap = seatDashData.seatMap || {};
         const seatOptions = ALL_SEAT_CODES.filter(c => c !== seatCode).map(c => {
           const occupant = seatMap[c];
