@@ -3,19 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>敏惠上課證｜行政點名與發書後台</title>
+  <title>敏惠上課證｜行政點名與座位管理後台</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
   <style>
     * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Noto Sans TC", sans-serif; }
-    body { margin: 0; background: #f1f5f9; color: #0f172a; padding: 14px; }
-    .box { max-width: 480px; margin: 0 auto; background: #fff; border-radius: 18px; padding: 18px; box-shadow: 0 8px 20px rgba(0,0,0,0.06); }
-    h2 { margin: 0 0 14px; font-size: 20px; text-align: center; }
-    input[type="text"], input[type="password"], select { width: 100%; padding: 11px 12px; border: 1.5px solid #cbd5e1; border-radius: 10px; font-size: 15px; margin-bottom: 10px; background: #fff; outline: none; }
-    input[type="text"]:focus, input[type="password"]:focus, select:focus { border-color: #0284c7; }
-    button { width: 100%; padding: 12px; border: none; border-radius: 10px; background: #0284c7; color: #fff; font-size: 16px; font-weight: 700; cursor: pointer; }
-    button:disabled { background: #94a3b8; }
-    .tabs { display: flex; gap: 8px; margin-bottom: 14px; }
-    .tab { flex: 1; background: #e2e8f0; color: #334155; font-size: 15px; }
+    body { margin: 0; background: #f1f5f9; color: #0f172a; padding: 12px; }
+    .box { max-width: 860px; margin: 0 auto; background: #fff; border-radius: 18px; padding: 16px; box-shadow: 0 8px 20px rgba(0,0,0,0.06); }
+    .narrow-wrap { max-width: 480px; margin: 0 auto; }
+    h2 { margin: 0 0 12px; font-size: 20px; text-align: center; }
+    input[type="text"], input[type="password"], input[type="date"], select { width: 100%; padding: 10px 12px; border: 1.5px solid #cbd5e1; border-radius: 10px; font-size: 14.5px; margin-bottom: 10px; background: #fff; outline: none; }
+    input:focus, select:focus { border-color: #0284c7; }
+    button { width: 100%; padding: 11px; border: none; border-radius: 10px; background: #0284c7; color: #fff; font-size: 15px; font-weight: 700; cursor: pointer; }
+    button:disabled { background: #94a3b8; cursor: not-allowed; }
+
+    /* 主分頁列 */
+    .tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 14px; }
+    .tab { background: #e2e8f0; color: #334155; font-size: 13px; padding: 10px 4px; border-radius: 10px; }
     .tab.active { background: #0284c7; color: #fff; }
 
     /* 發書清單卡片 */
@@ -44,25 +47,81 @@
 
     /* 結果卡片 */
     .res-card { background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 14px; margin-top: 14px; }
-    .ok-banner { background: #dcfce7; color: #166534; padding: 10px; border-radius: 8px; font-weight: 800; text-align: center; margin-bottom: 8px; font-size: 15px; line-height: 1.4; }
+    .ok-banner { background: #dcfce7; color: #166534; padding: 10px; border-radius: 8px; font-weight: 800; text-align: center; margin-bottom: 8px; font-size: 14.5px; line-height: 1.4; }
     .warn-banner { background: #fef3c7; color: #92400e; padding: 10px; border-radius: 8px; font-weight: 700; text-align: center; margin-bottom: 8px; font-size: 14px; line-height: 1.4; }
     .err-banner { background: #fee2e2; color: #991b1b; padding: 10px; border-radius: 8px; font-weight: 700; text-align: center; margin-top: 10px; font-size: 14px; }
     .checkin-pill { background: #e0f2fe; color: #0369a1; padding: 7px 10px; border-radius: 8px; font-size: 13px; font-weight: 700; text-align: center; margin-bottom: 10px; }
     .checkin-pill.dup { background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; }
     .detail-list { font-size: 13px; line-height: 1.6; margin-top: 8px; padding-top: 8px; border-top: 1px dashed #cbd5e1; }
     .stu-header { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
-    .stu-thumb { width: 52px; height: 52px; border-radius: 10px; object-fit: cover; background: #e2e8f0; flex-shrink: 0; }
+    .stu-thumb { width: 54px; height: 64px; border-radius: 10px; object-fit: cover; background: #e2e8f0; flex-shrink: 0; border: 1px solid #cbd5e1; }
     .book-row { display: flex; justify-content: space-between; align-items: center; padding: 9px 0; border-bottom: 1px solid #e2e8f0; gap: 8px; font-size: 14px; }
     .book-row:last-child { border-bottom: none; }
     .btn-sm { width: auto; padding: 6px 12px; font-size: 13px; flex-shrink: 0; }
     .btn-got { background: #16a34a; }
     .btn-wait { background: #64748b; }
+
+    /* === 分頁 3：座位表點名 === */
+    .seat-toolbar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 10px; }
+    .cls-btn { flex: 1; padding: 9px; font-size: 14px; background: #e2e8f0; color: #334155; }
+    .cls-btn.active { background: #1e3a8a; color: #fff; }
+    .btn-refresh { width: auto; padding: 9px 14px; font-size: 13px; background: #0f172a; }
+    .stat-strip { display: flex; justify-content: space-around; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 8px; margin-bottom: 10px; font-size: 13px; font-weight: 700; }
+    .legend-row { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; font-size: 12px; margin-bottom: 8px; color: #475569; font-weight: 600; }
+    .leg-box { display: inline-block; width: 13px; height: 13px; border-radius: 3px; vertical-align: middle; margin-right: 4px; border: 1px solid #94a3b8; }
+
+    .adm-map-scroll { overflow-x: auto; background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 12px; -webkit-overflow-scrolling: touch; }
+    .adm-classroom { min-width: 780px; }
+    .adm-wb { background: #334155; color: #fff; text-align: center; padding: 6px; border-radius: 7px; font-weight: 800; font-size: 13px; letter-spacing: 6px; margin-bottom: 10px; }
+    .adm-zones { display: flex; gap: 12px; justify-content: center; }
+    .adm-zone { background: #fff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 5px; }
+    .adm-grid { display: grid; gap: 3px; }
+    .acell { height: 44px; border-radius: 5px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 10.5px; line-height: 1.15; padding: 2px; text-align: center; overflow: hidden; }
+    .acell.head { height: 20px; background: #e2e8f0; color: #475569; font-weight: 700; }
+    .acell.aisle { background: transparent; }
+    .acell.res { background: #e2e8f0; color: #94a3b8; border: 1px dashed #cbd5e1; font-size: 9.5px; }
+    .acell.seat { cursor: pointer; border: 1.5px solid #cbd5e1; }
+    .acell.seat.empty { background: #f8fafc; color: #94a3b8; }
+    .acell.seat.unverified { background: #ffffff; border-color: #3b82f6; color: #0f172a; }
+    .acell.seat.checked { background: #dcfce7; border-color: #16a34a; color: #14532d; }
+    .acell .scode { font-weight: 800; font-size: 10px; }
+    .acell .sname { font-weight: 800; font-size: 11px; white-space: nowrap; }
+    .acell .snote-dot { color: #dc2626; font-size: 9px; font-weight: 900; }
+    .adm-doors { display: flex; justify-content: space-between; margin-top: 8px; font-size: 11px; font-weight: 800; color: #475569; }
+    .adm-doors span { background: #e2e8f0; padding: 3px 10px; border-radius: 6px; }
+
+    /* === 分頁 4：紀錄搜尋 === */
+    .search-bar { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
+    .search-bar input, .search-bar select { margin-bottom: 0; }
+    .sub-tabs { display: flex; gap: 8px; margin: 12px 0 8px; }
+    .sub-tab { flex: 1; padding: 8px; font-size: 13px; background: #e2e8f0; color: #334155; }
+    .sub-tab.active { background: #0f172a; color: #fff; }
+    .rec-item { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; font-size: 13px; }
+    .rec-top { display: flex; justify-content: space-between; font-weight: 800; margin-bottom: 4px; }
+    .badge-seat { background: #dbeafe; color: #1e40af; padding: 2px 8px; border-radius: 6px; font-size: 12px; }
+
+    /* === 座位核對彈窗 === */
+    .modal-mask { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.65); z-index: 999; display: none; align-items: center; justify-content: center; padding: 12px; }
+    .modal-box { background: #fff; width: 100%; max-width: 440px; max-height: 90vh; overflow-y: auto; border-radius: 18px; padding: 18px; box-shadow: 0 20px 40px rgba(0,0,0,0.25); }
+    .modal-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .modal-head h3 { margin: 0; font-size: 18px; }
+    .btn-x { width: 32px; height: 32px; border-radius: 50%; background: #e2e8f0; color: #334155; padding: 0; font-size: 16px; }
+    .verify-card { display: flex; gap: 14px; align-items: center; background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: 12px; margin-bottom: 12px; }
+    .verify-photo { width: 84px; height: 102px; border-radius: 10px; object-fit: cover; background: #e2e8f0; border: 1px solid #94a3b8; flex-shrink: 0; }
+    .sec-label { font-size: 13px; font-weight: 800; color: #334155; margin: 12px 0 6px; }
+    .btn-green { background: #16a34a; margin-bottom: 8px; }
+    .btn-amber { background: #d97706; }
+    .btn-slate { background: #475569; }
+    .inline-act { display: flex; gap: 8px; }
+    .inline-act select, .inline-act input { margin-bottom: 0; flex: 1; }
+    .inline-act button { width: auto; padding: 0 14px; flex-shrink: 0; }
+
     .logout-bar { text-align: center; margin-top: 16px; }
     .btn-link { background: transparent; color: #64748b; font-size: 13px; text-decoration: underline; padding: 4px; width: auto; }
   </style>
 </head>
 <body>
-  <div id="loginBox" class="box">
+  <div id="loginBox" class="box narrow-wrap">
     <h2>行政管理後台登入</h2>
     <input type="password" id="adminPass" placeholder="請輸入管理密碼" onkeydown="if(event.key==='Enter') doAdminLogin()">
     <button id="loginBtn" onclick="doAdminLogin()">進入後台</button>
@@ -70,58 +129,113 @@
   </div>
 
   <div id="mainBox" class="box" style="display:none;">
-    <h2>敏惠上課證｜行政作業</h2>
+    <h2>敏惠上課證｜行政作業後台</h2>
     <div class="tabs">
-      <button id="tCheckin" class="tab active" onclick="setMode('checkin')">掃碼點名報到</button>
-      <button id="tBook" class="tab" onclick="setMode('book')">發放講義登記</button>
+      <button id="tCheckin" class="tab active" onclick="setMode('checkin')">掃碼點名</button>
+      <button id="tBook" class="tab" onclick="setMode('book')">發放講義</button>
+      <button id="tSeat" class="tab" onclick="setMode('seat')">座位表點名</button>
+      <button id="tSearch" class="tab" onclick="setMode('search')">紀錄搜尋</button>
     </div>
 
-    <!-- 發放講義專用：本次發書清單與同步點名開關 -->
-    <div id="batchBookSection" class="batch-box" style="display:none;">
-      <div class="batch-title">
-        <span>Step 1｜本次發放講義清單（可選 1～多本）</span>
-        <button type="button" id="btnClearBatch" class="btn-clear-all" style="display:none;" onclick="clearBatchBooks()">清空清單</button>
+    <!-- === 分頁 1 & 2：掃碼點名 / 發放講義 === -->
+    <div id="scanModeSection" class="narrow-wrap">
+      <div id="batchBookSection" class="batch-box" style="display:none;">
+        <div class="batch-title">
+          <span>Step 1｜本次發放講義清單（可選 1～多本）</span>
+          <button type="button" id="btnClearBatch" class="btn-clear-all" style="display:none;" onclick="clearBatchBooks()">清空清單</button>
+        </div>
+
+        <label class="sync-opt">
+          <input type="checkbox" id="syncCheckinChk" checked>
+          <span>領書時同步完成「敏惠校內班」點名報到</span>
+        </label>
+
+        <div class="batch-row">
+          <select id="bookDropdown" onchange="addBookFromDropdown()">
+            <option value="">-- 從書單下拉選擇講義加入 --</option>
+          </select>
+        </div>
+        <div class="batch-row">
+          <input type="text" id="bookCodeInput" placeholder="或手動輸入書號（如 SP25D1AF）" onkeydown="if(event.key==='Enter') addBookManual()">
+          <button type="button" class="btn-add-book" onclick="addBookManual()">加入</button>
+        </div>
+        <div id="batchChipWrap" class="chip-wrap"></div>
+        <div id="batchHint" class="batch-hint empty">
+          可直接用下方鏡頭掃講義條碼、手動輸入或下拉加入（1 本或 3 本皆可）；加入後再連續掃學生 QR Code 即可一次全領！
+        </div>
       </div>
 
-      <label class="sync-opt">
-        <input type="checkbox" id="syncCheckinChk" checked>
-        <span>領書時同步完成「敏惠校內班」點名報到</span>
-      </label>
+      <div class="cam-panel">
+        <div id="reader"></div>
+        <div id="fileReader" style="display:none;"></div>
+        <div id="camStatus" class="cam-status">正在啟動掃碼鏡頭...</div>
+        <div class="cam-controls">
+          <select id="camSelect" style="display:none;" onchange="switchCamera()"></select>
+          <button type="button" class="btn-cam" onclick="initScanner()">開啟 / 重整鏡頭</button>
+          <button type="button" class="btn-photo" onclick="document.getElementById('qrFileInput').click()">拍照掃碼</button>
+          <input type="file" id="qrFileInput" accept="image/*" capture="environment" style="display:none;" onchange="scanFromPhoto(this)">
+        </div>
+      </div>
 
-      <div class="batch-row">
-        <select id="bookDropdown" onchange="addBookFromDropdown()">
-          <option value="">-- 從書單下拉選擇講義加入 --</option>
+      <input type="text" id="manualCode" placeholder="掃描學生 QR Code，或手動輸入學號" onkeydown="if(event.key==='Enter') submitManual()">
+      <button id="mainSubmitBtn" onclick="submitManual()">送出點名報到</button>
+
+      <div id="resultArea"></div>
+    </div>
+
+    <!-- === 分頁 3：座位表點名 === -->
+    <div id="seatModeSection" style="display:none;">
+      <div class="seat-toolbar">
+        <button id="btnClassA" class="cls-btn active" onclick="loadSeatDashboard('A')">校內 A 班</button>
+        <button id="btnClassB" class="cls-btn" onclick="loadSeatDashboard('B')">校內 B 班</button>
+        <button class="btn-refresh" onclick="loadSeatDashboard(currentSeatGroup)">重新整理</button>
+      </div>
+      <div id="seatStatStrip" class="stat-strip">載入座位統計中...</div>
+      <div class="legend-row">
+        <span><i class="leg-box" style="background:#dcfce7;border-color:#16a34a;"></i>今日已點名</span>
+        <span><i class="leg-box" style="background:#ffffff;border-color:#3b82f6;"></i>已劃位未點名</span>
+        <span><i class="leg-box" style="background:#f8fafc;border-color:#cbd5e1;"></i>空位</span>
+        <span><span style="color:#dc2626;font-weight:900;">●</span> 有備註</span>
+      </div>
+      <div class="adm-map-scroll">
+        <div id="admClassroomWrap" class="adm-classroom"></div>
+      </div>
+    </div>
+
+    <!-- === 分頁 4：點名與備註搜尋 === -->
+    <div id="searchModeSection" style="display:none;" class="narrow-wrap">
+      <div class="search-bar">
+        <input type="date" id="searchDate">
+        <select id="searchGroup">
+          <option value="ALL">全部班別（A+B班）</option>
+          <option value="A">僅看校內 A 班</option>
+          <option value="B">僅看校內 B 班</option>
         </select>
       </div>
       <div class="batch-row">
-        <input type="text" id="bookCodeInput" placeholder="或手動輸入書號（如 SP25D1AF）" onkeydown="if(event.key==='Enter') addBookManual()">
-        <button type="button" class="btn-add-book" onclick="addBookManual()">加入</button>
+        <input type="text" id="searchKeyword" placeholder="搜尋姓名、學號、座號或備註..." onkeydown="if(event.key==='Enter') runRecordSearch()">
+        <button type="button" class="btn-add-book" onclick="runRecordSearch()">搜尋</button>
       </div>
-      <div id="batchChipWrap" class="chip-wrap"></div>
-      <div id="batchHint" class="batch-hint empty">
-        可直接用下方鏡頭掃講義條碼、手動輸入或下拉加入（1 本或 3 本皆可）；加入後再連續掃學生 QR Code 即可一次全領！
+      <div class="sub-tabs">
+        <button id="subTabRec" class="sub-tab active" onclick="switchSearchSub('records')">點名與異動紀錄 (0)</button>
+        <button id="subTabAbs" class="sub-tab" onclick="switchSearchSub('absent')">當日未到名單 (0)</button>
       </div>
+      <div id="searchResultWrap"></div>
     </div>
-
-    <div class="cam-panel">
-      <div id="reader"></div>
-      <div id="fileReader" style="display:none;"></div>
-      <div id="camStatus" class="cam-status">正在啟動掃碼鏡頭...</div>
-      <div class="cam-controls">
-        <select id="camSelect" style="display:none;" onchange="switchCamera()"></select>
-        <button type="button" class="btn-cam" onclick="initScanner()">開啟 / 重整鏡頭</button>
-        <button type="button" class="btn-photo" onclick="document.getElementById('qrFileInput').click()">拍照掃碼</button>
-        <input type="file" id="qrFileInput" accept="image/*" capture="environment" style="display:none;" onchange="scanFromPhoto(this)">
-      </div>
-    </div>
-
-    <input type="text" id="manualCode" placeholder="掃描學生 QR Code，或手動輸入學號" onkeydown="if(event.key==='Enter') submitManual()">
-    <button id="mainSubmitBtn" onclick="submitManual()">送出點名報到</button>
-
-    <div id="resultArea"></div>
 
     <div class="logout-bar">
       <button class="btn-link" onclick="adminLogout()">鎖定 / 登出後台</button>
+    </div>
+  </div>
+
+  <!-- 座位核對與異動彈窗 -->
+  <div id="seatActionModal" class="modal-mask">
+    <div class="modal-box">
+      <div class="modal-head">
+        <h3 id="modalSeatHeader">座位管理</h3>
+        <button class="btn-x" onclick="closeSeatActionModal()">✕</button>
+      </div>
+      <div id="modalSeatBody"></div>
     </div>
   </div>
 
@@ -138,6 +252,41 @@
     let currentStudent = null;
     let html5QrCode = null;
     let isScanning = false;
+
+    let currentSeatGroup = 'A';
+    let seatDashData = null;
+    let searchDataCache = { records: [], absentList: [] };
+    let searchSubTab = 'records';
+
+    const ALL_SEAT_CODES = [
+      'A1','A2','A3','A4','A5','A6','A7','A8','A9','A10','A11','A12','A13','A14','A15',
+      'B2','B3','B4','B5','B6','B7','B8','B9','B10','B11','B12','B13','B14','B15','B16','B17','B18','B19',
+      'C4','C5','C6','C7','C8','C9','C10','C11','C12','C13','C14','C15','C16','C17','C18','C19','C20','C21','C22','C23','C24','C25','C26',
+      'D1','D2','D3','D4','D5','D6','D7','D10','D11','D12','D13','D14','D15','D16','D17','D18','D19','D20','D21','D22','D23','D24','D25','D26','D27','D28',
+      'E1','E2','E3','E4'
+    ];
+
+    const LEFT_GRID = [
+      [null, null, null, null, 'R',  'A1', 'A2', 'A3', 'A4'],
+      [null, null, 'R',  'B2', 'B3', 'B4', 'B5', 'B6', 'B7'],
+      ['R',  'R',  'R',  'C4', 'C5', 'C6', 'C7', 'C8', 'C9'],
+      ['D1', 'D2', 'D3', 'D4', 'D5', 'D6', 'D7', 'R',  'R' ],
+      [null, null, null, null, null, 'E1', 'E2', null, null]
+    ];
+    const MID_GRID = [
+      [null, null,  'A5',  'A6',  'A7',  'A8',  'A9',  'A10', 'A11', 'A12', null,  null ],
+      [null, 'B8',  'B9',  'B10', 'B11', 'B12', 'B13', 'B14', 'B15', 'B16', null,  null ],
+      ['C10','C11', 'C12', 'C13', 'C14', 'C15', 'C16', 'C17', 'C18', 'C19', 'C20', 'C21'],
+      [null, 'D10', 'D11', 'D12', 'D13', 'D14', 'D15', 'D16', 'D17', 'D18', 'D19', null ],
+      [null, null,  null,  null,  null,  null,  null,  null,  null,  null,  null,  null ]
+    ];
+    const RIGHT_GRID = [
+      ['A13', 'A14', 'A15', 'R',   'R',   null,  null,  null,  null ],
+      ['B17', 'B18', 'B19', 'R',   'R',   'R',   'R',   null,  null ],
+      ['C22', 'C23', 'C24', 'C25', 'C26', 'R',   'R',   'R',   'R'  ],
+      ['D20', 'D21', 'D22', 'D23', 'D24', 'D25', 'D26', 'D27', 'D28'],
+      ['E3',  'E4',  null,  null,  null,  null,  null,  null,  null ]
+    ];
 
     function playBeep() {
       try {
@@ -159,38 +308,19 @@
         const cbName = 'admCb_' + Date.now() + '_' + Math.floor(Math.random() * 10000);
         const script = document.createElement('script');
         let done = false;
-
         const cleanup = () => {
           delete window[cbName];
           if (script.parentNode) script.parentNode.removeChild(script);
         };
-
         const timer = setTimeout(() => {
-          if (!done) {
-            done = true;
-            cleanup();
-            reject(new Error('連線逾時，請再試一次'));
-          }
+          if (!done) { done = true; cleanup(); reject(new Error('連線逾時，請再試一次')); }
         }, 15000);
-
         window[cbName] = (data) => {
-          if (!done) {
-            done = true;
-            clearTimeout(timer);
-            cleanup();
-            resolve(data);
-          }
+          if (!done) { done = true; clearTimeout(timer); cleanup(); resolve(data); }
         };
-
         script.onerror = () => {
-          if (!done) {
-            done = true;
-            clearTimeout(timer);
-            cleanup();
-            reject(new Error('無法連線至資料庫'));
-          }
+          if (!done) { done = true; clearTimeout(timer); cleanup(); reject(new Error('無法連線至資料庫')); }
         };
-
         const query = new URLSearchParams(Object.assign({}, paramsObj, { callback: cbName })).toString();
         script.src = GAS_URL + '?' + query;
         document.body.appendChild(script);
@@ -204,9 +334,7 @@
           catalogBooks = res.books;
           const dd = document.getElementById('bookDropdown');
           dd.innerHTML = '<option value="">-- 從書單下拉選擇講義加入 --</option>' +
-            catalogBooks.map(b =>
-              '<option value="' + b.code + '">' + b.code + '｜' + b.name + '</option>'
-            ).join('');
+            catalogBooks.map(b => '<option value="' + b.code + '">' + b.code + '｜' + b.name + '</option>').join('');
         }
       } catch (e) {}
     }
@@ -228,6 +356,9 @@
           localStorage.setItem(ADMIN_KEY, p);
           document.getElementById('loginBox').style.display = 'none';
           document.getElementById('mainBox').style.display = 'block';
+          const today = new Date();
+          document.getElementById('searchDate').value =
+            today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
           loadBookCatalog();
           initScanner();
         } else {
@@ -260,24 +391,38 @@
       currentStudent = null;
       document.getElementById('tCheckin').className = 'tab' + (m === 'checkin' ? ' active' : '');
       document.getElementById('tBook').className = 'tab' + (m === 'book' ? ' active' : '');
-      document.getElementById('batchBookSection').style.display = (m === 'book') ? 'block' : 'none';
-      document.getElementById('manualCode').placeholder = (m === 'checkin')
-        ? '掃描學生 QR Code，或手動輸入學號'
-        : 'Step 2｜掃描學生 QR Code，或手動輸入學號';
-      document.getElementById('mainSubmitBtn').textContent = (m === 'checkin')
-        ? '送出點名報到'
-        : '送出學號（發書 / 查詢）';
-      document.getElementById('resultArea').innerHTML = '';
-      renderBatchList();
+      document.getElementById('tSeat').className = 'tab' + (m === 'seat' ? ' active' : '');
+      document.getElementById('tSearch').className = 'tab' + (m === 'search' ? ' active' : '');
+
+      const isScan = (m === 'checkin' || m === 'book');
+      document.getElementById('scanModeSection').style.display = isScan ? 'block' : 'none';
+      document.getElementById('seatModeSection').style.display = (m === 'seat') ? 'block' : 'none';
+      document.getElementById('searchModeSection').style.display = (m === 'search') ? 'block' : 'none';
+
+      if (isScan) {
+        document.getElementById('batchBookSection').style.display = (m === 'book') ? 'block' : 'none';
+        document.getElementById('manualCode').placeholder = (m === 'checkin')
+          ? '掃描學生 QR Code，或手動輸入學號'
+          : 'Step 2｜掃描學生 QR Code，或手動輸入學號';
+        document.getElementById('mainSubmitBtn').textContent = (m === 'checkin')
+          ? '送出點名報到'
+          : '送出學號（發書 / 查詢）';
+        document.getElementById('resultArea').innerHTML = '';
+        renderBatchList();
+        if (!isScanning) initScanner();
+      } else {
+        stopScannerIfRunning();
+        if (m === 'seat') loadSeatDashboard(currentSeatGroup);
+        if (m === 'search') runRecordSearch();
+      }
     }
 
+    // === 發書清單管理 ===
     function addBookToBatch(rawCode) {
       const clean = String(rawCode || '').trim().toUpperCase();
       if (!clean) return;
       const found = catalogBooks.find(b => b.code === clean || (b.barcode && b.barcode === clean));
-      const bookItem = found
-        ? { code: found.code, name: found.name }
-        : { code: clean, name: clean };
+      const bookItem = found ? { code: found.code, name: found.name } : { code: clean, name: clean };
 
       if (batchBooks.some(b => b.code === bookItem.code)) {
         showTempToast('warn', '「' + bookItem.name + '」已在本次發書清單中');
@@ -329,13 +474,11 @@
 
       clearBtn.style.display = 'inline-block';
       wrap.innerHTML = batchBooks.map(b =>
-        '<div class="book-chip">' +
-          b.name + ' (' + b.code + ')' +
-          '<span onclick="removeBatchBook(\'' + b.code + '\')">✕</span>' +
-        '</div>'
+        '<div class="book-chip">' + b.name + ' (' + b.code + ')' +
+        '<span onclick="removeBatchBook(\'' + b.code + '\')">✕</span></div>'
       ).join('');
       hint.className = 'batch-hint';
-      hint.textContent = '已鎖定以上 ' + batchBooks.length + ' 本講義！現在請直接掃描排隊學生的 QR Code（或輸入學號），刷一位就自動領取全部 ' + batchBooks.length + ' 本。';
+      hint.textContent = '已鎖定以上 ' + batchBooks.length + ' 本講義！現在請直接掃描排隊學生的 QR Code，刷一位就自動領取全部 ' + batchBooks.length + ' 本。';
     }
 
     function showTempToast(type, text) {
@@ -365,9 +508,7 @@
 
     async function stopScannerIfRunning() {
       if (html5QrCode && isScanning) {
-        try {
-          await html5QrCode.stop();
-        } catch (e) {}
+        try { await html5QrCode.stop(); } catch (e) {}
         isScanning = false;
       }
     }
@@ -389,15 +530,8 @@
 
     async function startWithConfig(cameraConfig) {
       await stopScannerIfRunning();
-      if (!html5QrCode) {
-        html5QrCode = createScannerInstance("reader");
-      }
-      await html5QrCode.start(
-        cameraConfig,
-        { fps: 10, qrbox: { width: 260, height: 150 } },
-        onScanSuccess,
-        () => {}
-      );
+      if (!html5QrCode) html5QrCode = createScannerInstance("reader");
+      await html5QrCode.start(cameraConfig, { fps: 10, qrbox: { width: 260, height: 150 } }, onScanSuccess, () => {});
       isScanning = true;
     }
 
@@ -409,7 +543,6 @@
       try {
         await startWithConfig({ facingMode: "environment" });
         statusEl.textContent = '相機已就緒，可掃描學生 QR Code 或講義條碼';
-
         try {
           const devices = await Html5Qrcode.getCameras();
           if (devices && devices.length > 1) {
@@ -437,7 +570,6 @@
           }
         } catch (e2) {}
       }
-
       statusEl.textContent = '無法直接開啟即時鏡頭，可點右側「拍照掃碼」或手動輸入';
     }
 
@@ -472,11 +604,11 @@
     }
 
     function getAvatarUrl(raw) {
-      const fallback = 'data:image/svg+xml;utf8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#e2e8f0"/><circle cx="50" cy="38" r="18" fill="#94a3b8"/><path d="M20 88c0-17 13-28 30-28s30 11 30 28" fill="#94a3b8"/></svg>');
+      const fallback = 'data:image/svg+xml;utf8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 120"><rect width="100" height="120" fill="#e2e8f0"/><circle cx="50" cy="44" r="20" fill="#94a3b8"/><path d="M18 106c0-20 14-32 32-32s32 12 32 32" fill="#94a3b8"/></svg>');
       if (!raw) return fallback;
       const m = raw.match(/[-\w]{25,}/);
       if (m && (raw.includes('drive.google.com') || raw.includes('googleusercontent.com'))) {
-        return 'https://lh3.googleusercontent.com/d/' + m[0] + '=s200';
+        return 'https://lh3.googleusercontent.com/d/' + m[0] + '=s300';
       }
       return raw;
     }
@@ -486,7 +618,6 @@
       if (!cleanCode) return;
       const area = document.getElementById('resultArea');
 
-      // === 分頁 1：掃碼點名報到 ===
       if (mode === 'checkin') {
         area.innerHTML = '<div class="res-card">報到處理中...</div>';
         try {
@@ -502,7 +633,7 @@
               '<img class="stu-thumb" referrerpolicy="no-referrer" src="' + getAvatarUrl(st.avatar) + '">' +
               '<div>' +
                 '<div><b>' + st.name + '</b>（' + cleanCode + '）</div>' +
-                '<div style="font-size:13px;color:#475569;">' + (st.className || st.mainClass || '') + '</div>' +
+                '<div style="font-size:13px;color:#475569;">' + (st.className || st.mainClass || '') + (st.seat ? (' ｜ 座位：<b>' + st.seat + '</b>') : '') + '</div>' +
                 '<div style="font-size:12px;color:#0284c7;margin-top:2px;">時間：' + res.time + '</div>' +
               '</div>' +
             '</div>' +
@@ -513,7 +644,6 @@
         return;
       }
 
-      // === 分頁 2：發放講義登記 ===
       const matchedCatalogBook = catalogBooks.find(b => b.code === cleanCode || (b.barcode && b.barcode === cleanCode));
       if (matchedCatalogBook) {
         addBookToBatch(matchedCatalogBook.code);
@@ -543,15 +673,9 @@
         return;
       }
 
-      // 若上方清單為空 -> 查詢個別學生書單（不自動點名）
       area.innerHTML = '<div class="res-card">查詢處理中...</div>';
       try {
-        const res = await callGasJsonp({
-          action: 'adminLookup',
-          pass: savedPass,
-          code: cleanCode,
-          allowBook: '1'
-        });
+        const res = await callGasJsonp({ action: 'adminLookup', pass: savedPass, code: cleanCode, allowBook: '1' });
         if (!res || !res.ok) {
           area.innerHTML = '<div class="err-banner">' + ((res && res.message) || '查詢失敗') + '</div>';
           return;
@@ -597,13 +721,12 @@
       if (naCount > 0) details.push('<div style="color:#64748b;"><b>非該生班別書單：</b>' + res.notEligible.join('、') + '</div>');
 
       area.innerHTML = '<div class="res-card">' +
-        bannerHtml +
-        checkinHtml +
+        bannerHtml + checkinHtml +
         '<div class="stu-header">' +
           '<img class="stu-thumb" referrerpolicy="no-referrer" src="' + getAvatarUrl(st.avatar) + '">' +
           '<div>' +
             '<div><b>' + st.name + '</b>（' + st.mainId + '）</div>' +
-            '<div style="font-size:13px;color:#475569;">' + (st.className || st.mainClass || '') + '</div>' +
+            '<div style="font-size:13px;color:#475569;">' + (st.className || st.mainClass || '') + (st.seat ? (' ｜ 座位：<b>' + st.seat + '</b>') : '') + '</div>' +
           '</div>' +
         '</div>' +
         '<div class="detail-list">' + details.join('') + '</div>' +
@@ -626,7 +749,7 @@
           '<img class="stu-thumb" referrerpolicy="no-referrer" src="' + getAvatarUrl(st.avatar) + '">' +
           '<div>' +
             '<div><b>' + st.name + '</b>（' + st.studentId + '）</div>' +
-            '<div style="font-size:13px;color:#475569;">' + (st.className || st.mainClass || '') + '</div>' +
+            '<div style="font-size:13px;color:#475569;">' + (st.className || st.mainClass || '') + (st.seat ? (' ｜ 座位：<b>' + st.seat + '</b>') : '') + '</div>' +
           '</div>' +
         '</div>' +
         '<hr style="border:none;border-top:1px solid #e2e8f0;margin:8px 0;">' +
@@ -638,12 +761,7 @@
       btn.disabled = true;
       btn.textContent = '更新中...';
       try {
-        const res = await callGasJsonp({
-          action: 'adminToggleBook',
-          pass: savedPass,
-          rowIndex: rowIndex,
-          bookCode: bookCode
-        });
+        const res = await callGasJsonp({ action: 'adminToggleBook', pass: savedPass, rowIndex: rowIndex, bookCode: bookCode });
         if (res && res.ok && currentStudent) {
           playBeep();
           const b = currentStudent.books.find(item => item.code === bookCode);
@@ -654,6 +772,297 @@
         btn.disabled = false;
         btn.textContent = '重試';
       }
+    }
+
+    // === 分頁 3：座位表點名與管理 ===
+    async function loadSeatDashboard(group) {
+      currentSeatGroup = group || 'A';
+      document.getElementById('btnClassA').className = 'cls-btn' + (currentSeatGroup === 'A' ? ' active' : '');
+      document.getElementById('btnClassB').className = 'cls-btn' + (currentSeatGroup === 'B' ? ' active' : '');
+
+      const wrap = document.getElementById('admClassroomWrap');
+      wrap.innerHTML = '<div style="text-align:center;padding:30px;font-weight:700;color:#475569;">正在載入校內' + currentSeatGroup + '班座位表...</div>';
+
+      try {
+        const res = await callGasJsonp({ action: 'adminGetSeatDashboard', pass: savedPass, group: currentSeatGroup });
+        if (!res || !res.ok) {
+          wrap.innerHTML = '<div class="err-banner">' + ((res && res.message) || '載入失敗') + '</div>';
+          return;
+        }
+        seatDashData = res;
+        renderAdminClassroom();
+      } catch (err) {
+        wrap.innerHTML = '<div class="err-banner">' + err.message + '</div>';
+      }
+    }
+
+    function buildAdminZoneHtml(gridData, colCount, showLeftRowNum, showRightRowNum) {
+      const seatMap = seatDashData.seatMap || {};
+      let html = '<div class="adm-zone"><div class="adm-grid" style="grid-template-columns:' +
+        (showLeftRowNum ? '18px ' : '') + 'repeat(' + colCount + ', 44px)' + (showRightRowNum ? ' 18px' : '') + ';">';
+
+      if (showLeftRowNum) html += '<div class="acell head"></div>';
+      for (let c = 1; c <= colCount; c++) {
+        html += '<div class="acell head">' + c + '</div>';
+      }
+      if (showRightRowNum) html += '<div class="acell head"></div>';
+
+      for (let r = 0; r < 5; r++) {
+        if (showLeftRowNum) html += '<div class="acell head">' + (r + 1) + '</div>';
+        for (let c = 0; c < colCount; c++) {
+          const code = gridData[r][c];
+          if (!code) {
+            html += '<div class="acell aisle"></div>';
+          } else if (code === 'R') {
+            html += '<div class="acell res">保留</div>';
+          } else {
+            const stu = seatMap[code];
+            let cls = 'acell seat ';
+            let inner = '';
+            if (!stu) {
+              cls += 'empty';
+              inner = '<span class="scode">' + code + '</span><span>空位</span>';
+            } else {
+              cls += stu.checkedIn ? 'checked' : 'unverified';
+              const dot = stu.adminNote ? '<span class="snote-dot">●</span>' : '';
+              inner = '<span class="scode">' + code + dot + '</span><span class="sname">' + stu.name + '</span>';
+            }
+            html += '<div class="' + cls + '" onclick="openSeatActionModal(\'' + code + '\')">' + inner + '</div>';
+          }
+        }
+        if (showRightRowNum) html += '<div class="acell head">' + (r + 1) + '</div>';
+      }
+      html += '</div></div>';
+      return html;
+    }
+
+    function renderAdminClassroom() {
+      const students = seatDashData.students || [];
+      const assigned = students.filter(s => s.seat).length;
+      const checked = students.filter(s => s.checkedIn).length;
+      const unverified = students.filter(s => s.seat && !s.checkedIn).length;
+
+      document.getElementById('seatStatStrip').innerHTML =
+        '<span>全班 ' + students.length + ' 人</span>' +
+        '<span style="color:#1d4ed8;">已劃位 ' + assigned + ' / 86</span>' +
+        '<span style="color:#16a34a;">今日已到 ' + checked + ' 人</span>' +
+        '<span style="color:#d97706;">劃位未到 ' + unverified + ' 人</span>';
+
+      document.getElementById('admClassroomWrap').innerHTML =
+        '<div class="adm-wb">白  板（校內 ' + currentSeatGroup + ' 班）</div>' +
+        '<div class="adm-zones">' +
+          buildAdminZoneHtml(LEFT_GRID, 9, true, false) +
+          buildAdminZoneHtml(MID_GRID, 12, false, false) +
+          buildAdminZoneHtml(RIGHT_GRID, 9, false, true) +
+        '</div>' +
+        '<div class="adm-doors"><span>教室門口</span><span>教室門口</span></div>';
+    }
+
+    function openSeatActionModal(seatCode) {
+      if (!seatDashData) return;
+      const stu = (seatDashData.seatMap || {})[seatCode];
+      document.getElementById('modalSeatHeader').textContent = '校內' + currentSeatGroup + '班｜座位【' + seatCode + '】';
+      const bodyEl = document.getElementById('modalSeatBody');
+
+      if (!stu) {
+        // 空位：允許行政直接把該班尚未劃位（或需調整）的同學安排進來
+        const unseated = (seatDashData.students || []).filter(s => !s.seat);
+        const optionsHtml = unseated.map(s =>
+          '<option value="' + s.rowIndex + '">' + s.name + '（' + s.mainId + '｜' + s.className + '）</option>'
+        ).join('');
+
+        bodyEl.innerHTML =
+          '<div style="background:#f8fafc;padding:14px;border-radius:12px;text-align:center;color:#475569;font-weight:700;margin-bottom:12px;">' +
+            '此座位目前為空位' +
+          '</div>' +
+          (unseated.length > 0 ? (
+            '<div class="sec-label">直接指派尚未劃位的同學至此座位：</div>' +
+            '<div class="inline-act">' +
+              '<select id="assignUnseatedSelect">' + optionsHtml + '</select>' +
+              '<button type="button" onclick="execAssignToEmptySeat(\'' + seatCode + '\')">安排入座</button>' +
+            '</div>'
+          ) : '<div style="font-size:13px;color:#64748b;text-align:center;">本班同學皆已劃位完畢</div>');
+      } else {
+        // 有人座位：顯示大頭照核對本人 + 點名 + 換位 + 備註
+        const seatMap = seatDashData.seatMap || {};
+        const seatOptions = ALL_SEAT_CODES.filter(c => c !== seatCode).map(c => {
+          const occupant = seatMap[c];
+          const label = occupant ? (c + '（目前：' + occupant.name + '，將對調）') : (c + '（空位）');
+          return '<option value="' + c + '">' + label + '</option>';
+        }).join('');
+
+        bodyEl.innerHTML =
+          '<div class="verify-card">' +
+            '<img class="verify-photo" referrerpolicy="no-referrer" src="' + getAvatarUrl(stu.avatar) + '">' +
+            '<div>' +
+              '<div style="font-size:19px;font-weight:900;">' + stu.name + '</div>' +
+              '<div style="font-size:13.5px;font-weight:700;color:#0369a1;margin:3px 0;">' + stu.mainId + '</div>' +
+              '<div style="font-size:13px;color:#475569;">班級：' + (stu.className || '--') + '</div>' +
+              '<div style="font-size:12.5px;margin-top:4px;font-weight:800;color:' + (stu.checkedIn ? '#16a34a' : '#d97706') + ';">' +
+                (stu.checkedIn ? ('今日已點名（' + stu.checkinTime + '）') : '今日尚未點名') +
+              '</div>' +
+            '</div>' +
+          '</div>' +
+
+          '<div class="sec-label">1. 行政備註（可記錄代坐、請假或現場狀況）：</div>' +
+          '<div class="inline-act" style="margin-bottom:10px;">' +
+            '<input type="text" id="modalNoteInput" value="' + (stu.adminNote || '').replace(/"/g, '&quot;') + '" placeholder="輸入備註文字...">' +
+            '<button type="button" class="btn-slate" onclick="execSaveNoteOnly(' + stu.rowIndex + ')">僅存備註</button>' +
+          '</div>' +
+
+          '<button type="button" class="btn-green" onclick="execSeatCheckin(' + stu.rowIndex + ')">' +
+            (stu.checkedIn ? '已點名（點擊更新備註並確認）' : '確認本人｜完成今日點名') +
+          '</button>' +
+
+          '<div class="sec-label">2. 現場更換座位（支援移至空位或與同學對調）：</div>' +
+          '<div class="inline-act">' +
+            '<select id="moveSeatSelect">' +
+              seatOptions +
+              '<option value="">-- 清空此生座位（恢復未劃位） --</option>' +
+            '</select>' +
+            '<button type="button" class="btn-amber" onclick="execMoveSeat(' + stu.rowIndex + ')">確認換位</button>' +
+          '</div>';
+      }
+
+      document.getElementById('seatActionModal').style.display = 'flex';
+    }
+
+    function closeSeatActionModal() {
+      document.getElementById('seatActionModal').style.display = 'none';
+    }
+
+    async function execSeatCheckin(rowIndex) {
+      const note = document.getElementById('modalNoteInput').value;
+      try {
+        const res = await callGasJsonp({ action: 'adminSeatCheckin', pass: savedPass, rowIndex: rowIndex, note: note });
+        if (!res || !res.ok) { alert((res && res.message) || '點名失敗'); return; }
+        playBeep();
+        closeSeatActionModal();
+        loadSeatDashboard(currentSeatGroup);
+      } catch (err) { alert(err.message); }
+    }
+
+    async function execSaveNoteOnly(rowIndex) {
+      const note = document.getElementById('modalNoteInput').value;
+      try {
+        const res = await callGasJsonp({ action: 'adminSaveSeatNote', pass: savedPass, rowIndex: rowIndex, note: note });
+        if (!res || !res.ok) { alert((res && res.message) || '儲存失敗'); return; }
+        playBeep();
+        closeSeatActionModal();
+        loadSeatDashboard(currentSeatGroup);
+      } catch (err) { alert(err.message); }
+    }
+
+    async function execMoveSeat(rowIndex) {
+      const newSeat = document.getElementById('moveSeatSelect').value;
+      const note = document.getElementById('modalNoteInput').value;
+      if (!confirm(newSeat ? ('確定要將座位調整至【' + newSeat + '】嗎？') : '確定要清空此同學的座位嗎？')) return;
+      try {
+        const res = await callGasJsonp({ action: 'adminChangeSeat', pass: savedPass, rowIndex: rowIndex, newSeat: newSeat, note: note });
+        if (!res || !res.ok) { alert((res && res.message) || '換位失敗'); return; }
+        playBeep();
+        alert(res.message);
+        closeSeatActionModal();
+        loadSeatDashboard(currentSeatGroup);
+      } catch (err) { alert(err.message); }
+    }
+
+    async function execAssignToEmptySeat(seatCode) {
+      const sel = document.getElementById('assignUnseatedSelect');
+      if (!sel || !sel.value) return;
+      try {
+        const res = await callGasJsonp({ action: 'adminChangeSeat', pass: savedPass, rowIndex: sel.value, newSeat: seatCode, note: '行政安排入座' });
+        if (!res || !res.ok) { alert((res && res.message) || '安排失敗'); return; }
+        playBeep();
+        closeSeatActionModal();
+        loadSeatDashboard(currentSeatGroup);
+      } catch (err) { alert(err.message); }
+    }
+
+    // === 分頁 4：點名紀錄與未到搜尋 ===
+    async function runRecordSearch() {
+      const dateVal = document.getElementById('searchDate').value;
+      const grpVal = document.getElementById('searchGroup').value;
+      const kwVal = document.getElementById('searchKeyword').value;
+      const wrap = document.getElementById('searchResultWrap');
+      wrap.innerHTML = '<div style="text-align:center;padding:20px;color:#475569;font-weight:700;">搜尋紀錄中...</div>';
+
+      try {
+        const res = await callGasJsonp({
+          action: 'adminSearchRecords',
+          pass: savedPass,
+          date: dateVal,
+          group: grpVal,
+          keyword: kwVal
+        });
+        if (!res || !res.ok) {
+          wrap.innerHTML = '<div class="err-banner">' + ((res && res.message) || '搜尋失敗') + '</div>';
+          return;
+        }
+        searchDataCache = res;
+        document.getElementById('subTabRec').textContent = '點名與異動紀錄 (' + res.records.length + ')';
+        document.getElementById('subTabAbs').textContent = '當日未到名單 (' + res.absentList.length + ')';
+        renderSearchResults();
+      } catch (err) {
+        wrap.innerHTML = '<div class="err-banner">' + err.message + '</div>';
+      }
+    }
+
+    function switchSearchSub(sub) {
+      searchSubTab = sub;
+      document.getElementById('subTabRec').className = 'sub-tab' + (sub === 'records' ? ' active' : '');
+      document.getElementById('subTabAbs').className = 'sub-tab' + (sub === 'absent' ? ' active' : '');
+      renderSearchResults();
+    }
+
+    function renderSearchResults() {
+      const wrap = document.getElementById('searchResultWrap');
+      if (searchSubTab === 'records') {
+        const list = searchDataCache.records || [];
+        if (list.length === 0) {
+          wrap.innerHTML = '<div style="text-align:center;padding:24px;color:#64748b;">查無符合條件的點名紀錄</div>';
+          return;
+        }
+        wrap.innerHTML = list.map(r =>
+          '<div class="rec-item">' +
+            '<div class="rec-top">' +
+              '<span>' + r.name + ' <small style="color:#64748b;">(' + r.studentId + ')</small></span>' +
+              '<span class="badge-seat">' + (r.seatGroup ? ('校內' + r.seatGroup + '班 ') : '') + (r.seat || '未劃位') + '</span>' +
+            '</div>' +
+            '<div style="color:#475569;font-size:12.5px;">時間：' + r.time + ' ｜ 方式：' + (r.method || r.scanType) + '</div>' +
+            (r.note ? ('<div style="color:#dc2626;font-size:12.5px;font-weight:700;margin-top:3px;">備註：' + r.note + '</div>') : '') +
+          '</div>'
+        ).join('');
+      } else {
+        const list = searchDataCache.absentList || [];
+        if (!document.getElementById('searchDate').value) {
+          wrap.innerHTML = '<div style="text-align:center;padding:24px;color:#64748b;">請先選擇日期以查詢當日未到名單</div>';
+          return;
+        }
+        if (list.length === 0) {
+          wrap.innerHTML = '<div style="text-align:center;padding:24px;color:#16a34a;font-weight:700;">太棒了！當日全數到齊</div>';
+          return;
+        }
+        wrap.innerHTML = list.map(s =>
+          '<div class="rec-item" style="display:flex;justify-content:space-between;align-items:center;gap:8px;">' +
+            '<div>' +
+              '<div style="font-weight:800;">' + s.name + ' <span class="badge-seat">校內' + s.seatGroup + '班 ' + (s.seat || '未劃位') + '</span></div>' +
+              '<div style="font-size:12px;color:#64748b;margin-top:2px;">' + s.mainId + ' ｜ ' + s.className + '</div>' +
+              (s.adminNote ? ('<div style="font-size:12px;color:#dc2626;font-weight:700;">備註：' + s.adminNote + '</div>') : '') +
+            '</div>' +
+            '<button class="btn-sm btn-got" onclick="quickCheckinFromAbsent(' + s.rowIndex + ')">補點名</button>' +
+          '</div>'
+        ).join('');
+      }
+    }
+
+    async function quickCheckinFromAbsent(rowIndex) {
+      try {
+        const res = await callGasJsonp({ action: 'adminSeatCheckin', pass: savedPass, rowIndex: rowIndex });
+        if (!res || !res.ok) { alert((res && res.message) || '補點名失敗'); return; }
+        playBeep();
+        runRecordSearch();
+      } catch (err) { alert(err.message); }
     }
 
     window.onload = function() {
