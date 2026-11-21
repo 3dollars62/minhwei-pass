@@ -68,7 +68,7 @@
 
     /* 座位表彈窗 */
     .modal-mask { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.65); z-index: 999; display: none; align-items: center; justify-content: center; padding: 10px; }
-    .modal-panel { background: #fff; width: 100%; max-width: 780px; max-height: 92vh; border-radius: 18px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.25); }
+    .modal-panel { background: #fff; width: 100%; max-width: 1180px; max-height: 92vh; border-radius: 18px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.25); }
     .modal-top { padding: 14px 16px; background: #1e3a8a; color: #fff; display: flex; justify-content: space-between; align-items: center; }
     .modal-top h3 { margin: 0; font-size: 16.5px; }
     .btn-close { background: rgba(255,255,255,0.2); border: none; color: #fff; width: 32px; height: 32px; border-radius: 50%; font-size: 16px; font-weight: 800; cursor: pointer; }
@@ -78,12 +78,12 @@
     .leg-item { display: flex; align-items: center; gap: 4px; font-weight: 600; }
     .leg-dot { width: 14px; height: 14px; border-radius: 4px; border: 1px solid #94a3b8; }
 
-    /* 教室座位圖捲動區 */
+    /* 教室座位圖捲動區（靠左完整展開，不裁切前5欄） */
     .map-scroll { overflow: auto; padding: 14px; flex: 1; background: #f8fafc; -webkit-overflow-scrolling: touch; }
-    .classroom-wrap { min-width: 720px; }
-    .whiteboard { background: #334155; color: #fff; text-align: center; padding: 7px; border-radius: 8px; font-weight: 800; font-size: 14px; letter-spacing: 6px; margin-bottom: 12px; }
-    .zones-row { display: flex; gap: 14px; align-items: flex-start; justify-content: center; }
-    .zone-block { background: #fff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 6px; }
+    .classroom-wrap { width: max-content; min-width: 100%; margin: 0 auto; }
+    .whiteboard { width: 100%; background: #334155; color: #fff; text-align: center; padding: 7px; border-radius: 8px; font-weight: 800; font-size: 14px; letter-spacing: 6px; margin-bottom: 12px; }
+    .zones-row { display: flex; gap: 14px; align-items: flex-start; justify-content: flex-start; }
+    .zone-block { background: #fff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 6px; flex-shrink: 0; }
     .seat-grid { display: grid; gap: 3px; }
     .g-cell { height: 38px; min-width: 24px; border-radius: 5px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; user-select: none; }
     .g-head { background: #e2e8f0; color: #475569; height: 22px; font-size: 10.5px; }
@@ -97,7 +97,7 @@
     .g-seat.mine { background: #2563eb; border-color: #1d4ed8; color: #fff; }
     .g-seat.readonly { cursor: default; }
     .g-sub { font-size: 9px; font-weight: 600; opacity: 0.9; }
-    .doors-row { display: flex; justify-content: space-between; margin-top: 8px; font-size: 11.5px; font-weight: 800; color: #475569; }
+    .doors-row { display: flex; justify-content: space-between; width: 100%; margin-top: 8px; font-size: 11.5px; font-weight: 800; color: #475569; }
     .door-tag { background: #e2e8f0; padding: 3px 10px; border-radius: 6px; }
 
     .modal-footer { padding: 12px 16px; background: #fff; border-top: 1px solid #e2e8f0; display: flex; gap: 10px; align-items: center; justify-content: space-between; }
@@ -185,7 +185,7 @@
         <div class="leg-item"><span class="leg-dot" style="background:#2563eb;border-color:#1d4ed8;"></span>我的座位</div>
         <div class="leg-item"><span class="leg-dot" style="background:#e2e8f0;border-style:dashed;"></span>不開放</div>
       </div>
-      <div class="map-scroll">
+      <div id="seatMapScroll" class="map-scroll">
         <div id="classroomMapContainer" class="classroom-wrap"></div>
       </div>
       <div id="seatModalFooter" class="modal-footer">
@@ -205,7 +205,6 @@
     let seatState = null;
     let pendingSeat = '';
 
-    // 教室三區座位座標定義（1:1 對應 Excel 底圖）
     const LEFT_GRID = [
       [null, null, null, null, 'R',  'A1', 'A2', 'A3', 'A4'],
       [null, null, 'R',  'B2', 'B3', 'B4', 'B5', 'B6', 'B7'],
@@ -330,7 +329,6 @@
       document.getElementById('stuName').textContent = st.name;
       document.getElementById('passTabs').style.display = st.hasErji ? 'flex' : 'none';
 
-      // 座位按鈕（校內A班/B班顯示）
       const seatBar = document.getElementById('seatBar');
       if (st.seatGroup) {
         seatBar.style.display = 'block';
@@ -339,7 +337,6 @@
         seatBar.style.display = 'none';
       }
 
-      // 講義清單
       const books = st.books || [];
       const gotCount = books.filter(b => b.received).length;
       document.getElementById('bookCountPill').textContent = '已領 ' + gotCount + ' / ' + books.length + ' 本';
@@ -408,10 +405,10 @@
       });
     }
 
-    // === 座位表載入與渲染 ===
     async function openSeatModal() {
       const modal = document.getElementById('seatModal');
       const mapEl = document.getElementById('classroomMapContainer');
+      const scrollEl = document.getElementById('seatMapScroll');
       modal.style.display = 'flex';
       pendingSeat = '';
       mapEl.innerHTML = '<div style="text-align:center;padding:40px;font-weight:700;color:#475569;">正在讀取最新座位狀況...</div>';
@@ -426,6 +423,7 @@
         currentStudent.seat = res.mySeat || '';
         updateSeatButtonUI(currentStudent.seat);
         renderStudentClassroomMap();
+        if (scrollEl) scrollEl.scrollLeft = 0;
       } catch (err) {
         mapEl.innerHTML = '<div class="err-msg">' + err.message + '</div>';
       }
@@ -439,14 +437,12 @@
       let html = '<div class="zone-block"><div class="seat-grid" style="grid-template-columns:' +
         (showLeftRowNum ? '22px ' : '') + 'repeat(' + colCount + ', 32px)' + (showRightRowNum ? ' 22px' : '') + ';">';
 
-      // 欄號列
       if (showLeftRowNum) html += '<div class="g-cell g-head"></div>';
       for (let c = 1; c <= colCount; c++) {
         html += '<div class="g-cell g-head">' + c + '</div>';
       }
       if (showRightRowNum) html += '<div class="g-cell g-head"></div>';
 
-      // 5 排座位
       for (let r = 0; r < 5; r++) {
         if (showLeftRowNum) html += '<div class="g-cell g-head">' + (r + 1) + '</div>';
         for (let c = 0; c < colCount; c++) {
