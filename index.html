@@ -7,236 +7,248 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <style>
     * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Noto Sans TC", sans-serif; }
-    body { margin: 0; background: #eef2f6; color: #0f172a; padding: 14px; }
+    body { margin: 0; background: #f1f5f9; color: #0f172a; padding: 14px; }
     .container { max-width: 480px; margin: 0 auto; }
-    .card { background: #fff; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08); margin-bottom: 14px; }
-    .login-box { padding: 24px 20px; }
-    .login-box h2 { margin: 0 0 6px; font-size: 21px; text-align: center; color: #1e3a8a; }
-    .login-box p { margin: 0 0 18px; font-size: 13.5px; color: #64748b; text-align: center; }
-    input { width: 100%; padding: 12px 14px; border: 1.5px solid #cbd5e1; border-radius: 12px; font-size: 16px; margin-bottom: 12px; outline: none; }
-    input:focus { border-color: #2563eb; }
-    .btn-primary { width: 100%; padding: 13px; border: none; border-radius: 12px; background: #1d4ed8; color: #fff; font-size: 16px; font-weight: 700; cursor: pointer; }
-    .btn-primary:disabled { background: #94a3b8; }
-    .err-msg { background: #fee2e2; color: #991b1b; padding: 10px; border-radius: 10px; font-size: 13.5px; font-weight: 600; text-align: center; margin-top: 10px; }
 
-    /* 雙證切換列 */
-    .pass-tabs { display: flex; gap: 8px; padding: 12px 14px 0; }
-    .pass-tab { flex: 1; padding: 10px; border: none; border-radius: 12px; font-size: 14px; font-weight: 800; cursor: pointer; background: #e2e8f0; color: #475569; }
-    .pass-tab.active-main { background: #2b5783; color: #fff; }
-    .pass-tab.active-erji { background: #6d28d9; color: #fff; }
+    /* 登入卡片 */
+    .login-card { background: #fff; border-radius: 20px; padding: 24px 20px; box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08); margin-top: 24px; }
+    .brand-tag { display: inline-block; background: #e0f2fe; color: #0369a1; font-size: 12px; font-weight: 800; padding: 4px 10px; border-radius: 99px; margin-bottom: 8px; }
+    .login-card h1 { margin: 0 0 6px; font-size: 21px; color: #0f172a; }
+    .login-card p { margin: 0 0 18px; font-size: 13.5px; color: #64748b; line-height: 1.5; }
+    label { display: block; font-size: 13px; font-weight: 700; color: #334155; margin-bottom: 5px; }
+    input[type="tel"], input[type="text"] { width: 100%; padding: 12px 14px; border: 1.5px solid #cbd5e1; border-radius: 12px; font-size: 16px; margin-bottom: 14px; outline: none; background: #fff; }
+    input:focus { border-color: #0284c7; }
+    .btn-primary { width: 100%; padding: 13px; border: none; border-radius: 12px; background: #0284c7; color: #fff; font-size: 16px; font-weight: 800; cursor: pointer; }
+    .btn-primary:disabled { background: #94a3b8; cursor: not-allowed; }
+    .err-msg { background: #fee2e2; color: #991b1b; padding: 10px 12px; border-radius: 10px; font-size: 13.5px; font-weight: 700; margin-top: 12px; text-align: center; }
 
-    /* 上課證頂部 */
-    .pass-header { background: #2b5783; color: #fff; text-align: center; padding: 18px 14px 16px; transition: background 0.25s; }
-    .pass-header.erji { background: linear-gradient(135deg, #5b21b6, #7c3aed); }
-    .pass-title { font-size: 19px; font-weight: 800; letter-spacing: 0.5px; margin-bottom: 8px; }
-    .clock-pill { display: inline-block; background: rgba(255,255,255,0.2); padding: 4px 14px; border-radius: 99px; font-size: 13.5px; font-weight: 700; font-variant-numeric: tabular-nums; }
+    /* 上課證主卡片 */
+    .pass-card { background: #fff; border-radius: 22px; overflow: hidden; box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08); margin-bottom: 14px; }
+    .pass-header { background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%); color: #fff; padding: 16px 18px; display: flex; justify-content: space-between; align-items: center; }
+    .pass-header .title { font-size: 15px; font-weight: 900; letter-spacing: 0.5px; }
+    .pass-header .sub { font-size: 11.5px; opacity: 0.8; margin-top: 2px; }
+    .btn-refresh-top { background: rgba(255,255,255,0.16); color: #fff; border: 1px solid rgba(255,255,255,0.28); border-radius: 8px; padding: 6px 10px; font-size: 12px; font-weight: 700; cursor: pointer; }
 
-    /* 學生資訊與條碼 */
-    .pass-body { padding: 18px 16px; }
-    .profile-row { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
-    .avatar { width: 76px; height: 92px; border-radius: 12px; object-fit: cover; background: #e2e8f0; border: 1.5px solid #cbd5e1; flex-shrink: 0; }
-    .stu-name { font-size: 22px; font-weight: 900; margin: 0 0 6px; color: #0f172a; }
-    .id-badge { display: inline-block; background: #e0f2fe; color: #0369a1; font-weight: 800; font-size: 14.5px; padding: 4px 12px; border-radius: 8px; margin-bottom: 6px; }
-    .id-badge.erji { background: #ede9fe; color: #5b21b6; }
-    .stu-meta { font-size: 13px; color: #475569; line-height: 1.45; }
+    .pass-body { padding: 18px; }
+    .profile-row { display: flex; gap: 14px; align-items: center; margin-bottom: 14px; }
+    .avatar { width: 72px; height: 86px; border-radius: 14px; object-fit: cover; background: #e2e8f0; border: 1.5px solid #cbd5e1; flex-shrink: 0; }
+    .stu-name-line { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin-bottom: 4px; }
+    .stu-name { font-size: 21px; font-weight: 900; color: #0f172a; }
+    .seat-tag { background: #dbeafe; color: #1e40af; font-size: 12.5px; font-weight: 900; padding: 3px 9px; border-radius: 8px; border: 1px solid #93c5fd; }
+    .btn-seat-text { background: transparent; border: none; color: #0284c7; font-size: 12.5px; font-weight: 800; text-decoration: underline; padding: 2px 4px; cursor: pointer; }
+    .stu-meta { font-size: 13px; color: #475569; line-height: 1.5; }
+    .seat-ended-note { font-size: 12.5px; color: #64748b; background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 8px; padding: 7px 10px; margin-top: 8px; font-weight: 600; }
 
-    .qr-box { background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 16px; padding: 18px 12px 14px; text-align: center; }
-    #qrcode { display: inline-flex; justify-content: center; align-items: center; padding: 10px; background: #fff; border-radius: 12px; }
-    .qr-code-text { font-size: 14px; font-weight: 800; color: #1e293b; margin-top: 8px; letter-spacing: 1px; }
-    .qr-tip { font-size: 12.5px; color: #64748b; margin-top: 4px; }
+    /* 雙證切換（校內班 / 二技班） */
+    .pass-switch { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; background: #f1f5f9; padding: 4px; border-radius: 10px; margin-bottom: 12px; }
+    .ps-btn { border: none; background: transparent; padding: 7px; border-radius: 8px; font-size: 13px; font-weight: 800; color: #475569; cursor: pointer; }
+    .ps-btn.active { background: #fff; color: #0284c7; box-shadow: 0 2px 6px rgba(0,0,0,0.06); }
 
-    /* 座位按鈕區 */
-    .seat-bar { margin-top: 14px; }
-    .btn-seat { width: 100%; padding: 13px 14px; border-radius: 12px; border: none; font-size: 15px; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
-    .btn-seat.open { background: #0284c7; color: #fff; box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25); }
-    .btn-seat.locked { background: #eff6ff; color: #1d4ed8; border: 1.5px solid #93c5fd; }
+    /* QR Code 區 */
+    .qr-box { background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 16px; padding: 16px; text-align: center; }
+    #qrcode { display: inline-block; padding: 10px; background: #fff; border-radius: 12px; border: 1px solid #cbd5e1; }
+    #qrcode img, #qrcode canvas { display: block; margin: 0 auto; }
+    .qr-id-text { font-size: 17px; font-weight: 900; letter-spacing: 1px; color: #0f172a; margin-top: 10px; }
+    .qr-hint { font-size: 12px; color: #64748b; margin-top: 3px; }
 
-    /* 出缺勤與全勤獎勵卡片 */
-    .att-card { padding: 16px; }
-    .att-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-    .att-head h3 { margin: 0; font-size: 16px; font-weight: 800; }
-    .full-banner { padding: 11px 12px; border-radius: 12px; font-size: 13.5px; font-weight: 800; text-align: center; margin-bottom: 12px; line-height: 1.45; }
-    .full-banner.ok { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
-    .full-banner.broken { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
-    .full-banner.neutral { background: #f1f5f9; color: #475569; }
-    .stat-5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-bottom: 12px; }
-    .s5-box { border-radius: 10px; padding: 8px 4px; text-align: center; border: 1px solid #e2e8f0; }
-    .s5-num { font-size: 17px; font-weight: 900; line-height: 1.1; }
-    .s5-lbl { font-size: 11px; font-weight: 700; margin-top: 3px; }
-    .att-list { max-height: 240px; overflow-y: auto; border-top: 1px solid #f1f5f9; }
-    .att-row { display: flex; justify-content: space-between; align-items: center; padding: 9px 0; border-bottom: 1px solid #f1f5f9; gap: 8px; }
-    .att-row:last-child { border-bottom: none; }
-    .st-pill { font-size: 12px; font-weight: 800; padding: 4px 10px; border-radius: 99px; flex-shrink: 0; }
-    .st-出席 { background: #dcfce7; color: #166534; }
-    .st-遲到 { background: #ffedd5; color: #9a3412; }
-    .st-早退 { background: #f3e8ff; color: #6b21a8; }
-    .st-請假 { background: #dbeafe; color: #1e40af; }
-    .st-未到 { background: #fee2e2; color: #991b1b; }
+    /* 線上劃位狀態區塊（依開關狀態動態變化） */
+    .seat-action-area { margin-top: 14px; }
+    .btn-seat-open { width: 100%; padding: 13px 14px; border: none; border-radius: 12px; background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); color: #fff; font-size: 15px; font-weight: 900; cursor: pointer; box-shadow: 0 4px 12px rgba(22, 163, 74, 0.25); }
+    .btn-seat-locked { width: 100%; padding: 12px 14px; border: 1.5px solid #93c5fd; border-radius: 12px; background: #eff6ff; color: #1e40af; font-size: 14.5px; font-weight: 800; cursor: pointer; }
+    .wait-card { background: #fffbeb; border: 1.5px solid #fcd34d; border-radius: 14px; padding: 12px 14px; text-align: center; }
+    .wait-rank { font-size: 14px; font-weight: 900; color: #92400e; margin-bottom: 4px; }
+    .wait-time { font-size: 13px; font-weight: 700; color: #b45309; }
+    .wait-countdown { display: inline-block; background: #fef3c7; color: #78350f; font-size: 13.5px; font-weight: 900; padding: 4px 12px; border-radius: 99px; margin: 7px 0 9px; border: 1px solid #f59e0b; }
+    .btn-preview-map { width: 100%; padding: 9px 12px; border: 1px solid #cbd5e1; border-radius: 10px; background: #fff; color: #334155; font-size: 13px; font-weight: 800; cursor: pointer; }
+    .paused-card { background: #f8fafc; border: 1.5px dashed #cbd5e1; border-radius: 12px; padding: 11px 12px; text-align: center; font-size: 13px; color: #475569; font-weight: 700; }
 
-    /* 講義清單 */
-    .books-card { padding: 16px; }
-    .books-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-    .books-head h3 { margin: 0; font-size: 16px; font-weight: 800; }
-    .count-pill { background: #f1f5f9; color: #334155; font-size: 12.5px; font-weight: 700; padding: 4px 10px; border-radius: 99px; }
-    .book-item { display: flex; justify-content: space-between; align-items: center; padding: 11px 0; border-bottom: 1px solid #f1f5f9; gap: 10px; }
+    /* 出缺勤與講義卡片 */
+    .sec-card { background: #fff; border-radius: 18px; padding: 16px 18px; box-shadow: 0 6px 18px rgba(15, 23, 42, 0.05); margin-bottom: 14px; }
+    .sec-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    .sec-head h3 { margin: 0; font-size: 15.5px; font-weight: 900; color: #0f172a; }
+    .full-pill { font-size: 12px; font-weight: 800; padding: 3px 10px; border-radius: 99px; }
+    .full-pill.yes { background: #dcfce7; color: #166534; }
+    .full-pill.no { background: #f1f5f9; color: #475569; }
+    .att-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; text-align: center; }
+    .att-cell { background: #f8fafc; border-radius: 10px; padding: 8px 2px; border: 1px solid #e2e8f0; }
+    .att-num { font-size: 17px; font-weight: 900; }
+    .att-lbl { font-size: 11px; color: #64748b; font-weight: 700; margin-top: 2px; }
+    .rec-toggle { width: 100%; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 9px; padding: 7px; font-size: 12.5px; font-weight: 700; color: #475569; margin-top: 10px; cursor: pointer; }
+    .rec-list { margin-top: 8px; max-height: 180px; overflow-y: auto; font-size: 12.5px; }
+    .rec-row { display: flex; justify-content: space-between; padding: 6px 4px; border-bottom: 1px solid #f1f5f9; }
+
+    .book-item { display: flex; justify-content: space-between; align-items: center; padding: 9px 0; border-bottom: 1px solid #f1f5f9; font-size: 13.5px; gap: 8px; }
     .book-item:last-child { border-bottom: none; }
-    .b-code { font-size: 14px; font-weight: 800; color: #0f172a; }
-    .b-name { font-size: 12.5px; color: #64748b; margin-top: 2px; }
-    .status-tag { font-size: 12px; font-weight: 800; padding: 4px 10px; border-radius: 99px; flex-shrink: 0; }
-    .status-tag.got { background: #dcfce7; color: #166534; }
-    .status-tag.wait { background: #f1f5f9; color: #64748b; }
+    .b-badge { font-size: 12px; font-weight: 800; padding: 3px 9px; border-radius: 99px; flex-shrink: 0; }
+    .b-badge.got { background: #dcfce7; color: #166534; }
+    .b-badge.wait { background: #f1f5f9; color: #64748b; }
 
-    .switch-link { display: block; text-align: center; color: #64748b; font-size: 13px; text-decoration: underline; margin: 14px 0 24px; cursor: pointer; background: none; border: none; width: 100%; }
+    .footer-logout { text-align: center; margin: 16px 0 24px; }
+    .btn-logout { background: transparent; border: none; color: #64748b; font-size: 13px; text-decoration: underline; cursor: pointer; }
 
-    /* 座位表彈窗 */
-    .modal-mask { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.65); z-index: 999; display: none; align-items: center; justify-content: center; padding: 10px; }
-    .modal-panel { background: #fff; width: 100%; max-width: 1180px; max-height: 92vh; border-radius: 18px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.25); }
-    .modal-top { padding: 14px 16px; background: #1e3a8a; color: #fff; display: flex; justify-content: space-between; align-items: center; }
-    .modal-top h3 { margin: 0; font-size: 16.5px; }
-    .btn-close { background: rgba(255,255,255,0.2); border: none; color: #fff; width: 32px; height: 32px; border-radius: 50%; font-size: 16px; font-weight: 800; cursor: pointer; }
-    .modal-notice { padding: 10px 14px; font-size: 13px; font-weight: 700; text-align: center; background: #eff6ff; color: #1e40af; border-bottom: 1px solid #dbeafe; }
-    .modal-notice.locked-note { background: #fef3c7; color: #92400e; border-bottom-color: #fde68a; }
-    .legend-bar { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; padding: 8px 12px; font-size: 12px; background: #f8fafc; border-bottom: 1px solid #e2e8f0; }
-    .leg-item { display: flex; align-items: center; gap: 4px; font-weight: 600; }
-    .leg-dot { width: 14px; height: 14px; border-radius: 4px; border: 1px solid #94a3b8; }
+    /* === 教室座位表彈窗 === */
+    .modal-mask { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.7); z-index: 999; display: none; align-items: center; justify-content: center; padding: 10px; }
+    .modal-box { background: #fff; width: 100%; max-width: 720px; max-height: 92vh; overflow-y: auto; border-radius: 20px; padding: 16px; box-shadow: 0 20px 45px rgba(0,0,0,0.3); }
+    .modal-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .modal-top h3 { margin: 0; font-size: 17px; font-weight: 900; }
+    .btn-close { width: 32px; height: 32px; border-radius: 50%; border: none; background: #e2e8f0; color: #334155; font-size: 16px; font-weight: 800; cursor: pointer; }
+    .modal-banner { font-size: 13px; font-weight: 800; padding: 8px 12px; border-radius: 10px; margin-bottom: 10px; text-align: center; line-height: 1.4; }
+    .modal-banner.info { background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; }
+    .modal-banner.warn { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
+    .modal-banner.ok { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
 
-    /* 教室座位圖捲動區（靠左完整展開，不裁切前5欄） */
-    .map-scroll { overflow: auto; padding: 14px; flex: 1; background: #f8fafc; -webkit-overflow-scrolling: touch; }
-    .classroom-wrap { width: max-content; min-width: 100%; margin: 0 auto; }
-    .whiteboard { width: 100%; background: #334155; color: #fff; text-align: center; padding: 7px; border-radius: 8px; font-weight: 800; font-size: 14px; letter-spacing: 6px; margin-bottom: 12px; }
-    .zones-row { display: flex; gap: 14px; align-items: flex-start; justify-content: flex-start; }
-    .zone-block { background: #fff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 6px; flex-shrink: 0; }
-    .seat-grid { display: grid; gap: 3px; }
-    .g-cell { height: 38px; min-width: 24px; border-radius: 5px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; user-select: none; }
-    .g-head { background: #e2e8f0; color: #475569; height: 22px; font-size: 10.5px; }
-    .g-aisle { background: transparent; }
-    .g-reserved { background: #e2e8f0; color: #94a3b8; border: 1px dashed #cbd5e1; font-size: 10px; font-weight: 500; }
-    .g-seat { border: 1.5px solid #cbd5e1; cursor: pointer; transition: transform 0.1s; }
-    .g-seat.avail { background: #dcfce7; border-color: #22c55e; color: #166534; }
-    .g-seat.avail:active { transform: scale(0.94); }
-    .g-seat.selected-preview { background: #f59e0b; border-color: #b45309; color: #fff; box-shadow: 0 0 0 2px #fde68a; }
-    .g-seat.taken { background: #cbd5e1; border-color: #94a3b8; color: #475569; cursor: not-allowed; }
-    .g-seat.mine { background: #2563eb; border-color: #1d4ed8; color: #fff; }
-    .g-seat.readonly { cursor: default; }
-    .g-sub { font-size: 9px; font-weight: 600; opacity: 0.9; }
-    .doors-row { display: flex; justify-content: space-between; width: 100%; margin-top: 8px; font-size: 11.5px; font-weight: 800; color: #475569; }
-    .door-tag { background: #e2e8f0; padding: 3px 10px; border-radius: 6px; }
+    .legend { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; font-size: 12px; font-weight: 700; color: #475569; margin-bottom: 8px; }
+    .leg-dot { display: inline-block; width: 13px; height: 13px; border-radius: 4px; vertical-align: middle; margin-right: 4px; border: 1px solid #94a3b8; }
 
-    .modal-footer { padding: 12px 16px; background: #fff; border-top: 1px solid #e2e8f0; display: flex; gap: 10px; align-items: center; justify-content: space-between; }
-    .footer-info { font-size: 13.5px; font-weight: 800; color: #0f172a; }
-    .btn-confirm-seat { width: auto; padding: 10px 18px; border-radius: 10px; border: none; background: #16a34a; color: #fff; font-size: 14px; font-weight: 800; cursor: pointer; }
-    .btn-confirm-seat:disabled { background: #94a3b8; cursor: not-allowed; }
+    .map-scroll { overflow-x: auto; background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 10px; -webkit-overflow-scrolling: touch; }
+    .classroom { width: max-content; min-width: 100%; margin: 0 auto; }
+    .wb { width: 100%; background: #334155; color: #fff; text-align: center; padding: 6px; border-radius: 7px; font-weight: 800; font-size: 13px; letter-spacing: 5px; margin-bottom: 10px; }
+    .zones { display: flex; gap: 10px; justify-content: flex-start; }
+    .zone { background: #fff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 5px; flex-shrink: 0; }
+    .sgrid { display: grid; gap: 3px; }
+    .scell { height: 36px; border-radius: 5px; display: flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 800; user-select: none; }
+    .scell.head { height: 20px; background: #e2e8f0; color: #475569; font-size: 10px; }
+    .scell.aisle { background: transparent; }
+    .scell.res { background: #e2e8f0; color: #94a3b8; border: 1px dashed #cbd5e1; font-size: 9.5px; }
+    .scell.free { background: #ffffff; border: 1.5px solid #94a3b8; color: #0f172a; cursor: pointer; }
+    .scell.free.readonly { cursor: default; }
+    .scell.taken { background: #cbd5e1; border: 1px solid #94a3b8; color: #64748b; cursor: not-allowed; }
+    .scell.mine { background: #16a34a; border: 2px solid #14532d; color: #fff; }
+    .scell.picked { background: #0284c7; border: 2px solid #0369a1; color: #fff; transform: scale(1.06); box-shadow: 0 2px 8px rgba(2,132,199,0.4); }
+    .doors { display: flex; justify-content: space-between; width: 100%; margin-top: 8px; font-size: 11px; font-weight: 800; color: #475569; }
+    .doors span { background: #e2e8f0; padding: 3px 10px; border-radius: 6px; }
+
+    .confirm-bar { margin-top: 12px; background: #f0f9ff; border: 1.5px solid #7dd3fc; border-radius: 12px; padding: 12px; display: none; text-align: center; }
+    .confirm-bar .picked-txt { font-size: 15px; font-weight: 900; color: #0369a1; margin-bottom: 8px; }
+    .btn-confirm-seat { width: 100%; padding: 12px; border: none; border-radius: 10px; background: #0284c7; color: #fff; font-size: 15px; font-weight: 900; cursor: pointer; }
+    .btn-confirm-seat:disabled { background: #94a3b8; }
   </style>
 </head>
 <body>
   <div class="container">
-    <!-- 登入卡片 -->
-    <div id="loginCard" class="card login-box">
-      <h2>敏惠醫專｜數位上課證</h2>
-      <p>請輸入報名時的手機號碼與身分證末四碼登入</p>
-      <input type="tel" id="phoneInput" placeholder="手機號碼（例如 0912345678）">
-      <input type="text" id="last4Input" maxlength="4" placeholder="身分證字號末四碼" onkeydown="if(event.key==='Enter') doLogin()">
-      <button id="loginBtn" class="btn-primary" onclick="doLogin()">查詢我的上課證</button>
+    <!-- 登入畫面 -->
+    <div id="loginView" class="login-card">
+      <span class="brand-tag">敏惠醫護管理專科學校｜校內班</span>
+      <h1>數位上課證系統</h1>
+      <p>請輸入報名時填寫的手機號碼與身分證末四碼，即可開啟專屬上課證、查看全勤紀錄與進行線上劃位。</p>
+      <label for="inpPhone">手機號碼</label>
+      <input type="tel" id="inpPhone" placeholder="例如：0912345678" maxlength="12" onkeydown="if(event.key==='Enter') doLogin()">
+      <label for="inpLast4">身分證末四碼</label>
+      <input type="text" id="inpLast4" placeholder="請輸入 4 碼數字" maxlength="4" onkeydown="if(event.key==='Enter') doLogin()">
+      <button id="btnLogin" class="btn-primary" onclick="doLogin()">開啟我的數位上課證</button>
       <div id="loginErr" class="err-msg" style="display:none;"></div>
     </div>
 
     <!-- 上課證主畫面 -->
     <div id="passView" style="display:none;">
-      <div class="card">
-        <div id="passTabs" class="pass-tabs" style="display:none;">
-          <button id="tabMain" class="pass-tab active-main" onclick="switchPassTab('main')">敏惠校內班</button>
-          <button id="tabErji" class="pass-tab" onclick="switchPassTab('erji')">二技衝刺班</button>
-        </div>
-
-        <div id="passHeader" class="pass-header">
-          <div id="passTitle" class="pass-title">敏惠校內班｜數位上課證</div>
-          <div id="liveClock" class="clock-pill">--/--/-- --:--:--</div>
+      <div class="pass-card">
+        <div class="pass-header">
+          <div>
+            <div class="title">敏惠校內班｜數位上課證</div>
+            <div class="sub" id="hdrSubText">點名與領取講義專用條碼</div>
+          </div>
+          <button type="button" class="btn-refresh-top" onclick="refreshStudentData()">↻ 重新整理</button>
         </div>
 
         <div class="pass-body">
           <div class="profile-row">
-            <img id="stuAvatar" class="avatar" referrerpolicy="no-referrer" src="" alt="大頭照">
-            <div>
-              <h1 id="stuName" class="stu-name">--</h1>
-              <div id="stuIdBadge" class="id-badge">--</div>
-              <div id="stuMeta" class="stu-meta">--</div>
+            <img id="stuAvatar" class="avatar" referrerpolicy="no-referrer" src="">
+            <div style="flex:1;min-width:0;">
+              <div class="stu-name-line">
+                <span class="stu-name" id="stuName">--</span>
+                <span class="seat-tag" id="stuSeatBadge" style="display:none;">座位 --</span>
+                <button type="button" class="btn-seat-text" id="btnSeatTextEnded" style="display:none;" onclick="openSeatModal()">查看座位圖</button>
+              </div>
+              <div class="stu-meta" id="stuMeta">--</div>
+              <div class="seat-ended-note" id="seatEndedNoSeatNote" style="display:none;">線上劃位已截止，請洽行政老師安排座位</div>
             </div>
+          </div>
+
+          <!-- 若同時有報二技衝刺班，顯示切換列 -->
+          <div id="erjiSwitchBar" class="pass-switch" style="display:none;">
+            <button type="button" id="psMain" class="ps-btn active" onclick="switchPassCard('main')">敏惠校內班</button>
+            <button type="button" id="psErji" class="ps-btn" onclick="switchPassCard('erji')">二技衝刺班</button>
           </div>
 
           <div class="qr-box">
             <div id="qrcode"></div>
-            <div id="qrCodeLabel" class="qr-code-text">--</div>
-            <div class="qr-tip">點名報到或領取講義時，請向工作人員出示此條碼</div>
+            <div class="qr-id-text" id="qrIdLabel">--</div>
+            <div class="qr-hint" id="qrHintLabel">進教室點名或領取講義時，請出示此條碼</div>
           </div>
 
-          <!-- 線上劃位按鈕（僅校內A/B班顯示） -->
-          <div id="seatBar" class="seat-bar" style="display:none;">
-            <button id="openSeatBtn" class="btn-seat open" onclick="openSeatModal()">
-              載入座位資訊中...
-            </button>
-          </div>
+          <!-- 線上劃位互動區塊（依據後台三階段開關自動切換） -->
+          <div id="seatActionArea" class="seat-action-area" style="display:none;"></div>
         </div>
       </div>
 
-      <!-- 我的出缺勤與全勤資格（僅校內A/B班顯示） -->
-      <div id="attCard" class="card att-card" style="display:none;">
-        <div class="att-head">
-          <h3>出缺勤與全勤獎勵資格</h3>
-          <span id="attTotalPill" class="count-pill">累計 0 堂</span>
+      <!-- 出缺勤與全勤統計 -->
+      <div id="attCard" class="sec-card" style="display:none;">
+        <div class="sec-head">
+          <h3>出缺勤與全勤統計</h3>
+          <span id="fullAttBadge" class="full-pill no">計算中</span>
         </div>
-        <div id="fullAttBanner" class="full-banner neutral">載入中...</div>
-        <div id="attStatGrid" class="stat-5"></div>
-        <div id="attHistoryList" class="att-list"></div>
+        <div class="att-grid">
+          <div class="att-cell"><div class="att-num" style="color:#16a34a;" id="cntPresent">0</div><div class="att-lbl">出席</div></div>
+          <div class="att-cell"><div class="att-num" style="color:#ea580c;" id="cntLate">0</div><div class="att-lbl">遲到</div></div>
+          <div class="att-cell"><div class="att-num" style="color:#9333ea;" id="cntEarly">0</div><div class="att-lbl">早退</div></div>
+          <div class="att-cell"><div class="att-num" style="color:#2563eb;" id="cntLeave">0</div><div class="att-lbl">請假</div></div>
+          <div class="att-cell"><div class="att-num" style="color:#dc2626;" id="cntAbsent">0</div><div class="att-lbl">未到</div></div>
+        </div>
+        <button type="button" id="btnToggleRecs" class="rec-toggle" onclick="toggleAttRecords()">展開近期點名明細 ▼</button>
+        <div id="attRecList" class="rec-list" style="display:none;"></div>
       </div>
 
-      <!-- 講義領取紀錄 -->
-      <div class="card books-card">
-        <div class="books-head">
+      <!-- 講義領取狀態 -->
+      <div class="sec-card">
+        <div class="sec-head">
           <h3>講義領取紀錄</h3>
-          <span id="bookCountPill" class="count-pill">已領 0 / 0 本</span>
+          <span id="bookCountBadge" class="full-pill no">0 / 0</span>
         </div>
-        <div id="booksList"></div>
+        <div id="bookListWrap"></div>
       </div>
 
-      <button class="switch-link" onclick="logoutStudent()">切換學生 / 重新登入</button>
+      <div class="footer-logout">
+        <button type="button" class="btn-logout" onclick="doLogout()">登出 / 切換其他同學帳號</button>
+      </div>
     </div>
   </div>
 
-  <!-- 座位表彈窗 -->
+  <!-- 教室座位表彈窗 -->
   <div id="seatModal" class="modal-mask">
-    <div class="modal-panel">
+    <div class="modal-box">
       <div class="modal-top">
-        <h3 id="seatModalTitle">教室線上劃位</h3>
-        <button class="btn-close" onclick="closeSeatModal()">✕</button>
+        <h3 id="seatModalTitle">教室座位表</h3>
+        <button type="button" class="btn-close" onclick="closeSeatModal()">✕</button>
       </div>
-      <div id="seatModalNotice" class="modal-notice">
-        每人僅限劃位一次，選定確認後即鎖定，無法自行更換
+      <div id="seatModalBanner" class="modal-banner info">載入座位圖中...</div>
+      <div class="legend">
+        <span><i class="leg-dot" style="background:#ffffff;border-color:#94a3b8;"></i>可選空位</span>
+        <span><i class="leg-dot" style="background:#cbd5e1;border-color:#94a3b8;"></i>已額滿</span>
+        <span><i class="leg-dot" style="background:#16a34a;border-color:#14532d;"></i>我的座位</span>
+        <span><i class="leg-dot" style="background:#0284c7;border-color:#0369a1;"></i>目前點選</span>
       </div>
-      <div class="legend-bar">
-        <div class="leg-item"><span class="leg-dot" style="background:#dcfce7;border-color:#22c55e;"></span>可選空位</div>
-        <div class="leg-item"><span class="leg-dot" style="background:#cbd5e1;border-color:#94a3b8;"></span>已選走</div>
-        <div class="leg-item"><span class="leg-dot" style="background:#2563eb;border-color:#1d4ed8;"></span>我的座位</div>
-        <div class="leg-item"><span class="leg-dot" style="background:#e2e8f0;border-style:dashed;"></span>不開放</div>
+      <div id="stuMapScroll" class="map-scroll">
+        <div id="stuClassroomWrap" class="classroom"></div>
       </div>
-      <div id="seatMapScroll" class="map-scroll">
-        <div id="classroomMapContainer" class="classroom-wrap"></div>
-      </div>
-      <div id="seatModalFooter" class="modal-footer">
-        <div id="selectedSeatText" class="footer-info">請點選上方綠色空位</div>
-        <button id="confirmSeatBtn" class="btn-confirm-seat" disabled onclick="submitSeatChoice()">確認鎖定座位</button>
+      <div id="seatConfirmBar" class="confirm-bar">
+        <div class="picked-txt" id="pickedSeatLabel">已選擇座位：--</div>
+        <button type="button" id="btnConfirmSeat" class="btn-confirm-seat" onclick="submitSeatChoice()">確認鎖定此座位（一人限選一次）</button>
       </div>
     </div>
   </div>
 
   <script>
     const GAS_URL = 'https://script.google.com/macros/s/AKfycbz7pnCqepoPJXTRZF0njrVu9Jr-gdqA5pDfEK3W-_ficbpJBQxq1Lfv99Fd7fknyLR0/exec';
-    const STORAGE_KEY = 'minhwei_student_cred';
+    const STORAGE_KEY = 'minhwei_student_cred_v1';
 
     let currentStudent = null;
-    let activeTab = 'main';
-    let clockTimer = null;
-    let seatState = null;
-    let pendingSeat = '';
+    let activeCardType = 'main';
+    let serverOffsetMs = 0;
+    let countdownTimer = null;
+    let recExpanded = false;
+
+    let seatMapData = null;
+    let pickedSeatCode = '';
 
     const LEFT_GRID = [
       [null, null, null, null, 'R',  'A1', 'A2', 'A3', 'A4'],
@@ -260,6 +272,10 @@
       ['E3',  'E4',  null,  null,  null,  null,  null,  null,  null ]
     ];
 
+    function getCalibratedNowMs() {
+      return Date.now() + serverOffsetMs;
+    }
+
     function callGasJsonp(paramsObj) {
       return new Promise((resolve, reject) => {
         const cbName = 'stuCb_' + Date.now() + '_' + Math.floor(Math.random() * 10000);
@@ -270,13 +286,13 @@
           if (script.parentNode) script.parentNode.removeChild(script);
         };
         const timer = setTimeout(() => {
-          if (!done) { done = true; cleanup(); reject(new Error('連線逾時，請重新整理再試')); }
+          if (!done) { done = true; cleanup(); reject(new Error('網路連線逾時，請再試一次')); }
         }, 15000);
         window[cbName] = (data) => {
           if (!done) { done = true; clearTimeout(timer); cleanup(); resolve(data); }
         };
         script.onerror = () => {
-          if (!done) { done = true; clearTimeout(timer); cleanup(); reject(new Error('無法連線至伺服器')); }
+          if (!done) { done = true; clearTimeout(timer); cleanup(); reject(new Error('無法連線至系統伺服器')); }
         };
         const query = new URLSearchParams(Object.assign({}, paramsObj, { callback: cbName })).toString();
         script.src = GAS_URL + '?' + query;
@@ -284,372 +300,489 @@
       });
     }
 
-    function startClock() {
-      if (clockTimer) clearInterval(clockTimer);
-      const update = () => {
-        const now = new Date();
-        const pad = n => String(n).padStart(2, '0');
-        document.getElementById('liveClock').textContent =
-          now.getFullYear() + '/' + pad(now.getMonth() + 1) + '/' + pad(now.getDate()) + ' ' +
-          pad(now.getHours()) + ':' + pad(now.getMinutes()) + ':' + pad(now.getSeconds());
-      };
-      update();
-      clockTimer = setInterval(update, 1000);
-    }
-
-    function getAvatarFallback(raw) {
+    function getAvatarUrl(raw) {
       const fallback = 'data:image/svg+xml;utf8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 120"><rect width="100" height="120" fill="#e2e8f0"/><circle cx="50" cy="44" r="20" fill="#94a3b8"/><path d="M18 106c0-20 14-32 32-32s32 12 32 32" fill="#94a3b8"/></svg>');
       if (!raw) return fallback;
       const m = raw.match(/[-\w]{25,}/);
       if (m && (raw.includes('drive.google.com') || raw.includes('googleusercontent.com'))) {
-        return 'https://lh3.googleusercontent.com/d/' + m[0] + '=s400';
+        return 'https://lh3.googleusercontent.com/d/' + m[0] + '=s300';
       }
       return raw;
     }
 
-    async function doLogin(savedPhone, savedLast4) {
-      const phone = savedPhone || document.getElementById('phoneInput').value.trim();
-      const last4 = savedLast4 || document.getElementById('last4Input').value.trim();
-      const btn = document.getElementById('loginBtn');
+    async function doLogin(savedCred) {
+      const phone = savedCred ? savedCred.phone : document.getElementById('inpPhone').value.trim();
+      const idLast4 = savedCred ? savedCred.idLast4 : document.getElementById('inpLast4').value.trim();
       const errEl = document.getElementById('loginErr');
+      const btn = document.getElementById('btnLogin');
 
-      if (!phone || !last4) {
+      errEl.style.display = 'none';
+      if (!phone || !idLast4) {
         errEl.style.display = 'block';
         errEl.textContent = '請完整輸入手機號碼與身分證末四碼';
         return;
       }
 
-      errEl.style.display = 'none';
       btn.disabled = true;
-      btn.textContent = '驗證資料中...';
+      btn.textContent = '查詢學籍資料中...';
 
       try {
-        const res = await callGasJsonp({ action: 'login', phone: phone, idLast4: last4 });
+        const res = await callGasJsonp({ action: 'login', phone: phone, idLast4: idLast4 });
         if (!res || !res.ok || !res.student) {
-          localStorage.removeItem(STORAGE_KEY);
+          if (savedCred) localStorage.removeItem(STORAGE_KEY);
           errEl.style.display = 'block';
-          errEl.textContent = (res && res.message) || '登入失敗';
+          errEl.textContent = (res && res.message) ? res.message : '查無符合的學籍資料';
           return;
         }
-        localStorage.setItem(STORAGE_KEY, JSON.stringify({ phone: phone, last4: last4 }));
+
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({ phone: phone, idLast4: idLast4 }));
         currentStudent = res.student;
-        renderPassView();
+        if (currentStudent.seatStatus && currentStudent.seatStatus.serverNowMs) {
+          serverOffsetMs = currentStudent.seatStatus.serverNowMs - Date.now();
+        }
+        renderStudentPass();
+        document.getElementById('loginView').style.display = 'none';
+        document.getElementById('passView').style.display = 'block';
       } catch (err) {
         errEl.style.display = 'block';
         errEl.textContent = err.message;
       } finally {
         btn.disabled = false;
-        btn.textContent = '查詢我的上課證';
+        btn.textContent = '開啟我的數位上課證';
       }
     }
 
-    function logoutStudent() {
+    async function refreshStudentData() {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return;
+      const btn = document.querySelector('.btn-refresh-top');
+      if (btn) { btn.disabled = true; btn.textContent = '更新中...'; }
+      try {
+        const cred = JSON.parse(raw);
+        const res = await callGasJsonp({ action: 'login', phone: cred.phone, idLast4: cred.idLast4 });
+        if (res && res.ok && res.student) {
+          currentStudent = res.student;
+          if (currentStudent.seatStatus && currentStudent.seatStatus.serverNowMs) {
+            serverOffsetMs = currentStudent.seatStatus.serverNowMs - Date.now();
+          }
+          renderStudentPass();
+        }
+      } catch (e) {
+        alert('更新失敗，請檢查網路連線');
+      } finally {
+        if (btn) { btn.disabled = false; btn.textContent = '↻ 重新整理'; }
+      }
+    }
+
+    function doLogout() {
+      if (countdownTimer) clearInterval(countdownTimer);
       localStorage.removeItem(STORAGE_KEY);
       currentStudent = null;
-      seatState = null;
-      if (clockTimer) clearInterval(clockTimer);
+      document.getElementById('inpPhone').value = '';
+      document.getElementById('inpLast4').value = '';
       document.getElementById('passView').style.display = 'none';
-      document.getElementById('loginCard').style.display = 'block';
+      document.getElementById('loginView').style.display = 'block';
     }
 
-    function renderAttendanceCard(summary) {
-      const card = document.getElementById('attCard');
-      if (!summary) {
-        card.style.display = 'none';
-        return;
-      }
-      card.style.display = 'block';
-      const c = summary.counts || { '出席': 0, '遲到': 0, '早退': 0, '請假': 0, '未到': 0 };
-      document.getElementById('attTotalPill').textContent = '累計 ' + summary.totalSessions + ' 堂';
-
-      const banner = document.getElementById('fullAttBanner');
-      if (summary.totalSessions === 0) {
-        banner.className = 'full-banner neutral';
-        banner.textContent = '尚無出缺勤紀錄（準時出席每堂課可獲得全勤獎勵）';
-      } else if (summary.isFullAttendance) {
-        banner.className = 'full-banner ok';
-        banner.textContent = '目前維持全勤獎勵資格（已準時出席 ' + c['出席'] + ' / ' + summary.totalSessions + ' 堂）';
-      } else {
-        banner.className = 'full-banner broken';
-        const brk = summary.firstBreak;
-        banner.textContent = brk
-          ? ('已中斷全勤資格（' + brk.date + ' ' + brk.session + '｜' + brk.status + '）')
-          : '已中斷全勤資格（有請假、遲到、早退或未到紀錄）';
-      }
-
-      const items = [
-        { lbl: '出席', val: c['出席'], bg: '#dcfce7', color: '#166534' },
-        { lbl: '遲到', val: c['遲到'], bg: '#ffedd5', color: '#9a3412' },
-        { lbl: '早退', val: c['早退'], bg: '#f3e8ff', color: '#6b21a8' },
-        { lbl: '請假', val: c['請假'], bg: '#dbeafe', color: '#1e40af' },
-        { lbl: '未到', val: c['未到'], bg: '#fee2e2', color: '#991b1b' }
-      ];
-      document.getElementById('attStatGrid').innerHTML = items.map(it =>
-        '<div class="s5-box" style="background:' + it.bg + ';color:' + it.color + ';">' +
-          '<div class="s5-num">' + it.val + '</div>' +
-          '<div class="s5-lbl">' + it.lbl + '</div>' +
-        '</div>'
-      ).join('');
-
-      const recs = summary.records || [];
-      document.getElementById('attHistoryList').innerHTML = recs.map(r =>
-        '<div class="att-row">' +
-          '<div>' +
-            '<div style="font-size:13.5px;font-weight:800;">' + r.date + ' ｜ ' + r.session + '</div>' +
-            (r.note ? ('<div style="font-size:12px;color:#64748b;margin-top:2px;">備註：' + r.note + '</div>') : '') +
-          '</div>' +
-          '<span class="st-pill st-' + r.status + '">' + r.status + '</span>' +
-        '</div>'
-      ).join('') || '<div style="text-align:center;color:#94a3b8;font-size:12.5px;padding:10px 0;">尚無上課點名明細</div>';
-    }
-
-    function renderPassView() {
-      const st = currentStudent;
-      document.getElementById('loginCard').style.display = 'none';
-      document.getElementById('passView').style.display = 'block';
-      startClock();
-
-      document.getElementById('stuAvatar').src = getAvatarFallback(st.photoUrl);
-      document.getElementById('stuName').textContent = st.name;
-      document.getElementById('passTabs').style.display = st.hasErji ? 'flex' : 'none';
-
-      const seatBar = document.getElementById('seatBar');
-      if (st.seatGroup) {
-        seatBar.style.display = 'block';
-        updateSeatButtonUI(st.seat);
-        renderAttendanceCard(st.attendanceSummary);
-      } else {
-        seatBar.style.display = 'none';
-        document.getElementById('attCard').style.display = 'none';
-      }
-
-      const books = st.books || [];
-      const gotCount = books.filter(b => b.received).length;
-      document.getElementById('bookCountPill').textContent = '已領 ' + gotCount + ' / ' + books.length + ' 本';
-      document.getElementById('booksList').innerHTML = books.map(b =>
-        '<div class="book-item">' +
-          '<div>' +
-            '<div class="b-code">' + b.code + '</div>' +
-            '<div class="b-name">' + b.name + '</div>' +
-          '</div>' +
-          '<span class="status-tag ' + (b.received ? 'got' : 'wait') + '">' +
-            (b.received ? '已領取' : '未領取') +
-          '</span>' +
-        '</div>'
-      ).join('') || '<div style="color:#64748b;font-size:13px;padding:8px 0;">尚無對應書單</div>';
-
-      switchPassTab('main');
-    }
-
-    function updateSeatButtonUI(seatCode) {
-      const btn = document.getElementById('openSeatBtn');
-      if (seatCode) {
-        btn.className = 'btn-seat locked';
-        btn.innerHTML = '我的座位：【' + seatCode + '】｜查看教室座位表';
-      } else {
-        btn.className = 'btn-seat open';
-        btn.innerHTML = '點我進行線上劃位（每人限選 1 次）';
-      }
-    }
-
-    function switchPassTab(tab) {
-      activeTab = tab;
-      const st = currentStudent;
-      const isErji = (tab === 'erji');
-
-      document.getElementById('tabMain').className = 'pass-tab' + (!isErji ? ' active-main' : '');
-      document.getElementById('tabErji').className = 'pass-tab' + (isErji ? ' active-erji' : '');
-
-      const header = document.getElementById('passHeader');
-      const badge = document.getElementById('stuIdBadge');
-      header.className = 'pass-header' + (isErji ? ' erji' : '');
-      badge.className = 'id-badge' + (isErji ? ' erji' : '');
-
-      const displayCode = isErji ? st.erjiId : st.mainId;
-      document.getElementById('passTitle').textContent = isErji ? '二技衝刺班｜數位上課證' : '敏惠校內班｜數位上課證';
-      badge.textContent = displayCode;
-      document.getElementById('qrCodeLabel').textContent = displayCode;
-
-      if (isErji) {
-        document.getElementById('stuMeta').innerHTML =
-          st.school + ' ・ ' + (st.erjiLabel || '二技加選') +
-          (st.className ? (' ・ ' + st.className) : '');
-      } else {
-        document.getElementById('stuMeta').innerHTML =
-          st.school + ' ・ ' + st.mainClass +
-          (st.className ? (' ・ ' + st.className) : '') +
-          (st.seat ? ('<br><b style="color:#1d4ed8;">已劃位座號：' + st.seat + '</b>') : '');
-      }
-
-      const qrEl = document.getElementById('qrcode');
-      qrEl.innerHTML = '';
-      new QRCode(qrEl, {
-        text: displayCode,
-        width: 185,
-        height: 185,
+    function renderQrCode(textVal) {
+      const box = document.getElementById('qrcode');
+      box.innerHTML = '';
+      new QRCode(box, {
+        text: textVal,
+        width: 190,
+        height: 190,
+        colorDark: '#0f172a',
+        colorLight: '#ffffff',
         correctLevel: QRCode.CorrectLevel.M
       });
     }
 
+    function switchPassCard(type) {
+      activeCardType = type;
+      document.getElementById('psMain').className = 'ps-btn' + (type === 'main' ? ' active' : '');
+      document.getElementById('psErji').className = 'ps-btn' + (type === 'erji' ? ' active' : '');
+      if (!currentStudent) return;
+
+      if (type === 'erji' && currentStudent.hasErji) {
+        renderQrCode(currentStudent.erjiId);
+        document.getElementById('qrIdLabel').textContent = currentStudent.erjiId;
+        document.getElementById('qrHintLabel').textContent = currentStudent.erjiLabel + ' 專用條碼';
+      } else {
+        renderQrCode(currentStudent.mainId);
+        document.getElementById('qrIdLabel').textContent = currentStudent.mainId;
+        document.getElementById('qrHintLabel').textContent = '進教室點名或領取講義時，請出示此條碼';
+      }
+    }
+
+    function formatCountdown(msDiff) {
+      if (msDiff <= 0) return '00 分 00 秒';
+      const totalSec = Math.floor(msDiff / 1000);
+      const days = Math.floor(totalSec / 86400);
+      const hrs = Math.floor((totalSec % 86400) / 3600);
+      const mins = Math.floor((totalSec % 3600) / 60);
+      const secs = totalSec % 60;
+      const pad = n => String(n).padStart(2, '0');
+      if (days > 0) return days + ' 天 ' + pad(hrs) + ' 時 ' + pad(mins) + ' 分 ' + pad(secs) + ' 秒';
+      if (hrs > 0) return pad(hrs) + ' 時 ' + pad(mins) + ' 分 ' + pad(secs) + ' 秒';
+      return pad(mins) + ' 分 ' + pad(secs) + ' 秒';
+    }
+
+    function renderSeatSection() {
+      if (countdownTimer) {
+        clearInterval(countdownTimer);
+        countdownTimer = null;
+      }
+
+      const st = currentStudent;
+      const ss = st.seatStatus;
+      const seatBadge = document.getElementById('stuSeatBadge');
+      const btnTextEnded = document.getElementById('btnSeatTextEnded');
+      const endedNoSeatNote = document.getElementById('seatEndedNoSeatNote');
+      const actionArea = document.getElementById('seatActionArea');
+
+      // 先重置所有狀態
+      seatBadge.style.display = 'none';
+      btnTextEnded.style.display = 'none';
+      endedNoSeatNote.style.display = 'none';
+      actionArea.style.display = 'none';
+      actionArea.innerHTML = '';
+
+      if (!ss || !ss.hasGroup) return;
+
+      const mySeat = ss.mySeat || st.seat || '';
+      const mode = ss.seatMode || 'paused';
+
+      // 若已有座號，姓名旁一律顯示座號小標籤
+      if (mySeat) {
+        seatBadge.style.display = 'inline-block';
+        seatBadge.textContent = '座位 ' + mySeat;
+      }
+
+      // === 階段三：已結束劃位（手動切換後） ===
+      if (mode === 'ended') {
+        if (mySeat) {
+          // 收起大按鈕，僅保留姓名旁精巧的「查看座位圖」文字按鈕
+          btnTextEnded.style.display = 'inline-block';
+        } else {
+          // 逾期未劃位提示
+          endedNoSeatNote.style.display = 'block';
+        }
+        return;
+      }
+
+      // === 階段一：暫停劃位（開放前防呆） ===
+      if (mode === 'paused') {
+        actionArea.style.display = 'block';
+        if (mySeat) {
+          actionArea.innerHTML =
+            '<button type="button" class="btn-seat-locked" onclick="openSeatModal()">我的座位：' + mySeat + '（點擊查看座位圖）</button>';
+        } else {
+          actionArea.innerHTML =
+            '<div class="paused-card">' +
+              '<div>⏸ 線上劃位尚未開放，請留意班級群組公告</div>' +
+              '<button type="button" class="btn-preview-map" style="margin-top:8px;" onclick="openSeatModal()">先預覽教室座位配置（唯讀）</button>' +
+            '</div>';
+        }
+        return;
+      }
+
+      // === 階段二：依梯次時間開放（open） ===
+      actionArea.style.display = 'block';
+      if (mySeat) {
+        actionArea.innerHTML =
+          '<button type="button" class="btn-seat-locked" onclick="openSeatModal()">我的座位：' + mySeat + '（點擊查看座位圖）</button>';
+        return;
+      }
+
+      const updateOpenOrCountdownUI = () => {
+        const nowMs = getCalibratedNowMs();
+        const unlockMs = ss.unlockTimeMs || 0;
+        const isUnlocked = (nowMs >= unlockMs);
+
+        if (isUnlocked) {
+          if (countdownTimer) {
+            clearInterval(countdownTimer);
+            countdownTimer = null;
+          }
+          ss.canSelect = true;
+          const rankTxt = ss.rank ? ('校內' + ss.seatGroup + '班 第 ' + ss.rank + ' 順位') : ('校內' + ss.seatGroup + '班');
+          actionArea.innerHTML =
+            '<button type="button" class="btn-seat-open" onclick="openSeatModal()">🪑 開放劃位中！點我選擇座位（' + rankTxt + '）</button>';
+        } else {
+          const remain = unlockMs - nowMs;
+          const rankHeader = ss.rank
+            ? ('🔒 校內' + ss.seatGroup + '班 第 ' + ss.rank + ' 順位（第 ' + ss.batchNum + ' 梯）')
+            : ('🔒 校內' + ss.seatGroup + '班 線上劃位排隊中');
+          actionArea.innerHTML =
+            '<div class="wait-card">' +
+              '<div class="wait-rank">' + rankHeader + '</div>' +
+              '<div class="wait-time">您的開放時間：<b>' + (ss.unlockTimeStr || '--') + '</b>（過號不影響後續梯次）</div>' +
+              '<div class="wait-countdown">距離開放倒數：' + formatCountdown(remain) + '</div>' +
+              '<button type="button" class="btn-preview-map" onclick="openSeatModal()">👀 先查看即時空位戰況（唯讀）</button>' +
+            '</div>';
+        }
+      };
+
+      updateOpenOrCountdownUI();
+      if (getCalibratedNowMs() < (ss.unlockTimeMs || 0)) {
+        countdownTimer = setInterval(updateOpenOrCountdownUI, 1000);
+      }
+    }
+
+    function renderStudentPass() {
+      const st = currentStudent;
+      if (!st) return;
+
+      document.getElementById('stuAvatar').src = getAvatarUrl(st.avatar);
+      document.getElementById('stuName').textContent = st.name;
+      document.getElementById('stuMeta').innerHTML =
+        '學號：<b>' + st.mainId + '</b><br>' +
+        '班別：' + (st.mainClass || '--') + (st.className ? (' ｜ ' + st.className) : '');
+
+      if (st.hasErji) {
+        document.getElementById('erjiSwitchBar').style.display = 'grid';
+      } else {
+        document.getElementById('erjiSwitchBar').style.display = 'none';
+        activeCardType = 'main';
+      }
+      switchPassCard(activeCardType);
+      renderSeatSection();
+
+      // 出缺勤卡片
+      const attCard = document.getElementById('attCard');
+      if (st.attendanceSummary) {
+        attCard.style.display = 'block';
+        const c = st.attendanceSummary.counts || {};
+        document.getElementById('cntPresent').textContent = c['出席'] || 0;
+        document.getElementById('cntLate').textContent = c['遲到'] || 0;
+        document.getElementById('cntEarly').textContent = c['早退'] || 0;
+        document.getElementById('cntLeave').textContent = c['請假'] || 0;
+        document.getElementById('cntAbsent').textContent = c['未到'] || 0;
+
+        const badge = document.getElementById('fullAttBadge');
+        if (st.attendanceSummary.totalSessions === 0) {
+          badge.className = 'full-pill no';
+          badge.textContent = '尚未開課';
+        } else if (st.attendanceSummary.isFullAttendance) {
+          badge.className = 'full-pill yes';
+          badge.textContent = '✔ 目前全勤（共 ' + st.attendanceSummary.totalSessions + ' 堂）';
+        } else {
+          badge.className = 'full-pill no';
+          badge.textContent = '未全勤（共 ' + st.attendanceSummary.totalSessions + ' 堂）';
+        }
+
+        const recs = st.attendanceSummary.records || [];
+        const recWrap = document.getElementById('attRecList');
+        if (recs.length === 0) {
+          recWrap.innerHTML = '<div style="text-align:center;color:#94a3b8;padding:10px;">尚無點名紀錄</div>';
+        } else {
+          recWrap.innerHTML = recs.map(r =>
+            '<div class="rec-row">' +
+              '<span>' + r.date + ' ' + r.session + '</span>' +
+              '<b>' + r.status + '</b>' +
+            '</div>'
+          ).join('');
+        }
+      } else {
+        attCard.style.display = 'none';
+      }
+
+      // 講義領取清單
+      const books = st.books || [];
+      const gotCnt = books.filter(b => b.received).length;
+      document.getElementById('bookCountBadge').textContent = '已領 ' + gotCnt + ' / ' + books.length + ' 本';
+      const bookWrap = document.getElementById('bookListWrap');
+      if (books.length === 0) {
+        bookWrap.innerHTML = '<div style="text-align:center;color:#94a3b8;font-size:13px;padding:10px;">尚無書單資料</div>';
+      } else {
+        bookWrap.innerHTML = books.map(b =>
+          '<div class="book-item">' +
+            '<span>' + b.name + ' <small style="color:#94a3b8;">(' + b.code + ')</small></span>' +
+            '<span class="b-badge ' + (b.received ? 'got' : 'wait') + '">' + (b.received ? '已領取' : '尚未領取') + '</span>' +
+          '</div>'
+        ).join('');
+      }
+    }
+
+    function toggleAttRecords() {
+      recExpanded = !recExpanded;
+      document.getElementById('attRecList').style.display = recExpanded ? 'block' : 'none';
+      document.getElementById('btnToggleRecs').textContent = recExpanded ? '收合點名明細 ▲' : '展開近期點名明細 ▼';
+    }
+
+    // ==========================================
+    // === 教室座位圖檢視與選位互動 ===
+    // ==========================================
+
     async function openSeatModal() {
-      const modal = document.getElementById('seatModal');
-      const mapEl = document.getElementById('classroomMapContainer');
-      const scrollEl = document.getElementById('seatMapScroll');
-      modal.style.display = 'flex';
-      pendingSeat = '';
-      mapEl.innerHTML = '<div style="text-align:center;padding:40px;font-weight:700;color:#475569;">正在讀取最新座位狀況...</div>';
+      if (!currentStudent) return;
+      pickedSeatCode = '';
+      document.getElementById('seatConfirmBar').style.display = 'none';
+      document.getElementById('seatModalBanner').className = 'modal-banner info';
+      document.getElementById('seatModalBanner').textContent = '正在載入最新教室座位表...';
+      document.getElementById('stuClassroomWrap').innerHTML = '';
+      document.getElementById('seatModal').style.display = 'flex';
 
       try {
         const res = await callGasJsonp({ action: 'getSeatMap', studentId: currentStudent.mainId });
         if (!res || !res.ok) {
-          mapEl.innerHTML = '<div class="err-msg">' + ((res && res.message) || '無法讀取座位表') + '</div>';
+          document.getElementById('seatModalBanner').className = 'modal-banner warn';
+          document.getElementById('seatModalBanner').textContent = (res && res.message) || '載入座位表失敗';
           return;
         }
-        seatState = res;
-        currentStudent.seat = res.mySeat || '';
-        updateSeatButtonUI(currentStudent.seat);
-        renderStudentClassroomMap();
-        if (scrollEl) scrollEl.scrollLeft = 0;
+
+        seatMapData = res;
+        if (res.seatStatus) {
+          currentStudent.seatStatus = res.seatStatus;
+          if (res.seatStatus.serverNowMs) {
+            serverOffsetMs = res.seatStatus.serverNowMs - Date.now();
+          }
+          renderSeatSection();
+        }
+        renderSeatMapModal();
       } catch (err) {
-        mapEl.innerHTML = '<div class="err-msg">' + err.message + '</div>';
+        document.getElementById('seatModalBanner').className = 'modal-banner warn';
+        document.getElementById('seatModalBanner').textContent = err.message;
       }
     }
 
     function closeSeatModal() {
       document.getElementById('seatModal').style.display = 'none';
+      pickedSeatCode = '';
     }
 
-    function buildZoneHtml(gridData, colCount, showLeftRowNum, showRightRowNum) {
-      let html = '<div class="zone-block"><div class="seat-grid" style="grid-template-columns:' +
-        (showLeftRowNum ? '22px ' : '') + 'repeat(' + colCount + ', 32px)' + (showRightRowNum ? ' 22px' : '') + ';">';
+    function canStudentPickNow() {
+      if (!seatMapData || !seatMapData.seatStatus) return false;
+      const ss = seatMapData.seatStatus;
+      if (ss.seatMode !== 'open') return false;
+      if (seatMapData.mySeat || ss.locked) return false;
+      return getCalibratedNowMs() >= (ss.unlockTimeMs || 0);
+    }
 
-      if (showLeftRowNum) html += '<div class="g-cell g-head"></div>';
-      for (let c = 1; c <= colCount; c++) {
-        html += '<div class="g-cell g-head">' + c + '</div>';
+    function renderSeatMapModal() {
+      const ss = seatMapData.seatStatus || {};
+      const grp = seatMapData.seatGroup || '';
+      const mySeat = seatMapData.mySeat || '';
+      const interactive = canStudentPickNow();
+
+      document.getElementById('seatModalTitle').textContent = '敏惠校內 ' + grp + ' 班｜教室座位圖';
+      const banner = document.getElementById('seatModalBanner');
+
+      if (mySeat) {
+        banner.className = 'modal-banner ok';
+        banner.textContent = '您已鎖定座位【' + mySeat + '】（綠色標示為您的位置，如需換位請洽行政老師）';
+      } else if (ss.seatMode === 'paused') {
+        banner.className = 'modal-banner warn';
+        banner.textContent = '目前為「暫停劃位」預覽模式，正式開放後方可點選座位';
+      } else if (ss.seatMode === 'ended') {
+        banner.className = 'modal-banner warn';
+        banner.textContent = '線上劃位已截止，如需安排座位請洽行政老師';
+      } else if (!interactive) {
+        banner.className = 'modal-banner warn';
+        banner.textContent = '唯讀看盤模式｜您的順位（第 ' + ss.rank + ' 順位）將於 ' + ss.unlockTimeStr + ' 開放選位';
+      } else {
+        banner.className = 'modal-banner info';
+        banner.textContent = '請點選下方白色空位，選好後按「確認鎖定此座位」（每人限選一次）';
       }
-      if (showRightRowNum) html += '<div class="g-cell g-head"></div>';
+
+      document.getElementById('stuClassroomWrap').innerHTML =
+        '<div class="wb">白  板（校內 ' + grp + ' 班）</div>' +
+        '<div class="zones">' +
+          buildStudentZoneHtml(LEFT_GRID, 9, true, false, interactive) +
+          buildStudentZoneHtml(MID_GRID, 12, false, false, interactive) +
+          buildStudentZoneHtml(RIGHT_GRID, 9, false, true, interactive) +
+        '</div>' +
+        '<div class="doors"><span>教室門口</span><span>教室門口</span></div>';
+    }
+
+    function buildStudentZoneHtml(gridData, colCount, showLeftRowNum, showRightRowNum, interactive) {
+      const takenSeats = (seatMapData && seatMapData.takenSeats) || {};
+      let html = '<div class="zone"><div class="sgrid" style="grid-template-columns:' +
+        (showLeftRowNum ? '18px ' : '') + 'repeat(' + colCount + ', 36px)' + (showRightRowNum ? ' 18px' : '') + ';">';
+
+      if (showLeftRowNum) html += '<div class="scell head"></div>';
+      for (let c = 1; c <= colCount; c++) {
+        html += '<div class="scell head">' + c + '</div>';
+      }
+      if (showRightRowNum) html += '<div class="scell head"></div>';
 
       for (let r = 0; r < 5; r++) {
-        if (showLeftRowNum) html += '<div class="g-cell g-head">' + (r + 1) + '</div>';
+        if (showLeftRowNum) html += '<div class="scell head">' + (r + 1) + '</div>';
         for (let c = 0; c < colCount; c++) {
           const code = gridData[r][c];
           if (!code) {
-            html += '<div class="g-cell g-aisle"></div>';
+            html += '<div class="scell aisle"></div>';
           } else if (code === 'R') {
-            html += '<div class="g-cell g-reserved">保留</div>';
+            html += '<div class="scell res">保留</div>';
           } else {
-            const status = (seatState.takenSeats && seatState.takenSeats[code]) || 'AVAIL';
-            const isLocked = seatState.locked;
-            let cls = 'g-cell g-seat ';
-            let sub = '';
-
-            if (status === 'MINE') {
-              cls += 'mine readonly';
-              sub = '我的';
-            } else if (status === 'TAKEN') {
-              cls += 'taken readonly';
-              sub = '已選';
-            } else if (isLocked) {
-              cls += 'avail readonly';
-              sub = '空位';
-            } else if (pendingSeat === code) {
-              cls += 'selected-preview';
-              sub = '預選';
+            const state = takenSeats[code];
+            if (state === 'MINE') {
+              html += '<div class="scell mine">' + code + '</div>';
+            } else if (state === 'TAKEN') {
+              html += '<div class="scell taken">' + code + '</div>';
             } else {
-              cls += 'avail';
-              sub = '可選';
+              const isPicked = (pickedSeatCode === code);
+              const cls = 'scell free' + (interactive ? '' : ' readonly') + (isPicked ? ' picked' : '');
+              const clickAttr = interactive ? (' onclick="pickSeatCell(\'' + code + '\')"') : '';
+              html += '<div class="' + cls + '"' + clickAttr + '>' + code + '</div>';
             }
-
-            const clickAttr = (!isLocked && status === 'AVAIL') ? (' onclick="previewSeat(\'' + code + '\')"') : '';
-            html += '<div class="' + cls + '"' + clickAttr + '>' + code + '<span class="g-sub">' + sub + '</span></div>';
           }
         }
-        if (showRightRowNum) html += '<div class="g-cell g-head">' + (r + 1) + '</div>';
+        if (showRightRowNum) html += '<div class="scell head">' + (r + 1) + '</div>';
       }
       html += '</div></div>';
       return html;
     }
 
-    function renderStudentClassroomMap() {
-      const isLocked = seatState.locked;
-      document.getElementById('seatModalTitle').textContent =
-        '校內' + seatState.seatGroup + '班｜' + (isLocked ? '教室座位表（唯讀）' : '線上劃位');
-
-      const noticeEl = document.getElementById('seatModalNotice');
-      const footerEl = document.getElementById('seatModalFooter');
-
-      if (isLocked) {
-        noticeEl.className = 'modal-notice locked-note';
-        noticeEl.textContent = '您已劃位【' + seatState.mySeat + '】（一人限選一次），如需更換座位請洽行政老師';
-        footerEl.style.display = 'none';
-      } else {
-        noticeEl.className = 'modal-notice';
-        noticeEl.textContent = '每人僅限劃位一次，點選綠色空位並按「確認鎖定座位」後即無法自行更改';
-        footerEl.style.display = 'flex';
-        document.getElementById('selectedSeatText').textContent = pendingSeat ? ('已選擇：【' + pendingSeat + '】') : '請點選上方綠色空位';
-        document.getElementById('confirmSeatBtn').disabled = !pendingSeat;
-      }
-
-      const mapHtml =
-        '<div class="whiteboard">白  板</div>' +
-        '<div class="zones-row">' +
-          buildZoneHtml(LEFT_GRID, 9, true, false) +
-          buildZoneHtml(MID_GRID, 12, false, false) +
-          buildZoneHtml(RIGHT_GRID, 9, false, true) +
-        '</div>' +
-        '<div class="doors-row">' +
-          '<span class="door-tag">教室門口</span>' +
-          '<span class="door-tag">教室門口</span>' +
-        '</div>';
-
-      document.getElementById('classroomMapContainer').innerHTML = mapHtml;
-    }
-
-    function previewSeat(code) {
-      if (!seatState || seatState.locked) return;
-      pendingSeat = code;
-      renderStudentClassroomMap();
+    function pickSeatCell(seatCode) {
+      if (!canStudentPickNow()) return;
+      pickedSeatCode = seatCode;
+      renderSeatMapModal();
+      document.getElementById('pickedSeatLabel').textContent = '目前點選座位：【' + seatCode + '】';
+      document.getElementById('seatConfirmBar').style.display = 'block';
     }
 
     async function submitSeatChoice() {
-      if (!pendingSeat || !seatState || seatState.locked) return;
-      if (!confirm('確定要選擇座位【' + pendingSeat + '】嗎？\n\n注意：每人僅能選位一次，送出鎖定後無法自行更換！')) return;
+      if (!currentStudent || !pickedSeatCode) return;
+      if (!confirm('確定要鎖定座位【' + pickedSeatCode + '】嗎？\n送出後即永久鎖定，無法自行更改喔！')) return;
 
-      const btn = document.getElementById('confirmSeatBtn');
+      const btn = document.getElementById('btnConfirmSeat');
       btn.disabled = true;
-      btn.textContent = '鎖定中...';
+      btn.textContent = '正在鎖定座位...';
 
       try {
         const res = await callGasJsonp({
           action: 'selectSeat',
           studentId: currentStudent.mainId,
-          seat: pendingSeat
+          seat: pickedSeatCode
         });
         if (!res || !res.ok) {
-          alert((res && res.message) || '劃位失敗，請重新嘗試');
-          openSeatModal();
+          alert((res && res.message) || '劃位失敗，請重新選擇');
+          await openSeatModal();
           return;
         }
+
         alert(res.message);
-        currentStudent.seat = res.seat;
-        switchPassTab(activeTab);
-        openSeatModal();
+        closeSeatModal();
+        await refreshStudentData();
       } catch (err) {
         alert(err.message);
+      } finally {
         btn.disabled = false;
-        btn.textContent = '確認鎖定座位';
+        btn.textContent = '確認鎖定此座位（一人限選一次）';
       }
     }
 
     window.onload = function() {
-      try {
-        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
-        if (saved && saved.phone && saved.last4) {
-          document.getElementById('phoneInput').value = saved.phone;
-          document.getElementById('last4Input').value = saved.last4;
-          doLogin(saved.phone, saved.last4);
-        }
-      } catch (e) {}
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        try {
+          const cred = JSON.parse(raw);
+          if (cred && cred.phone && cred.idLast4) {
+            doLogin(cred);
+          }
+        } catch (e) {}
+      }
     };
   </script>
 </body>
