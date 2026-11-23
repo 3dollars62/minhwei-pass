@@ -11,20 +11,20 @@
     .box { max-width: 1460px; margin: 0 auto; background: #fff; border-radius: 18px; padding: 16px; box-shadow: 0 8px 20px rgba(0,0,0,0.06); }
     .narrow-wrap { max-width: 500px; margin: 0 auto; }
     h2 { margin: 0 0 10px; font-size: 20px; text-align: center; }
-    input[type="text"], input[type="password"], input[type="date"], select { width: 100%; padding: 10px 12px; border: 1.5px solid #cbd5e1; border-radius: 10px; font-size: 14.5px; margin-bottom: 10px; background: #fff; outline: none; }
-    input:focus, select:focus { border-color: #0284c7; }
+    input[type="text"], input[type="password"], input[type="date"], input[type="datetime-local"], input[type="number"], select, textarea { width: 100%; padding: 10px 12px; border: 1.5px solid #cbd5e1; border-radius: 10px; font-size: 14.5px; margin-bottom: 10px; background: #fff; outline: none; }
+    input:focus, select:focus, textarea:focus { border-color: #0284c7; }
     button { width: 100%; padding: 11px; border: none; border-radius: 10px; background: #0284c7; color: #fff; font-size: 15px; font-weight: 700; cursor: pointer; }
     button:disabled { background: #94a3b8; cursor: not-allowed; }
 
     /* 全域場次切換條 */
-    .session-bar { max-width: 680px; margin: 0 auto 12px; background: #eff6ff; border: 1.5px solid #93c5fd; border-radius: 12px; padding: 8px 10px; display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+    .session-bar { max-width: 780px; margin: 0 auto 12px; background: #eff6ff; border: 1.5px solid #93c5fd; border-radius: 12px; padding: 8px 10px; display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
     .session-label { font-size: 13px; font-weight: 800; color: #1e3a8a; }
     .session-btns { display: flex; gap: 6px; }
     .sess-btn { width: auto; padding: 6px 12px; font-size: 13px; border-radius: 8px; background: #dbeafe; color: #1e40af; }
     .sess-btn.active { background: #1d4ed8; color: #fff; }
 
     /* 主分頁列 */
-    .tabs { max-width: 680px; margin: 0 auto 14px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+    .tabs { max-width: 780px; margin: 0 auto 14px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
     .tab { background: #e2e8f0; color: #334155; font-size: 13px; padding: 10px 4px; border-radius: 10px; }
     .tab.active { background: #0284c7; color: #fff; }
 
@@ -67,6 +67,40 @@
     .btn-sm { width: auto; padding: 6px 12px; font-size: 13px; flex-shrink: 0; }
     .btn-got { background: #16a34a; }
     .btn-wait { background: #64748b; }
+
+    /* === 分頁 3：線上劃位控管卡片 === */
+    .seat-ctrl-card { max-width: 780px; margin: 0 auto 12px; background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: 12px; }
+    .seat-ctrl-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .seat-ctrl-title { font-size: 14.5px; font-weight: 900; color: #0f172a; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .mode-pill { font-size: 12px; font-weight: 800; padding: 3px 10px; border-radius: 99px; }
+    .mode-pill.m-paused { background: #fef3c7; color: #92400e; border: 1px solid #f59e0b; }
+    .mode-pill.m-open { background: #dcfce7; color: #166534; border: 1px solid #16a34a; }
+    .mode-pill.m-ended { background: #e2e8f0; color: #334155; border: 1px solid #94a3b8; }
+    .btn-toggle-ctrl { width: auto; padding: 5px 11px; font-size: 12.5px; background: #e2e8f0; color: #334155; border-radius: 8px; }
+
+    .seat-ctrl-body { margin-top: 12px; padding-top: 12px; border-top: 1px dashed #cbd5e1; }
+    .mode-3-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 12px; }
+    .mode-opt-btn { padding: 9px 6px; font-size: 12.5px; border-radius: 10px; background: #e2e8f0; color: #334155; border: 1.5px solid transparent; line-height: 1.3; }
+    .mode-opt-btn.active.m-paused { background: #fef3c7; color: #92400e; border-color: #d97706; }
+    .mode-opt-btn.active.m-open { background: #dcfce7; color: #166534; border-color: #16a34a; }
+    .mode-opt-btn.active.m-ended { background: #334155; color: #fff; border-color: #0f172a; }
+
+    .ab-cfg-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+    @media (max-width: 620px) {
+      .ab-cfg-grid { grid-template-columns: 1fr; }
+      .mode-3-grid { grid-template-columns: 1fr; }
+    }
+    .cfg-subbox { background: #fff; border: 1px solid #cbd5e1; border-radius: 10px; padding: 10px; }
+    .cfg-subbox h4 { margin: 0 0 8px; font-size: 13.5px; color: #1e3a8a; display: flex; justify-content: space-between; align-items: center; }
+    .cfg-subbox label { display: block; font-size: 12px; font-weight: 700; color: #475569; margin-bottom: 3px; }
+    .cfg-subbox input { margin-bottom: 8px; padding: 7px 9px; font-size: 13.5px; }
+    .cfg-mini-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .cfg-mini-row input { margin-bottom: 0; }
+
+    .ctrl-act-row { display: flex; gap: 8px; flex-wrap: wrap; }
+    .btn-save-cfg { flex: 2; min-width: 150px; background: #0284c7; padding: 10px; font-size: 13.5px; }
+    .btn-copy-line { flex: 1; min-width: 120px; background: #16a34a; padding: 10px; font-size: 13px; }
+    .btn-prev-tier { flex: 1; min-width: 110px; background: #475569; padding: 10px; font-size: 13px; }
 
     /* === 分頁 3：座位表點名 === */
     .seat-toolbar { max-width: 780px; margin: 0 auto 10px; display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
@@ -122,9 +156,9 @@
     .notfull-badge { background: #e2e8f0; color: #475569; font-size: 11.5px; font-weight: 700; padding: 2px 8px; border-radius: 99px; }
     .mini-counts { display: flex; gap: 8px; flex-wrap: wrap; font-size: 12px; font-weight: 700; margin-top: 5px; }
 
-    /* === 彈窗（座位核對 & 一鍵未到確認） === */
+    /* === 彈窗（座位核對 & 一鍵未到確認 & 公告預覽） === */
     .modal-mask { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.65); z-index: 999; display: none; align-items: center; justify-content: center; padding: 12px; }
-    .modal-box { background: #fff; width: 100%; max-width: 460px; max-height: 90vh; overflow-y: auto; border-radius: 18px; padding: 18px; box-shadow: 0 20px 40px rgba(0,0,0,0.25); }
+    .modal-box { background: #fff; width: 100%; max-width: 480px; max-height: 90vh; overflow-y: auto; border-radius: 18px; padding: 18px; box-shadow: 0 20px 40px rgba(0,0,0,0.25); }
     .modal-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
     .modal-head h3 { margin: 0; font-size: 17.5px; }
     .btn-x { width: 32px; height: 32px; border-radius: 50%; background: #e2e8f0; color: #334155; padding: 0; font-size: 16px; }
@@ -223,8 +257,78 @@
       <div id="resultArea"></div>
     </div>
 
-    <!-- === 分頁 3：座位表點名 === -->
+    <!-- === 分頁 3：座位表點名與線上劃位控管 === -->
     <div id="seatModeSection" style="display:none;">
+
+      <!-- 線上劃位控管與梯次設定卡片 -->
+      <div class="seat-ctrl-card">
+        <div class="seat-ctrl-head">
+          <div class="seat-ctrl-title">
+            <span>線上劃位控管與梯次設定</span>
+            <span id="seatModePill" class="mode-pill m-paused">載入中...</span>
+          </div>
+          <button type="button" id="btnToggleSeatCtrl" class="btn-toggle-ctrl" onclick="toggleSeatCtrlPanel()">收合設定 ▲</button>
+        </div>
+
+        <div id="seatCtrlBody" class="seat-ctrl-body">
+          <div class="sec-label" style="margin-top:0;">1. 劃位總開關（手動切換狀態）：</div>
+          <div class="mode-3-grid">
+            <button type="button" id="btnModePaused" class="mode-opt-btn m-paused" onclick="selectSeatModeUI('paused')">
+              ⏸ 暫停劃位<br><small>（開放前防呆）</small>
+            </button>
+            <button type="button" id="btnModeOpen" class="mode-opt-btn m-open" onclick="selectSeatModeUI('open')">
+              🟢 依梯次時間開放<br><small>（過號不擋人）</small>
+            </button>
+            <button type="button" id="btnModeEnded" class="mode-opt-btn m-ended" onclick="selectSeatModeUI('ended')">
+              🔒 已結束劃位<br><small>（收起大按鈕）</small>
+            </button>
+          </div>
+
+          <div class="sec-label">2. 各班開放時間與分梯次規則（可設同時開搶或錯開時段）：</div>
+          <div class="ab-cfg-grid">
+            <div class="cfg-subbox">
+              <h4><span>校內 A 班設定</span><small id="countInfoA" style="color:#64748b;">共 -- 人</small></h4>
+              <label>開放起始日期與時間</label>
+              <input type="datetime-local" id="cfgStartA">
+              <div class="cfg-mini-row">
+                <div>
+                  <label>每梯人數（人）</label>
+                  <input type="number" id="cfgBatchA" min="1" max="200" value="15">
+                </div>
+                <div>
+                  <label>間隔時間（分鐘）</label>
+                  <input type="number" id="cfgIntervalA" min="0" max="180" value="10">
+                </div>
+              </div>
+            </div>
+
+            <div class="cfg-subbox">
+              <h4><span>校內 B 班設定</span><small id="countInfoB" style="color:#64748b;">共 -- 人</small></h4>
+              <label>開放起始日期與時間</label>
+              <input type="datetime-local" id="cfgStartB">
+              <div class="cfg-mini-row">
+                <div>
+                  <label>每梯人數（人）</label>
+                  <input type="number" id="cfgBatchB" min="1" max="200" value="15">
+                </div>
+                <div>
+                  <label>間隔時間（分鐘）</label>
+                  <input type="number" id="cfgIntervalB" min="0" max="180" value="10">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="ctrl-act-row">
+            <button type="button" id="btnSaveSeatCfg" class="btn-save-cfg" onclick="saveSeatSettings()">儲存劃位設定</button>
+            <button type="button" class="btn-copy-line" onclick="copyLineAnnouncement('A')">複製 A 班公告</button>
+            <button type="button" class="btn-copy-line" onclick="copyLineAnnouncement('B')">複製 B 班公告</button>
+            <button type="button" class="btn-prev-tier" onclick="openTierPreviewModal()">預覽梯次</button>
+          </div>
+          <div id="cfgSaveMsg" style="font-size:12.5px;font-weight:700;color:#166534;margin-top:8px;display:none;"></div>
+        </div>
+      </div>
+
       <div class="seat-toolbar">
         <button id="btnClassA" class="cls-btn active" onclick="loadSeatDashboard('A')">校內 A 班</button>
         <button id="btnClassB" class="cls-btn" onclick="loadSeatDashboard('B')">校內 B 班</button>
@@ -310,7 +414,7 @@
     </div>
   </div>
 
-  <!-- 通用互動彈窗（座位點名核對 / 一鍵未到確認） -->
+  <!-- 通用互動彈窗（座位點名核對 / 一鍵未到確認 / 公告預覽） -->
   <div id="seatActionModal" class="modal-mask">
     <div class="modal-box">
       <div class="modal-head">
@@ -338,6 +442,9 @@
 
     let currentSeatGroup = 'A';
     let seatDashData = null;
+    let seatSettingsCache = null;
+    let selectedSeatModeDraft = 'paused';
+    let seatCtrlExpanded = true;
     let searchDataCache = { records: [], unmarkedList: [] };
     let searchSubTab = 'stats';
 
@@ -903,6 +1010,176 @@
       }
     }
 
+    // ==========================================
+    // === 線上劃位控管與梯次設定（三階段總開關） ===
+    // ==========================================
+
+    function gasStrToDatetimeLocal(gasStr) {
+      const m = String(gasStr || '').trim().match(/^(\d{4})[\/\-](\d{1,2})[\/\-](\d{1,2})\s+(\d{1,2}):(\d{2})/);
+      if (!m) return '';
+      return m[1] + '-' + ('0' + m[2]).slice(-2) + '-' + ('0' + m[3]).slice(-2) +
+             'T' + ('0' + m[4]).slice(-2) + ':' + ('0' + m[5]).slice(-2);
+    }
+
+    function datetimeLocalToGasStr(dtVal) {
+      const raw = String(dtVal || '').trim().replace('T', ' ');
+      const m = raw.match(/^(\d{4})[\/\-](\d{1,2})[\/\-](\d{1,2})\s+(\d{1,2}):(\d{2})/);
+      if (!m) return '';
+      return m[1] + '/' + ('0' + m[2]).slice(-2) + '/' + ('0' + m[3]).slice(-2) +
+             ' ' + ('0' + m[4]).slice(-2) + ':' + ('0' + m[5]).slice(-2);
+    }
+
+    function toggleSeatCtrlPanel() {
+      seatCtrlExpanded = !seatCtrlExpanded;
+      document.getElementById('seatCtrlBody').style.display = seatCtrlExpanded ? 'block' : 'none';
+      document.getElementById('btnToggleSeatCtrl').textContent = seatCtrlExpanded ? '收合設定 ▲' : '展開設定 ▼';
+    }
+
+    function selectSeatModeUI(m) {
+      selectedSeatModeDraft = m;
+      document.getElementById('btnModePaused').className = 'mode-opt-btn m-paused' + (m === 'paused' ? ' active' : '');
+      document.getElementById('btnModeOpen').className = 'mode-opt-btn m-open' + (m === 'open' ? ' active' : '');
+      document.getElementById('btnModeEnded').className = 'mode-opt-btn m-ended' + (m === 'ended' ? ' active' : '');
+    }
+
+    function applySeatSettingsToUI(settingsObj) {
+      if (!settingsObj || !settingsObj.config) return;
+      seatSettingsCache = settingsObj;
+      const cfg = settingsObj.config;
+      selectSeatModeUI(cfg.mode || 'paused');
+
+      const pill = document.getElementById('seatModePill');
+      if (cfg.mode === 'open') {
+        pill.className = 'mode-pill m-open';
+        pill.textContent = '目前狀態：依梯次時間開放';
+      } else if (cfg.mode === 'ended') {
+        pill.className = 'mode-pill m-ended';
+        pill.textContent = '目前狀態：已結束劃位';
+      } else {
+        pill.className = 'mode-pill m-paused';
+        pill.textContent = '目前狀態：暫停劃位（防呆中）';
+      }
+
+      document.getElementById('cfgStartA').value = gasStrToDatetimeLocal(cfg.startA);
+      document.getElementById('cfgBatchA').value = cfg.batchA || 15;
+      document.getElementById('cfgIntervalA').value = (cfg.intervalA !== undefined) ? cfg.intervalA : 10;
+
+      document.getElementById('cfgStartB').value = gasStrToDatetimeLocal(cfg.startB);
+      document.getElementById('cfgBatchB').value = cfg.batchB || 15;
+      document.getElementById('cfgIntervalB').value = (cfg.intervalB !== undefined) ? cfg.intervalB : 10;
+
+      if (settingsObj.groupA) {
+        document.getElementById('countInfoA').textContent = '共 ' + settingsObj.groupA.total + ' 人（分 ' + settingsObj.groupA.tiers.length + ' 梯）';
+      }
+      if (settingsObj.groupB) {
+        document.getElementById('countInfoB').textContent = '共 ' + settingsObj.groupB.total + ' 人（分 ' + settingsObj.groupB.tiers.length + ' 梯）';
+      }
+    }
+
+    async function saveSeatSettings() {
+      const btn = document.getElementById('btnSaveSeatCfg');
+      const msgEl = document.getElementById('cfgSaveMsg');
+      const startAStr = datetimeLocalToGasStr(document.getElementById('cfgStartA').value);
+      const startBStr = datetimeLocalToGasStr(document.getElementById('cfgStartB').value);
+      const batchA = document.getElementById('cfgBatchA').value;
+      const intervalA = document.getElementById('cfgIntervalA').value;
+      const batchB = document.getElementById('cfgBatchB').value;
+      const intervalB = document.getElementById('cfgIntervalB').value;
+
+      if (!startAStr || !startBStr) {
+        alert('請完整選擇 A 班與 B 班的開放起始日期與時間');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = '儲存並計算梯次中...';
+      msgEl.style.display = 'none';
+
+      try {
+        const res = await callGasJsonp({
+          action: 'adminSaveSeatSettings',
+          pass: savedPass,
+          mode: selectedSeatModeDraft,
+          startA: startAStr,
+          batchA: batchA,
+          intervalA: intervalA,
+          startB: startBStr,
+          batchB: batchB,
+          intervalB: intervalB
+        });
+        if (!res || !res.ok) {
+          alert((res && res.message) || '儲存失敗');
+          return;
+        }
+        playBeep();
+        applySeatSettingsToUI(res);
+        msgEl.style.display = 'block';
+        msgEl.textContent = '✔ ' + res.message;
+        setTimeout(() => { msgEl.style.display = 'none'; }, 4000);
+      } catch (err) {
+        alert(err.message);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '儲存劃位設定';
+      }
+    }
+
+    async function copyLineAnnouncement(group) {
+      if (!seatSettingsCache) {
+        alert('請先等待座位設定載入完成');
+        return;
+      }
+      const grpData = (group === 'B') ? seatSettingsCache.groupB : seatSettingsCache.groupA;
+      const text = grpData ? grpData.lineText : '';
+      if (!text) return;
+
+      try {
+        await navigator.clipboard.writeText(text);
+        playBeep();
+        alert('已複製【校內 ' + group + ' 班】LINE 梯次公告文案！可直接貼到群組發送。');
+      } catch (e) {
+        openTierPreviewModal(group);
+      }
+    }
+
+    function openTierPreviewModal(focusGroup) {
+      if (!seatSettingsCache) return;
+      const textA = (seatSettingsCache.groupA && seatSettingsCache.groupA.lineText) || '';
+      const textB = (seatSettingsCache.groupB && seatSettingsCache.groupB.lineText) || '';
+
+      document.getElementById('modalSeatHeader').textContent = 'LINE 群組梯次公告預覽（依最新儲存設定）';
+      document.getElementById('modalSeatBody').innerHTML =
+        '<div style="font-size:12.5px;color:#475569;margin-bottom:8px;">若剛修改過時間或人數，請先按「儲存劃位設定」再複製最新名單：</div>' +
+        '<div class="sec-label" style="margin-top:4px;">校內 A 班梯次公告：</div>' +
+        '<textarea id="taLineA" rows="7" readonly style="font-size:12.5px;line-height:1.45;background:#f8fafc;">' + textA + '</textarea>' +
+        '<button type="button" class="btn-copy-line" style="width:100%;margin-bottom:12px;" onclick="selectAndCopyTa(\'taLineA\',\'A\')">一鍵複製 A 班公告</button>' +
+        '<div class="sec-label" style="margin-top:4px;">校內 B 班梯次公告：</div>' +
+        '<textarea id="taLineB" rows="7" readonly style="font-size:12.5px;line-height:1.45;background:#f8fafc;">' + textB + '</textarea>' +
+        '<button type="button" class="btn-copy-line" style="width:100%;" onclick="selectAndCopyTa(\'taLineB\',\'B\')">一鍵複製 B 班公告</button>';
+
+      document.getElementById('seatActionModal').style.display = 'flex';
+      if (focusGroup === 'A' || focusGroup === 'B') {
+        setTimeout(() => {
+          const el = document.getElementById('taLine' + focusGroup);
+          if (el) { el.focus(); el.select(); }
+        }, 80);
+      }
+    }
+
+    function selectAndCopyTa(elId, grp) {
+      const el = document.getElementById(elId);
+      if (!el) return;
+      el.select();
+      el.setSelectionRange(0, 99999);
+      try {
+        document.execCommand('copy');
+        playBeep();
+        alert('已複製校內 ' + grp + ' 班公告文案！');
+      } catch (e) {
+        alert('請長按上方文字框全選並複製');
+      }
+    }
+
     // === 分頁 3：座位表點名與管理 ===
     async function loadSeatDashboard(group) {
       currentSeatGroup = group || 'A';
@@ -925,6 +1202,9 @@
           return;
         }
         seatDashData = res;
+        if (res.seatSettings) {
+          applySeatSettingsToUI(res.seatSettings);
+        }
         renderAdminClassroom();
         if (scrollEl) scrollEl.scrollLeft = 0;
       } catch (err) {
@@ -1017,16 +1297,17 @@
 
       if (!stu) {
         const unseated = (seatDashData.students || []).filter(s => !s.seat);
-        const optionsHtml = unseated.map(s =>
-          '<option value="' + s.rowIndex + '">' + s.name + '（' + s.mainId + '｜' + s.className + '）</option>'
-        ).join('');
+        const optionsHtml = unseated.map(s => {
+          const rankTxt = s.rank ? ('｜第' + s.rank + '順位') : '';
+          return '<option value="' + s.rowIndex + '">' + s.name + '（' + s.mainId + rankTxt + '）</option>';
+        }).join('');
 
         bodyEl.innerHTML =
           '<div style="background:#f8fafc;padding:14px;border-radius:12px;text-align:center;color:#475569;font-weight:700;margin-bottom:12px;">' +
             '此座位目前為空位' +
           '</div>' +
           (unseated.length > 0 ? (
-            '<div class="sec-label">直接指派尚未劃位的同學至此座位：</div>' +
+            '<div class="sec-label">直接指派尚未劃位的同學至此座位（依順位排列）：</div>' +
             '<div class="inline-act">' +
               '<select id="assignUnseatedSelect">' + optionsHtml + '</select>' +
               '<button type="button" onclick="execAssignToEmptySeat(\'' + seatCode + '\')">安排入座</button>' +
@@ -1041,6 +1322,9 @@
         }).join('');
 
         const noteVal = (stu.sessionNote || stu.adminNote || '').replace(/"/g, '&quot;');
+        const rankInfo = stu.rank
+          ? ('<div style="font-size:12px;color:#64748b;margin-top:2px;">劃位順位：第 ' + stu.rank + ' 順位（第 ' + stu.batchNum + ' 梯｜' + stu.unlockTimeStr + '）</div>')
+          : '';
 
         bodyEl.innerHTML =
           '<div class="verify-card">' +
@@ -1049,6 +1333,7 @@
               '<div style="font-size:19px;font-weight:900;">' + stu.name + '</div>' +
               '<div style="font-size:13.5px;font-weight:700;color:#0369a1;margin:2px 0;">' + stu.mainId + '</div>' +
               '<div style="font-size:12.5px;color:#475569;">班級：' + (stu.className || '--') + '</div>' +
+              rankInfo +
               '<div style="font-size:13px;margin-top:4px;font-weight:900;">' +
                 currentSession + '目前狀態：' +
                 (stu.status ? ('<span class="st-tag st-' + stu.status + '">' + stu.status + '</span>') : '<span style="color:#64748b;">尚未登記</span>') +
