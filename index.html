@@ -24,10 +24,12 @@
 
     /* 上課證主卡片 */
     .pass-card { background: #fff; border-radius: 22px; overflow: hidden; box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08); margin-bottom: 14px; }
-    .pass-header { background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%); color: #fff; padding: 16px 18px; display: flex; justify-content: space-between; align-items: center; }
+    .pass-header { background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%); color: #fff; padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
     .pass-header .title { font-size: 15px; font-weight: 900; letter-spacing: 0.5px; }
     .pass-header .sub { font-size: 11.5px; opacity: 0.8; margin-top: 2px; }
-    .btn-refresh-top { background: rgba(255,255,255,0.16); color: #fff; border: 1px solid rgba(255,255,255,0.28); border-radius: 8px; padding: 6px 10px; font-size: 12px; font-weight: 700; cursor: pointer; }
+    .hdr-btns { display: flex; gap: 6px; flex-shrink: 0; }
+    .btn-hdr { background: rgba(255,255,255,0.16); color: #fff; border: 1px solid rgba(255,255,255,0.28); border-radius: 8px; padding: 6px 9px; font-size: 12px; font-weight: 700; cursor: pointer; position: relative; }
+    .btn-hdr.has-ann { background: #f59e0b; border-color: #fbbf24; color: #0f172a; font-weight: 900; }
 
     .pass-body { padding: 18px; }
     .profile-row { display: flex; gap: 14px; align-items: center; margin-bottom: 14px; }
@@ -39,7 +41,7 @@
     .stu-meta { font-size: 13px; color: #475569; line-height: 1.5; }
     .seat-ended-note { font-size: 12.5px; color: #64748b; background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 8px; padding: 7px 10px; margin-top: 8px; font-weight: 600; }
 
-    /* 雙證切換（校內班 / 二技班） */
+    /* 雙證切換 */
     .pass-switch { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; background: #f1f5f9; padding: 4px; border-radius: 10px; margin-bottom: 12px; }
     .ps-btn { border: none; background: transparent; padding: 7px; border-radius: 8px; font-size: 13px; font-weight: 800; color: #475569; cursor: pointer; }
     .ps-btn.active { background: #fff; color: #0284c7; box-shadow: 0 2px 6px rgba(0,0,0,0.06); }
@@ -51,9 +53,9 @@
     .qr-id-text { font-size: 17px; font-weight: 900; letter-spacing: 1px; color: #0f172a; margin-top: 10px; }
     .qr-hint { font-size: 12px; color: #64748b; margin-top: 3px; }
 
-    /* 線上劃位狀態區塊（依開關狀態動態變化） */
+    /* 線上劃位狀態區塊 */
     .seat-action-area { margin-top: 14px; }
-    .btn-seat-open { width: 100%; padding: 13px 14px; border: none; border-radius: 12px; background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); color: #fff; font-size: 15px; font-weight: 900; cursor: pointer; box-shadow: 0 4px 12px rgba(22, 163, 74, 0.25); }
+    .btn-seat-open { width: 100%; padding: 13px 14px; border: none; border-radius: 12px; background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); color: #fff; font-size: 14.5px; font-weight: 900; cursor: pointer; box-shadow: 0 4px 12px rgba(22, 163, 74, 0.25); }
     .btn-seat-locked { width: 100%; padding: 12px 14px; border: 1.5px solid #93c5fd; border-radius: 12px; background: #eff6ff; color: #1e40af; font-size: 14.5px; font-weight: 800; cursor: pointer; }
     .wait-card { background: #fffbeb; border: 1.5px solid #fcd34d; border-radius: 14px; padding: 12px 14px; text-align: center; }
     .wait-rank { font-size: 14px; font-weight: 900; color: #92400e; margin-bottom: 4px; }
@@ -62,21 +64,35 @@
     .btn-preview-map { width: 100%; padding: 9px 12px; border: 1px solid #cbd5e1; border-radius: 10px; background: #fff; color: #334155; font-size: 13px; font-weight: 800; cursor: pointer; }
     .paused-card { background: #f8fafc; border: 1.5px dashed #cbd5e1; border-radius: 12px; padding: 11px 12px; text-align: center; font-size: 13px; color: #475569; font-weight: 700; }
 
-    /* 出缺勤與講義卡片 */
+    /* 通用資訊卡片 */
     .sec-card { background: #fff; border-radius: 18px; padding: 16px 18px; box-shadow: 0 6px 18px rgba(15, 23, 42, 0.05); margin-bottom: 14px; }
-    .sec-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    .sec-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; gap: 8px; }
     .sec-head h3 { margin: 0; font-size: 15.5px; font-weight: 900; color: #0f172a; }
-    .full-pill { font-size: 12px; font-weight: 800; padding: 3px 10px; border-radius: 99px; }
+    .full-pill { font-size: 12px; font-weight: 800; padding: 3px 10px; border-radius: 99px; flex-shrink: 0; }
     .full-pill.yes { background: #dcfce7; color: #166534; }
     .full-pill.no { background: #f1f5f9; color: #475569; }
+    .full-pill.blue { background: #dbeafe; color: #1e40af; }
+
+    /* 課表卡片樣式 */
+    .sched-alert-banner { background: #fef3c7; border: 1px solid #f59e0b; color: #92400e; font-size: 12.5px; font-weight: 800; padding: 7px 10px; border-radius: 9px; margin-bottom: 10px; }
+    .today-course-box { background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 10px 12px; }
+    .today-course-row { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 4px 0; font-size: 13.5px; }
+    .today-course-row + .today-course-row { border-top: 1px dashed #cbd5e1; margin-top: 5px; padding-top: 7px; }
+    .sess-chip { background: #0284c7; color: #fff; font-size: 11.5px; font-weight: 800; padding: 2px 8px; border-radius: 6px; flex-shrink: 0; }
+    .chg-chip { background: #ffedd5; color: #9a3412; border: 1px solid #fdba74; font-size: 11.5px; font-weight: 800; padding: 2px 7px; border-radius: 6px; flex-shrink: 0; }
+    .week-sched-item { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 8px 4px; border-bottom: 1px solid #f1f5f9; font-size: 13px; }
+    .week-sched-item:last-child { border-bottom: none; }
+
+    /* 出缺勤卡片 */
     .att-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; text-align: center; }
     .att-cell { background: #f8fafc; border-radius: 10px; padding: 8px 2px; border: 1px solid #e2e8f0; }
     .att-num { font-size: 17px; font-weight: 900; }
     .att-lbl { font-size: 11px; color: #64748b; font-weight: 700; margin-top: 2px; }
-    .rec-toggle { width: 100%; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 9px; padding: 7px; font-size: 12.5px; font-weight: 700; color: #475569; margin-top: 10px; cursor: pointer; }
-    .rec-list { margin-top: 8px; max-height: 180px; overflow-y: auto; font-size: 12.5px; }
+    .rec-toggle { width: 100%; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 9px; padding: 8px; font-size: 12.5px; font-weight: 700; color: #475569; margin-top: 10px; cursor: pointer; }
+    .rec-list { margin-top: 8px; max-height: 200px; overflow-y: auto; font-size: 12.5px; }
     .rec-row { display: flex; justify-content: space-between; padding: 6px 4px; border-bottom: 1px solid #f1f5f9; }
 
+    /* 講義領取清單 */
     .book-item { display: flex; justify-content: space-between; align-items: center; padding: 9px 0; border-bottom: 1px solid #f1f5f9; font-size: 13.5px; gap: 8px; }
     .book-item:last-child { border-bottom: none; }
     .b-badge { font-size: 12px; font-weight: 800; padding: 3px 9px; border-radius: 99px; flex-shrink: 0; }
@@ -86,10 +102,11 @@
     .footer-logout { text-align: center; margin: 16px 0 24px; }
     .btn-logout { background: transparent; border: none; color: #64748b; font-size: 13px; text-decoration: underline; cursor: pointer; }
 
-    /* === 教室座位表彈窗 === */
-    .modal-mask { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.7); z-index: 999; display: none; align-items: center; justify-content: center; padding: 10px; }
+    /* === 通用彈窗 === */
+    .modal-mask { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.72); z-index: 999; display: none; align-items: center; justify-content: center; padding: 12px; }
     .modal-box { background: #fff; width: 100%; max-width: 720px; max-height: 92vh; overflow-y: auto; border-radius: 20px; padding: 16px; box-shadow: 0 20px 45px rgba(0,0,0,0.3); }
-    .modal-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .modal-box.narrow { max-width: 460px; }
+    .modal-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
     .modal-top h3 { margin: 0; font-size: 17px; font-weight: 900; }
     .btn-close { width: 32px; height: 32px; border-radius: 50%; border: none; background: #e2e8f0; color: #334155; font-size: 16px; font-weight: 800; cursor: pointer; }
     .modal-banner { font-size: 13px; font-weight: 800; padding: 8px 12px; border-radius: 10px; margin-bottom: 10px; text-align: center; line-height: 1.4; }
@@ -97,17 +114,23 @@
     .modal-banner.warn { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
     .modal-banner.ok { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
 
+    /* 公告彈窗內容 */
+    .ann-card { background: #f8fafc; border: 1.5px solid #bae6fd; border-radius: 14px; padding: 14px; margin-bottom: 10px; }
+    .ann-card-title { font-size: 16px; font-weight: 900; color: #0f172a; margin-bottom: 4px; }
+    .ann-card-meta { font-size: 12px; font-weight: 700; color: #0369a1; margin-bottom: 8px; }
+    .ann-card-body { font-size: 14px; line-height: 1.6; color: #1e293b; white-space: pre-line; background: #fff; padding: 10px 12px; border-radius: 10px; border: 1px solid #e2e8f0; }
+
+    /* === 動態教室座位圖 === */
     .legend { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; font-size: 12px; font-weight: 700; color: #475569; margin-bottom: 8px; }
     .leg-dot { display: inline-block; width: 13px; height: 13px; border-radius: 4px; vertical-align: middle; margin-right: 4px; border: 1px solid #94a3b8; }
 
     .map-scroll { overflow-x: auto; background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 10px; -webkit-overflow-scrolling: touch; }
     .classroom { width: max-content; min-width: 100%; margin: 0 auto; }
     .wb { width: 100%; background: #334155; color: #fff; text-align: center; padding: 6px; border-radius: 7px; font-weight: 800; font-size: 13px; letter-spacing: 5px; margin-bottom: 10px; }
-    .zones { display: flex; gap: 10px; justify-content: flex-start; }
-    .zone { background: #fff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 5px; flex-shrink: 0; }
-    .sgrid { display: grid; gap: 3px; }
-    .scell { height: 36px; border-radius: 5px; display: flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 800; user-select: none; }
-    .scell.head { height: 20px; background: #e2e8f0; color: #475569; font-size: 10px; }
+    .dyn-board { background: #fff; border: 1px solid #cbd5e1; border-radius: 10px; padding: 8px; display: inline-block; min-width: 100%; }
+    .sgrid { display: grid; gap: 4px; }
+    .scell { height: 38px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 800; user-select: none; }
+    .scell.head { height: 22px; background: #e2e8f0; color: #475569; font-size: 10px; }
     .scell.aisle { background: transparent; }
     .scell.res { background: #e2e8f0; color: #94a3b8; border: 1px dashed #cbd5e1; font-size: 9.5px; }
     .scell.free { background: #ffffff; border: 1.5px solid #94a3b8; color: #0f172a; cursor: pointer; }
@@ -130,7 +153,7 @@
     <div id="loginView" class="login-card">
       <span class="brand-tag">敏惠醫護管理專科學校｜校內班</span>
       <h1>數位上課證系統</h1>
-      <p>請輸入報名時填寫的手機號碼與身分證末四碼，即可開啟專屬上課證、查看全勤紀錄與進行線上劃位。</p>
+      <p>請輸入報名時填寫的手機號碼與身分證末四碼，即可開啟專屬上課證、查看課表公告、全勤紀錄與進行線上劃位。</p>
       <label for="inpPhone">手機號碼</label>
       <input type="tel" id="inpPhone" placeholder="例如：0912345678" maxlength="12" onkeydown="if(event.key==='Enter') doLogin()">
       <label for="inpLast4">身分證末四碼</label>
@@ -147,7 +170,10 @@
             <div class="title">敏惠校內班｜數位上課證</div>
             <div class="sub" id="hdrSubText">點名與領取講義專用條碼</div>
           </div>
-          <button type="button" class="btn-refresh-top" onclick="refreshStudentData()">↻ 重新整理</button>
+          <div class="hdr-btns">
+            <button type="button" id="btnHeaderAnn" class="btn-hdr" onclick="openAnnouncementModal()">📢 公告</button>
+            <button type="button" class="btn-hdr" onclick="refreshStudentData()">↻ 更新</button>
+          </div>
         </div>
 
         <div class="pass-body">
@@ -176,9 +202,23 @@
             <div class="qr-hint" id="qrHintLabel">進教室點名或領取講義時，請出示此條碼</div>
           </div>
 
-          <!-- 線上劃位互動區塊（依據後台三階段開關自動切換） -->
+          <!-- 線上劃位互動區塊 -->
           <div id="seatActionArea" class="seat-action-area" style="display:none;"></div>
         </div>
+      </div>
+
+      <!-- 今日課程與近一週課表（僅顯示所屬班別未來 7 天內課程） -->
+      <div id="schedCard" class="sec-card" style="display:none;">
+        <div class="sec-head">
+          <h3>今日課程與近一週課表</h3>
+          <span id="schedGroupBadge" class="full-pill blue">校內班</span>
+        </div>
+        <div id="schedAlertBanner" class="sched-alert-banner" style="display:none;">
+          ⚠️ 近一週內有調課或停課異動，請留意下方課程備註！
+        </div>
+        <div id="todayCourseBox" class="today-course-box"></div>
+        <button type="button" id="btnToggleWeekSched" class="rec-toggle" onclick="toggleWeekSchedule()">展開近一週課表（未來 7 天） ▼</button>
+        <div id="weekSchedList" class="rec-list" style="display:none;"></div>
       </div>
 
       <!-- 出缺勤與全勤統計 -->
@@ -210,6 +250,18 @@
       <div class="footer-logout">
         <button type="button" class="btn-logout" onclick="doLogout()">登出 / 切換其他同學帳號</button>
       </div>
+    </div>
+  </div>
+
+  <!-- 班級公告自動彈窗 -->
+  <div id="annModal" class="modal-mask">
+    <div class="modal-box narrow">
+      <div class="modal-top">
+        <h3>📢 重要班級公告</h3>
+        <button type="button" class="btn-close" onclick="closeAnnouncementModal()">✕</button>
+      </div>
+      <div id="annModalBody"></div>
+      <button type="button" class="btn-primary" style="margin-top:8px;" onclick="closeAnnouncementModal()">我已了解</button>
     </div>
   </div>
 
@@ -246,31 +298,19 @@
     let serverOffsetMs = 0;
     let countdownTimer = null;
     let recExpanded = false;
+    let weekSchedExpanded = false;
 
     let seatMapData = null;
     let pickedSeatCode = '';
 
-    const LEFT_GRID = [
-      [null, null, null, null, 'R',  'A1', 'A2', 'A3', 'A4'],
-      [null, null, 'R',  'B2', 'B3', 'B4', 'B5', 'B6', 'B7'],
-      ['R',  'R',  'R',  'C4', 'C5', 'C6', 'C7', 'C8', 'C9'],
-      ['D1', 'D2', 'D3', 'D4', 'D5', 'D6', 'D7', 'R',  'R' ],
-      [null, null, null, null, null, 'E1', 'E2', null, null]
-    ];
-    const MID_GRID = [
-      [null, null,  'A5',  'A6',  'A7',  'A8',  'A9',  'A10', 'A11', 'A12', null,  null ],
-      [null, 'B8',  'B9',  'B10', 'B11', 'B12', 'B13', 'B14', 'B15', 'B16', null,  null ],
-      ['C10','C11', 'C12', 'C13', 'C14', 'C15', 'C16', 'C17', 'C18', 'C19', 'C20', 'C21'],
-      [null, 'D10', 'D11', 'D12', 'D13', 'D14', 'D15', 'D16', 'D17', 'D18', 'D19', null ],
-      [null, null,  null,  null,  null,  null,  null,  null,  null,  null,  null,  null ]
-    ];
-    const RIGHT_GRID = [
-      ['A13', 'A14', 'A15', 'R',   'R',   null,  null,  null,  null ],
-      ['B17', 'B18', 'B19', 'R',   'R',   'R',   'R',   null,  null ],
-      ['C22', 'C23', 'C24', 'C25', 'C26', 'R',   'R',   'R',   'R'  ],
-      ['D20', 'D21', 'D22', 'D23', 'D24', 'D25', 'D26', 'D27', 'D28'],
-      ['E3',  'E4',  null,  null,  null,  null,  null,  null,  null ]
-    ];
+    function escHtml(str) {
+      return String(str || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
 
     function getCalibratedNowMs() {
       return Date.now() + serverOffsetMs;
@@ -343,6 +383,11 @@
         renderStudentPass();
         document.getElementById('loginView').style.display = 'none';
         document.getElementById('passView').style.display = 'block';
+
+        // 若當日有上架中的班級公告，登入時自動跳出提醒視窗
+        if (Array.isArray(currentStudent.announcements) && currentStudent.announcements.length > 0) {
+          openAnnouncementModal();
+        }
       } catch (err) {
         errEl.style.display = 'block';
         errEl.textContent = err.message;
@@ -355,7 +400,7 @@
     async function refreshStudentData() {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (!raw) return;
-      const btn = document.querySelector('.btn-refresh-top');
+      const btn = document.querySelectorAll('.btn-hdr')[1];
       if (btn) { btn.disabled = true; btn.textContent = '更新中...'; }
       try {
         const cred = JSON.parse(raw);
@@ -370,7 +415,7 @@
       } catch (e) {
         alert('更新失敗，請檢查網路連線');
       } finally {
-        if (btn) { btn.disabled = false; btn.textContent = '↻ 重新整理'; }
+        if (btn) { btn.disabled = false; btn.textContent = '↻ 更新'; }
       }
     }
 
@@ -382,6 +427,32 @@
       document.getElementById('inpLast4').value = '';
       document.getElementById('passView').style.display = 'none';
       document.getElementById('loginView').style.display = 'block';
+    }
+
+    // === 班級公告彈窗 ===
+    function openAnnouncementModal() {
+      if (!currentStudent) return;
+      const list = currentStudent.announcements || [];
+      const bodyEl = document.getElementById('annModalBody');
+      if (list.length === 0) {
+        bodyEl.innerHTML = '<div style="text-align:center;padding:24px;color:#64748b;font-weight:700;">目前沒有進行中的班級公告</div>';
+      } else {
+        bodyEl.innerHTML = list.map(a => {
+          const rangeStr = (a.startDate || a.endDate)
+            ? ('公告期間：' + (a.startDate || '即日起') + ' ～ ' + (a.endDate || '長期'))
+            : '公告對象：' + (a.targetGroup || '全體');
+          return '<div class="ann-card">' +
+            '<div class="ann-card-title">' + escHtml(a.title || '班級通知') + '</div>' +
+            '<div class="ann-card-meta">' + escHtml(rangeStr) + '</div>' +
+            '<div class="ann-card-body">' + escHtml(a.content) + '</div>' +
+          '</div>';
+        }).join('');
+      }
+      document.getElementById('annModal').style.display = 'flex';
+    }
+
+    function closeAnnouncementModal() {
+      document.getElementById('annModal').style.display = 'none';
     }
 
     function renderQrCode(textVal) {
@@ -440,7 +511,6 @@
       const endedNoSeatNote = document.getElementById('seatEndedNoSeatNote');
       const actionArea = document.getElementById('seatActionArea');
 
-      // 先重置所有狀態
       seatBadge.style.display = 'none';
       btnTextEnded.style.display = 'none';
       endedNoSeatNote.style.display = 'none';
@@ -452,30 +522,27 @@
       const mySeat = ss.mySeat || st.seat || '';
       const mode = ss.seatMode || 'paused';
 
-      // 若已有座號，姓名旁一律顯示座號小標籤
       if (mySeat) {
         seatBadge.style.display = 'inline-block';
         seatBadge.textContent = '座位 ' + mySeat;
       }
 
-      // === 階段三：已結束劃位（手動切換後） ===
+      // 階段三：已結束劃位
       if (mode === 'ended') {
         if (mySeat) {
-          // 收起大按鈕，僅保留姓名旁精巧的「查看座位圖」文字按鈕
           btnTextEnded.style.display = 'inline-block';
         } else {
-          // 逾期未劃位提示
           endedNoSeatNote.style.display = 'block';
         }
         return;
       }
 
-      // === 階段一：暫停劃位（開放前防呆） ===
+      // 階段一：暫停劃位
       if (mode === 'paused') {
         actionArea.style.display = 'block';
         if (mySeat) {
           actionArea.innerHTML =
-            '<button type="button" class="btn-seat-locked" onclick="openSeatModal()">我的座位：' + mySeat + '（點擊查看座位圖）</button>';
+            '<button type="button" class="btn-seat-locked" onclick="openSeatModal()">我的座位：' + escHtml(mySeat) + '（點擊查看座位圖）</button>';
         } else {
           actionArea.innerHTML =
             '<div class="paused-card">' +
@@ -486,13 +553,17 @@
         return;
       }
 
-      // === 階段二：依梯次時間開放（open） ===
+      // 階段二：依梯次時間開放（扣除已劃位者重算當日順位）
       actionArea.style.display = 'block';
       if (mySeat) {
         actionArea.innerHTML =
-          '<button type="button" class="btn-seat-locked" onclick="openSeatModal()">我的座位：' + mySeat + '（點擊查看座位圖）</button>';
+          '<button type="button" class="btn-seat-locked" onclick="openSeatModal()">我的座位：' + escHtml(mySeat) + '（點擊查看座位圖）</button>';
         return;
       }
+
+      const rankDetailTxt = ss.rank
+        ? ('校內' + ss.seatGroup + '班 當日第 ' + ss.rank + ' 順位' + (ss.overallRank ? ('（總序號 #' + ss.overallRank + '）') : ''))
+        : ('校內' + ss.seatGroup + '班');
 
       const updateOpenOrCountdownUI = () => {
         const nowMs = getCalibratedNowMs();
@@ -505,18 +576,17 @@
             countdownTimer = null;
           }
           ss.canSelect = true;
-          const rankTxt = ss.rank ? ('校內' + ss.seatGroup + '班 第 ' + ss.rank + ' 順位') : ('校內' + ss.seatGroup + '班');
           actionArea.innerHTML =
-            '<button type="button" class="btn-seat-open" onclick="openSeatModal()">🪑 開放劃位中！點我選擇座位（' + rankTxt + '）</button>';
+            '<button type="button" class="btn-seat-open" onclick="openSeatModal()">🪑 開放劃位中！點我選位（' + escHtml(rankDetailTxt) + '）</button>';
         } else {
           const remain = unlockMs - nowMs;
           const rankHeader = ss.rank
-            ? ('🔒 校內' + ss.seatGroup + '班 第 ' + ss.rank + ' 順位（第 ' + ss.batchNum + ' 梯）')
+            ? ('🔒 ' + rankDetailTxt + '｜第 ' + ss.batchNum + ' 梯')
             : ('🔒 校內' + ss.seatGroup + '班 線上劃位排隊中');
           actionArea.innerHTML =
             '<div class="wait-card">' +
-              '<div class="wait-rank">' + rankHeader + '</div>' +
-              '<div class="wait-time">您的開放時間：<b>' + (ss.unlockTimeStr || '--') + '</b>（過號不影響後續梯次）</div>' +
+              '<div class="wait-rank">' + escHtml(rankHeader) + '</div>' +
+              '<div class="wait-time">您的開放時間：<b>' + escHtml(ss.unlockTimeStr || '--') + '</b>（過號不影響後續梯次）</div>' +
               '<div class="wait-countdown">距離開放倒數：' + formatCountdown(remain) + '</div>' +
               '<button type="button" class="btn-preview-map" onclick="openSeatModal()">👀 先查看即時空位戰況（唯讀）</button>' +
             '</div>';
@@ -529,15 +599,94 @@
       }
     }
 
+    function renderScheduleSection() {
+      const st = currentStudent;
+      const sched = st.scheduleInfo;
+      const card = document.getElementById('schedCard');
+      if (!sched || !sched.seatGroup) {
+        card.style.display = 'none';
+        return;
+      }
+
+      card.style.display = 'block';
+      document.getElementById('schedGroupBadge').textContent = '校內 ' + sched.seatGroup + ' 班';
+      document.getElementById('schedAlertBanner').style.display = sched.hasAlert ? 'block' : 'none';
+
+      const todayCourses = sched.todayCourses || [];
+      const todayBox = document.getElementById('todayCourseBox');
+      const shortToday = (sched.todayYmd || '').slice(5) + ' (' + (sched.todayWeekday || '') + ')';
+
+      if (todayCourses.length === 0) {
+        todayBox.innerHTML =
+          '<div style="font-size:13px;color:#64748b;font-weight:700;text-align:center;padding:4px 0;">' +
+            '📅 今日 ' + escHtml(shortToday) + ' 無排課' +
+          '</div>';
+      } else {
+        todayBox.innerHTML = todayCourses.map(c => {
+          const noteBadge = c.isChanged ? ('<span class="chg-chip">' + escHtml(c.note) + '</span>') : '';
+          return '<div class="today-course-row">' +
+            '<div style="display:flex;align-items:center;gap:8px;min-width:0;">' +
+              '<span class="sess-chip">' + escHtml(c.session) + '</span>' +
+              '<b style="color:#0f172a;">' + escHtml(c.subject) + '</b>' +
+            '</div>' +
+            noteBadge +
+          '</div>';
+        }).join('');
+      }
+
+      const weekCourses = sched.weekCourses || [];
+      const weekWrap = document.getElementById('weekSchedList');
+      if (weekCourses.length === 0) {
+        weekWrap.innerHTML = '<div style="text-align:center;color:#94a3b8;padding:10px;">未來 7 天內尚無排課資料</div>';
+      } else {
+        weekWrap.innerHTML = weekCourses.map(c => {
+          const shortD = (c.date || '').slice(5) + ' (' + (c.weekday || '') + ')';
+          const isToday = (c.date === sched.todayYmd);
+          const noteTag = c.isChanged
+            ? ('<span class="chg-chip">' + escHtml(c.note) + '</span>')
+            : '<span style="font-size:11.5px;color:#64748b;">正常上課</span>';
+          return '<div class="week-sched-item">' +
+            '<div>' +
+              '<div style="font-weight:800;color:#0f172a;">' +
+                escHtml(shortD) + ' ' + escHtml(c.session) +
+                (isToday ? ' <span style="color:#0284c7;font-size:11px;">[今日]</span>' : '') +
+              '</div>' +
+              '<div style="font-size:13.5px;font-weight:900;color:#1e3a8a;margin-top:2px;">' + escHtml(c.subject) + '</div>' +
+            '</div>' +
+            noteTag +
+          '</div>';
+        }).join('');
+      }
+    }
+
+    function toggleWeekSchedule() {
+      weekSchedExpanded = !weekSchedExpanded;
+      document.getElementById('weekSchedList').style.display = weekSchedExpanded ? 'block' : 'none';
+      document.getElementById('btnToggleWeekSched').textContent = weekSchedExpanded
+        ? '收合近一週課表 ▲'
+        : '展開近一週課表（未來 7 天） ▼';
+    }
+
     function renderStudentPass() {
       const st = currentStudent;
       if (!st) return;
 
+      // 更新頂部公告按鈕提示狀態
+      const annBtn = document.getElementById('btnHeaderAnn');
+      const annCount = Array.isArray(st.announcements) ? st.announcements.length : 0;
+      if (annCount > 0) {
+        annBtn.className = 'btn-hdr has-ann';
+        annBtn.textContent = '📢 公告 (' + annCount + ')';
+      } else {
+        annBtn.className = 'btn-hdr';
+        annBtn.textContent = '📢 公告';
+      }
+
       document.getElementById('stuAvatar').src = getAvatarUrl(st.avatar);
       document.getElementById('stuName').textContent = st.name;
       document.getElementById('stuMeta').innerHTML =
-        '學號：<b>' + st.mainId + '</b><br>' +
-        '班別：' + (st.mainClass || '--') + (st.className ? (' ｜ ' + st.className) : '');
+        '學號：<b>' + escHtml(st.mainId) + '</b><br>' +
+        '班別：' + escHtml(st.mainClass || '--') + (st.className ? (' ｜ ' + escHtml(st.className)) : '');
 
       if (st.hasErji) {
         document.getElementById('erjiSwitchBar').style.display = 'grid';
@@ -547,6 +696,7 @@
       }
       switchPassCard(activeCardType);
       renderSeatSection();
+      renderScheduleSection();
 
       // 出缺勤卡片
       const attCard = document.getElementById('attCard');
@@ -578,8 +728,8 @@
         } else {
           recWrap.innerHTML = recs.map(r =>
             '<div class="rec-row">' +
-              '<span>' + r.date + ' ' + r.session + '</span>' +
-              '<b>' + r.status + '</b>' +
+              '<span>' + escHtml(r.date + ' ' + r.session) + '</span>' +
+              '<b>' + escHtml(r.status) + '</b>' +
             '</div>'
           ).join('');
         }
@@ -597,7 +747,7 @@
       } else {
         bookWrap.innerHTML = books.map(b =>
           '<div class="book-item">' +
-            '<span>' + b.name + ' <small style="color:#94a3b8;">(' + b.code + ')</small></span>' +
+            '<span>' + escHtml(b.name) + ' <small style="color:#94a3b8;">(' + escHtml(b.code) + ')</small></span>' +
             '<span class="b-badge ' + (b.received ? 'got' : 'wait') + '">' + (b.received ? '已領取' : '尚未領取') + '</span>' +
           '</div>'
         ).join('');
@@ -611,7 +761,7 @@
     }
 
     // ==========================================
-    // === 教室座位圖檢視與選位互動 ===
+    // === 試算表動態座位圖檢視與選位互動 ===
     // ==========================================
 
     async function openSeatModal() {
@@ -619,7 +769,7 @@
       pickedSeatCode = '';
       document.getElementById('seatConfirmBar').style.display = 'none';
       document.getElementById('seatModalBanner').className = 'modal-banner info';
-      document.getElementById('seatModalBanner').textContent = '正在載入最新教室座位表...';
+      document.getElementById('seatModalBanner').textContent = '正在從試算表讀取最新教室座位配置...';
       document.getElementById('stuClassroomWrap').innerHTML = '';
       document.getElementById('seatModal').style.display = 'flex';
 
@@ -679,59 +829,74 @@
         banner.textContent = '線上劃位已截止，如需安排座位請洽行政老師';
       } else if (!interactive) {
         banner.className = 'modal-banner warn';
-        banner.textContent = '唯讀看盤模式｜您的順位（第 ' + ss.rank + ' 順位）將於 ' + ss.unlockTimeStr + ' 開放選位';
+        banner.textContent = '唯讀看盤模式｜您的當日第 ' + ss.rank + ' 順位將於 ' + ss.unlockTimeStr + ' 開放選位';
       } else {
         banner.className = 'modal-banner info';
         banner.textContent = '請點選下方白色空位，選好後按「確認鎖定此座位」（每人限選一次）';
       }
 
-      document.getElementById('stuClassroomWrap').innerHTML =
-        '<div class="wb">白  板（校內 ' + grp + ' 班）</div>' +
-        '<div class="zones">' +
-          buildStudentZoneHtml(LEFT_GRID, 9, true, false, interactive) +
-          buildStudentZoneHtml(MID_GRID, 12, false, false, interactive) +
-          buildStudentZoneHtml(RIGHT_GRID, 9, false, true, interactive) +
-        '</div>' +
-        '<div class="doors"><span>教室門口</span><span>教室門口</span></div>';
-    }
+      const layout = seatMapData.seatLayout || {};
+      const grid = layout.grid || [];
+      const colIsAisle = layout.colIsAisle || [];
+      const takenSeats = seatMapData.takenSeats || {};
 
-    function buildStudentZoneHtml(gridData, colCount, showLeftRowNum, showRightRowNum, interactive) {
-      const takenSeats = (seatMapData && seatMapData.takenSeats) || {};
-      let html = '<div class="zone"><div class="sgrid" style="grid-template-columns:' +
-        (showLeftRowNum ? '18px ' : '') + 'repeat(' + colCount + ', 36px)' + (showRightRowNum ? ' 18px' : '') + ';">';
-
-      if (showLeftRowNum) html += '<div class="scell head"></div>';
-      for (let c = 1; c <= colCount; c++) {
-        html += '<div class="scell head">' + c + '</div>';
+      if (grid.length === 0) {
+        document.getElementById('stuClassroomWrap').innerHTML =
+          '<div class="modal-banner warn">目前尚未設定本班座位表，請洽行政老師確認。</div>';
+        return;
       }
-      if (showRightRowNum) html += '<div class="scell head"></div>';
 
-      for (let r = 0; r < 5; r++) {
-        if (showLeftRowNum) html += '<div class="scell head">' + (r + 1) + '</div>';
-        for (let c = 0; c < colCount; c++) {
-          const code = gridData[r][c];
-          if (!code) {
-            html += '<div class="scell aisle"></div>';
-          } else if (code === 'R') {
-            html += '<div class="scell res">保留</div>';
+      const numCols = grid[0].length;
+      const colWidths = ['20px'];
+      for (let c = 0; c < numCols; c++) {
+        colWidths.push(colIsAisle[c] ? '12px' : '38px');
+      }
+
+      let gridHtml = '<div class="dyn-board"><div class="sgrid" style="grid-template-columns:' + colWidths.join(' ') + ';">';
+
+      // 頂部欄號列
+      gridHtml += '<div class="scell head"></div>';
+      let visibleColNum = 0;
+      for (let c = 0; c < numCols; c++) {
+        if (colIsAisle[c]) {
+          gridHtml += '<div class="scell aisle" style="height:22px;"></div>';
+        } else {
+          visibleColNum += 1;
+          gridHtml += '<div class="scell head">' + visibleColNum + '</div>';
+        }
+      }
+
+      // 逐排渲染動態座位格
+      for (let r = 0; r < grid.length; r++) {
+        gridHtml += '<div class="scell head">' + (r + 1) + '</div>';
+        for (let c = 0; c < numCols; c++) {
+          const cell = grid[r][c] || { t: 'e' };
+          if (cell.t === 'e') {
+            gridHtml += '<div class="scell aisle"></div>';
+          } else if (cell.t === 'r') {
+            gridHtml += '<div class="scell res">保留</div>';
           } else {
+            const code = cell.c;
             const state = takenSeats[code];
             if (state === 'MINE') {
-              html += '<div class="scell mine">' + code + '</div>';
+              gridHtml += '<div class="scell mine">' + escHtml(code) + '</div>';
             } else if (state === 'TAKEN') {
-              html += '<div class="scell taken">' + code + '</div>';
+              gridHtml += '<div class="scell taken">' + escHtml(code) + '</div>';
             } else {
               const isPicked = (pickedSeatCode === code);
               const cls = 'scell free' + (interactive ? '' : ' readonly') + (isPicked ? ' picked' : '');
-              const clickAttr = interactive ? (' onclick="pickSeatCell(\'' + code + '\')"') : '';
-              html += '<div class="' + cls + '"' + clickAttr + '>' + code + '</div>';
+              const clickAttr = interactive ? (' onclick="pickSeatCell(\'' + escHtml(code) + '\')"') : '';
+              gridHtml += '<div class="' + cls + '"' + clickAttr + '>' + escHtml(code) + '</div>';
             }
           }
         }
-        if (showRightRowNum) html += '<div class="scell head">' + (r + 1) + '</div>';
       }
-      html += '</div></div>';
-      return html;
+      gridHtml += '</div></div>';
+
+      document.getElementById('stuClassroomWrap').innerHTML =
+        '<div class="wb">白  板（校內 ' + escHtml(grp) + ' 班）</div>' +
+        gridHtml +
+        '<div class="doors"><span>教室門口</span><span>教室門口</span></div>';
     }
 
     function pickSeatCell(seatCode) {
