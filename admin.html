@@ -9,22 +9,29 @@
     * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Noto Sans TC", sans-serif; }
     body { margin: 0; background: #f1f5f9; color: #0f172a; padding: 12px; }
     .box { max-width: 1460px; margin: 0 auto; background: #fff; border-radius: 18px; padding: 16px; box-shadow: 0 8px 20px rgba(0,0,0,0.06); }
-    .narrow-wrap { max-width: 500px; margin: 0 auto; }
+    .narrow-wrap { max-width: 540px; margin: 0 auto; }
     h2 { margin: 0 0 10px; font-size: 20px; text-align: center; }
     input[type="text"], input[type="password"], input[type="date"], input[type="datetime-local"], input[type="number"], select, textarea { width: 100%; padding: 10px 12px; border: 1.5px solid #cbd5e1; border-radius: 10px; font-size: 14.5px; margin-bottom: 10px; background: #fff; outline: none; }
     input:focus, select:focus, textarea:focus { border-color: #0284c7; }
     button { width: 100%; padding: 11px; border: none; border-radius: 10px; background: #0284c7; color: #fff; font-size: 15px; font-weight: 700; cursor: pointer; }
     button:disabled { background: #94a3b8; cursor: not-allowed; }
 
-    /* 全域場次切換條 */
-    .session-bar { max-width: 780px; margin: 0 auto 12px; background: #eff6ff; border: 1.5px solid #93c5fd; border-radius: 12px; padding: 8px 10px; display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+    /* 全域場次與今日課表提示條 */
+    .session-bar { max-width: 820px; margin: 0 auto 12px; background: #eff6ff; border: 1.5px solid #93c5fd; border-radius: 12px; padding: 9px 12px; }
+    .session-top-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
     .session-label { font-size: 13px; font-weight: 800; color: #1e3a8a; }
     .session-btns { display: flex; gap: 6px; }
     .sess-btn { width: auto; padding: 6px 12px; font-size: 13px; border-radius: 8px; background: #dbeafe; color: #1e40af; }
     .sess-btn.active { background: #1d4ed8; color: #fff; }
+    .today-sched-strip { margin-top: 8px; padding-top: 7px; border-top: 1px dashed #93c5fd; font-size: 12.5px; color: #1e3a8a; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+    .sched-pill { background: #fff; border: 1px solid #bfdbfe; border-radius: 7px; padding: 3px 8px; font-weight: 700; color: #0f172a; }
+    .sched-pill.alert { background: #fef3c7; border-color: #f59e0b; color: #92400e; }
 
-    /* 主分頁列 */
-    .tabs { max-width: 780px; margin: 0 auto 14px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+    /* 主分頁列（6大功能） */
+    .tabs { max-width: 820px; margin: 0 auto 14px; display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; }
+    @media (max-width: 680px) {
+      .tabs { grid-template-columns: repeat(3, 1fr); }
+    }
     .tab { background: #e2e8f0; color: #334155; font-size: 13px; padding: 10px 4px; border-radius: 10px; }
     .tab.active { background: #0284c7; color: #fff; }
 
@@ -69,7 +76,7 @@
     .btn-wait { background: #64748b; }
 
     /* === 分頁 3：線上劃位控管卡片 === */
-    .seat-ctrl-card { max-width: 780px; margin: 0 auto 12px; background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: 12px; }
+    .seat-ctrl-card { max-width: 820px; margin: 0 auto 12px; background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: 12px; }
     .seat-ctrl-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
     .seat-ctrl-title { font-size: 14.5px; font-weight: 900; color: #0f172a; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
     .mode-pill { font-size: 12px; font-weight: 800; padding: 3px 10px; border-radius: 99px; }
@@ -91,7 +98,7 @@
       .mode-3-grid { grid-template-columns: 1fr; }
     }
     .cfg-subbox { background: #fff; border: 1px solid #cbd5e1; border-radius: 10px; padding: 10px; }
-    .cfg-subbox h4 { margin: 0 0 8px; font-size: 13.5px; color: #1e3a8a; display: flex; justify-content: space-between; align-items: center; }
+    .cfg-subbox h4 { margin: 0 0 8px; font-size: 13.5px; color: #1e3a8a; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px; }
     .cfg-subbox label { display: block; font-size: 12px; font-weight: 700; color: #475569; margin-bottom: 3px; }
     .cfg-subbox input { margin-bottom: 8px; padding: 7px 9px; font-size: 13.5px; }
     .cfg-mini-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
@@ -99,29 +106,27 @@
 
     .ctrl-act-row { display: flex; gap: 8px; flex-wrap: wrap; }
     .btn-save-cfg { flex: 2; min-width: 150px; background: #0284c7; padding: 10px; font-size: 13.5px; }
-    .btn-copy-line { flex: 1; min-width: 120px; background: #16a34a; padding: 10px; font-size: 13px; }
-    .btn-prev-tier { flex: 1; min-width: 110px; background: #475569; padding: 10px; font-size: 13px; }
+    .btn-prev-tier { flex: 1; min-width: 120px; background: #475569; padding: 10px; font-size: 13px; }
 
-    /* === 分頁 3：座位表點名 === */
-    .seat-toolbar { max-width: 780px; margin: 0 auto 10px; display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+    /* === 分頁 3：動態教室座位表 === */
+    .seat-toolbar { max-width: 820px; margin: 0 auto 10px; display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
     .cls-btn { flex: 1; min-width: 90px; padding: 9px; font-size: 14px; background: #e2e8f0; color: #334155; }
     .cls-btn.active { background: #1e3a8a; color: #fff; }
     .btn-absent-batch { width: auto; padding: 9px 12px; font-size: 13px; background: #dc2626; }
     .btn-refresh { width: auto; padding: 9px 12px; font-size: 13px; background: #0f172a; }
-    .stat-strip { max-width: 780px; margin: 0 auto 10px; display: flex; justify-content: space-around; flex-wrap: wrap; gap: 6px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 8px; font-size: 12.5px; font-weight: 800; }
+    .stat-strip { max-width: 820px; margin: 0 auto 10px; display: flex; justify-content: space-around; flex-wrap: wrap; gap: 6px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 8px; font-size: 12.5px; font-weight: 800; }
     .legend-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; font-size: 12px; margin-bottom: 8px; color: #475569; font-weight: 700; }
     .leg-box { display: inline-block; width: 13px; height: 13px; border-radius: 3px; vertical-align: middle; margin-right: 3px; border: 1px solid #94a3b8; }
 
     .adm-map-scroll { overflow-x: auto; background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 12px; -webkit-overflow-scrolling: touch; }
     .adm-classroom { width: max-content; min-width: 100%; margin: 0 auto; }
     .adm-wb { width: 100%; background: #334155; color: #fff; text-align: center; padding: 6px; border-radius: 7px; font-weight: 800; font-size: 13px; letter-spacing: 5px; margin-bottom: 10px; }
-    .adm-zones { display: flex; gap: 12px; justify-content: flex-start; }
-    .adm-zone { background: #fff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 5px; flex-shrink: 0; }
-    .adm-grid { display: grid; gap: 3px; }
-    .acell { height: 48px; border-radius: 5px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 10.5px; line-height: 1.15; padding: 2px; text-align: center; overflow: hidden; }
-    .acell.head { height: 20px; background: #e2e8f0; color: #475569; font-weight: 700; }
+    .adm-dyn-board { background: #fff; border: 1px solid #cbd5e1; border-radius: 10px; padding: 8px; display: inline-block; min-width: 100%; }
+    .adm-grid { display: grid; gap: 4px; }
+    .acell { height: 50px; border-radius: 6px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 10.5px; line-height: 1.15; padding: 2px; text-align: center; overflow: hidden; }
+    .acell.head { height: 22px; background: #e2e8f0; color: #475569; font-weight: 800; font-size: 10px; }
     .acell.aisle { background: transparent; }
-    .acell.res { background: #e2e8f0; color: #94a3b8; border: 1px dashed #cbd5e1; font-size: 9.5px; }
+    .acell.res { background: #e2e8f0; color: #94a3b8; border: 1px dashed #cbd5e1; font-size: 9.5px; font-weight: 700; }
     .acell.seat { cursor: pointer; border: 1.5px solid #cbd5e1; }
     .acell.seat.empty { background: #f8fafc; color: #94a3b8; }
     .acell.seat.unmarked { background: #ffffff; border-color: #64748b; color: #0f172a; }
@@ -144,7 +149,7 @@
     .search-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
     .search-grid input, .search-grid select { margin-bottom: 0; }
     .rec-item { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; font-size: 13px; }
-    .rec-top { display: flex; justify-content: space-between; align-items: center; font-weight: 800; margin-bottom: 4px; gap: 6px; }
+    .rec-top { display: flex; justify-content: space-between; align-items: center; font-weight: 800; margin-bottom: 4px; gap: 6px; flex-wrap: wrap; }
     .badge-seat { background: #e2e8f0; color: #334155; padding: 2px 7px; border-radius: 6px; font-size: 11.5px; }
     .st-tag { font-size: 11.5px; font-weight: 800; padding: 2px 8px; border-radius: 99px; }
     .st-tag.st-出席 { background: #dcfce7; color: #166534; }
@@ -156,7 +161,21 @@
     .notfull-badge { background: #e2e8f0; color: #475569; font-size: 11.5px; font-weight: 700; padding: 2px 8px; border-radius: 99px; }
     .mini-counts { display: flex; gap: 8px; flex-wrap: wrap; font-size: 12px; font-weight: 700; margin-top: 5px; }
 
-    /* === 彈窗（座位核對 & 一鍵未到確認 & 公告預覽） === */
+    /* === 分頁 5 & 6：班級公告與課表管理 === */
+    .form-card { background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: 14px; margin-bottom: 14px; }
+    .form-card h3 { margin: 0 0 10px; font-size: 15.5px; color: #0f172a; }
+    .form-card label { display: block; font-size: 12.5px; font-weight: 700; color: #475569; margin-bottom: 4px; }
+    .row-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .ann-state { font-size: 11.5px; font-weight: 800; padding: 2px 8px; border-radius: 99px; }
+    .ann-state.active { background: #dcfce7; color: #166534; }
+    .ann-state.upcoming { background: #fef3c7; color: #92400e; }
+    .ann-state.expired { background: #e2e8f0; color: #475569; }
+    .ann-state.disabled { background: #fee2e2; color: #991b1b; }
+    .item-actions { display: flex; gap: 6px; margin-top: 8px; }
+    .btn-mini-edit { width: auto; padding: 5px 11px; font-size: 12px; background: #0284c7; border-radius: 7px; }
+    .btn-mini-del { width: auto; padding: 5px 11px; font-size: 12px; background: #dc2626; border-radius: 7px; }
+
+    /* === 彈窗 === */
     .modal-mask { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.65); z-index: 999; display: none; align-items: center; justify-content: center; padding: 12px; }
     .modal-box { background: #fff; width: 100%; max-width: 480px; max-height: 90vh; overflow-y: auto; border-radius: 18px; padding: 18px; box-shadow: 0 20px 40px rgba(0,0,0,0.25); }
     .modal-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
@@ -195,20 +214,26 @@
   <div id="mainBox" class="box" style="display:none;">
     <h2>敏惠上課證｜行政作業後台</h2>
 
-    <!-- 全域場次切換（12:30場 / 17:00場） -->
+    <!-- 全域場次切換與今日課表對照條 -->
     <div class="session-bar">
-      <div class="session-label" id="sessionHintText">點名場次：12:30場</div>
-      <div class="session-btns">
-        <button type="button" id="sessBtn1230" class="sess-btn active" onclick="setSession('12:30場')">12:30 場</button>
-        <button type="button" id="sessBtn1700" class="sess-btn" onclick="setSession('17:00場')">17:00 場</button>
+      <div class="session-top-row">
+        <div class="session-label" id="sessionHintText">點名場次：12:30場</div>
+        <div class="session-btns">
+          <button type="button" id="sessBtn1230" class="sess-btn active" onclick="setSession('12:30場')">12:30 場</button>
+          <button type="button" id="sessBtn1700" class="sess-btn" onclick="setSession('17:00場')">17:00 場</button>
+        </div>
       </div>
+      <div id="todaySchedStrip" class="today-sched-strip">載入今日課表中...</div>
     </div>
 
+    <!-- 6大主分頁 -->
     <div class="tabs">
       <button id="tCheckin" class="tab active" onclick="setMode('checkin')">掃碼點名</button>
       <button id="tBook" class="tab" onclick="setMode('book')">發放講義</button>
       <button id="tSeat" class="tab" onclick="setMode('seat')">座位表點名</button>
       <button id="tSearch" class="tab" onclick="setMode('search')">統計與查詢</button>
+      <button id="tAnnounce" class="tab" onclick="setMode('announce')">班級公告</button>
+      <button id="tSchedule" class="tab" onclick="setMode('schedule')">課表管理</button>
     </div>
 
     <!-- === 分頁 1 & 2：掃碼點名 / 發放講義 === -->
@@ -257,37 +282,35 @@
       <div id="resultArea"></div>
     </div>
 
-    <!-- === 分頁 3：座位表點名與線上劃位控管 === -->
+    <!-- === 分頁 3：座位表點名與分天線上劃位控管 === -->
     <div id="seatModeSection" style="display:none;">
-
-      <!-- 線上劃位控管與梯次設定卡片 -->
       <div class="seat-ctrl-card">
         <div class="seat-ctrl-head">
           <div class="seat-ctrl-title">
-            <span>線上劃位控管與梯次設定</span>
+            <span>線上劃位控管與分天梯次設定</span>
             <span id="seatModePill" class="mode-pill m-paused">載入中...</span>
           </div>
           <button type="button" id="btnToggleSeatCtrl" class="btn-toggle-ctrl" onclick="toggleSeatCtrlPanel()">收合設定 ▲</button>
         </div>
 
         <div id="seatCtrlBody" class="seat-ctrl-body">
-          <div class="sec-label" style="margin-top:0;">1. 劃位總開關（手動切換狀態）：</div>
+          <div class="sec-label" style="margin-top:0;">1. 劃位總開關（分天劃位結束後，請手動切回暫停劃位）：</div>
           <div class="mode-3-grid">
             <button type="button" id="btnModePaused" class="mode-opt-btn m-paused" onclick="selectSeatModeUI('paused')">
-              ⏸ 暫停劃位<br><small>（開放前防呆）</small>
+              ⏸ 暫停劃位<br><small>（開放前／分日截止）</small>
             </button>
             <button type="button" id="btnModeOpen" class="mode-opt-btn m-open" onclick="selectSeatModeUI('open')">
               🟢 依梯次時間開放<br><small>（過號不擋人）</small>
             </button>
             <button type="button" id="btnModeEnded" class="mode-opt-btn m-ended" onclick="selectSeatModeUI('ended')">
-              🔒 已結束劃位<br><small>（收起大按鈕）</small>
+              🔒 已結束劃位<br><small>（收起選位按鈕）</small>
             </button>
           </div>
 
-          <div class="sec-label">2. 各班開放時間與分梯次規則（可設同時開搶或錯開時段）：</div>
+          <div class="sec-label">2. 各班開放時間與分梯次規則（自動扣除已劃位者，由未劃位者第 1 順位起算）：</div>
           <div class="ab-cfg-grid">
             <div class="cfg-subbox">
-              <h4><span>校內 A 班設定</span><small id="countInfoA" style="color:#64748b;">共 -- 人</small></h4>
+              <h4><span>校內 A 班設定</span><small id="countInfoA" style="color:#0369a1;">已劃 -- / 待劃 --</small></h4>
               <label>開放起始日期與時間</label>
               <input type="datetime-local" id="cfgStartA">
               <div class="cfg-mini-row">
@@ -303,7 +326,7 @@
             </div>
 
             <div class="cfg-subbox">
-              <h4><span>校內 B 班設定</span><small id="countInfoB" style="color:#64748b;">共 -- 人</small></h4>
+              <h4><span>校內 B 班設定</span><small id="countInfoB" style="color:#0369a1;">已劃 -- / 待劃 --</small></h4>
               <label>開放起始日期與時間</label>
               <input type="datetime-local" id="cfgStartB">
               <div class="cfg-mini-row">
@@ -321,9 +344,7 @@
 
           <div class="ctrl-act-row">
             <button type="button" id="btnSaveSeatCfg" class="btn-save-cfg" onclick="saveSeatSettings()">儲存劃位設定</button>
-            <button type="button" class="btn-copy-line" onclick="copyLineAnnouncement('A')">複製 A 班公告</button>
-            <button type="button" class="btn-copy-line" onclick="copyLineAnnouncement('B')">複製 B 班公告</button>
-            <button type="button" class="btn-prev-tier" onclick="openTierPreviewModal()">預覽梯次</button>
+            <button type="button" class="btn-prev-tier" onclick="openTierPreviewModal()">預覽待劃位梯次</button>
           </div>
           <div id="cfgSaveMsg" style="font-size:12.5px;font-weight:700;color:#166534;margin-top:8px;display:none;"></div>
         </div>
@@ -357,7 +378,6 @@
         <button id="subTabAbs" class="sub-tab" onclick="switchSearchSub('unmarked')">當日未登記</button>
       </div>
 
-      <!-- 子頁 A：全班全勤統計 -->
       <div id="statsFilterBox">
         <div class="search-grid">
           <select id="statsGroup" onchange="runStatsSearch()">
@@ -377,7 +397,6 @@
         <div id="statsBanner" class="checkin-pill" style="margin-bottom:10px;">載入統計中...</div>
       </div>
 
-      <!-- 子頁 B & C：明細與未登記 -->
       <div id="logFilterBox" style="display:none;">
         <div class="search-grid">
           <input type="date" id="searchDate">
@@ -409,12 +428,107 @@
       <div id="searchResultWrap"></div>
     </div>
 
+    <!-- === 分頁 5：班級公告排程管理 === -->
+    <div id="announceModeSection" style="display:none;" class="narrow-wrap">
+      <div class="form-card">
+        <h3 id="annFormHeading">新增 / 排程班級公告（學生登入自動跳出）</h3>
+        <input type="hidden" id="annEditId" value="">
+        <label>公告標題</label>
+        <input type="text" id="annTitleInput" placeholder="例如：二技統一入學測驗報名提醒">
+        <label>公告內容（支援換行分段）</label>
+        <textarea id="annContentInput" rows="4" placeholder="請輸入要提醒同學的事項、攜帶物品或注意事項..."></textarea>
+        <div class="row-2col">
+          <div>
+            <label>適用班別</label>
+            <select id="annTargetSelect">
+              <option value="全體">全體（A班 + B班）</option>
+              <option value="校內A班">僅限校內 A 班</option>
+              <option value="校內B班">僅限校內 B 班</option>
+            </select>
+          </div>
+          <div>
+            <label>顯示狀態</label>
+            <select id="annEnabledSelect">
+              <option value="1">啟用（依日期區間顯示）</option>
+              <option value="0">停用（暫不顯示）</option>
+            </select>
+          </div>
+        </div>
+        <div class="row-2col">
+          <div>
+            <label>開始顯示日期（留白表立即）</label>
+            <input type="date" id="annStartInput">
+          </div>
+          <div>
+            <label>結束顯示日期（留白表長期）</label>
+            <input type="date" id="annEndInput">
+          </div>
+        </div>
+        <div class="ctrl-act-row">
+          <button type="button" id="btnSaveAnn" class="btn-save-cfg" onclick="saveAnnouncement()">儲存並發布公告</button>
+          <button type="button" id="btnCancelAnnEdit" class="btn-prev-tier" style="display:none;" onclick="resetAnnForm()">取消編輯</button>
+        </div>
+      </div>
+
+      <div class="sec-label">已建立的班級公告清單：</div>
+      <div id="annListWrap"></div>
+    </div>
+
+    <!-- === 分頁 6：A/B 班獨立課表管理 === -->
+    <div id="scheduleModeSection" style="display:none;" class="narrow-wrap">
+      <div class="seat-toolbar" style="margin-bottom:10px;">
+        <button type="button" id="btnSchedGroupA" class="cls-btn active" onclick="switchSchedGroup('A')">校內 A 班課表</button>
+        <button type="button" id="btnSchedGroupB" class="cls-btn" onclick="switchSchedGroup('B')">校內 B 班課表</button>
+      </div>
+
+      <div class="form-card">
+        <h3 id="schedFormHeading">新增 / 修改【校內 A 班】課程</h3>
+        <input type="hidden" id="schedEditRow" value="">
+        <div class="row-2col">
+          <div>
+            <label>上課日期</label>
+            <input type="date" id="schedDateInput">
+          </div>
+          <div>
+            <label>上課場次</label>
+            <select id="schedSessionSelect">
+              <option value="12:30場">12:30 場</option>
+              <option value="17:00場">17:00 場</option>
+            </select>
+          </div>
+        </div>
+        <label>課程科目（與老師）</label>
+        <input type="text" id="schedSubjectInput" placeholder="例如：基本護理學（王英老師）">
+        <label>異動狀態 / 備註（若有調課或停課請標註，前後台會醒目提醒）</label>
+        <div class="quick-tags">
+          <button type="button" class="q-tag" onclick="setSchedNoteTag('正常上課')">正常上課</button>
+          <button type="button" class="q-tag" onclick="setSchedNoteTag('調課異動')">+ 調課異動</button>
+          <button type="button" class="q-tag" onclick="setSchedNoteTag('颱風停課')">+ 颱風停課</button>
+          <button type="button" class="q-tag" onclick="setSchedNoteTag('補課')">+ 補課</button>
+        </div>
+        <input type="text" id="schedNoteInput" placeholder="選填，例如：原內外科調課、颱風停課順延">
+        <div class="ctrl-act-row">
+          <button type="button" id="btnSaveSched" class="btn-save-cfg" onclick="saveScheduleItem()">儲存至課表</button>
+          <button type="button" id="btnCancelSchedEdit" class="btn-prev-tier" style="display:none;" onclick="resetSchedForm()">取消編輯</button>
+        </div>
+      </div>
+
+      <div class="batch-row" style="align-items:center;margin-bottom:10px;">
+        <select id="schedScopeSelect" onchange="loadScheduleList()">
+          <option value="upcoming">顯示今日及未來課表</option>
+          <option value="all">顯示全部課表（含已結束）</option>
+        </select>
+        <button type="button" class="btn-add-book" style="height:40px;" onclick="loadScheduleList()">重新整理</button>
+      </div>
+      <div id="schedListWrap"></div>
+    </div>
+
     <div class="logout-bar">
       <button class="btn-link" onclick="adminLogout()">鎖定 / 登出後台</button>
     </div>
   </div>
 
-  <!-- 通用互動彈窗（座位點名核對 / 一鍵未到確認 / 公告預覽） -->
+  <!-- 通用互動彈窗 -->
   <div id="seatActionModal" class="modal-mask">
     <div class="modal-box">
       <div class="modal-head">
@@ -448,35 +562,31 @@
     let searchDataCache = { records: [], unmarkedList: [] };
     let searchSubTab = 'stats';
 
-    const ALL_SEAT_CODES = [
-      'A1','A2','A3','A4','A5','A6','A7','A8','A9','A10','A11','A12','A13','A14','A15',
-      'B2','B3','B4','B5','B6','B7','B8','B9','B10','B11','B12','B13','B14','B15','B16','B17','B18','B19',
-      'C4','C5','C6','C7','C8','C9','C10','C11','C12','C13','C14','C15','C16','C17','C18','C19','C20','C21','C22','C23','C24','C25','C26',
-      'D1','D2','D3','D4','D5','D6','D7','D10','D11','D12','D13','D14','D15','D16','D17','D18','D19','D20','D21','D22','D23','D24','D25','D26','D27','D28',
-      'E1','E2','E3','E4'
-    ];
+    let todayScheduleCache = null;
+    let announcementsCache = [];
+    let currentSchedGroup = 'A';
+    let scheduleListCache = [];
 
-    const LEFT_GRID = [
-      [null, null, null, null, 'R',  'A1', 'A2', 'A3', 'A4'],
-      [null, null, 'R',  'B2', 'B3', 'B4', 'B5', 'B6', 'B7'],
-      ['R',  'R',  'R',  'C4', 'C5', 'C6', 'C7', 'C8', 'C9'],
-      ['D1', 'D2', 'D3', 'D4', 'D5', 'D6', 'D7', 'R',  'R' ],
-      [null, null, null, null, null, 'E1', 'E2', null, null]
-    ];
-    const MID_GRID = [
-      [null, null,  'A5',  'A6',  'A7',  'A8',  'A9',  'A10', 'A11', 'A12', null,  null ],
-      [null, 'B8',  'B9',  'B10', 'B11', 'B12', 'B13', 'B14', 'B15', 'B16', null,  null ],
-      ['C10','C11', 'C12', 'C13', 'C14', 'C15', 'C16', 'C17', 'C18', 'C19', 'C20', 'C21'],
-      [null, 'D10', 'D11', 'D12', 'D13', 'D14', 'D15', 'D16', 'D17', 'D18', 'D19', null ],
-      [null, null,  null,  null,  null,  null,  null,  null,  null,  null,  null,  null ]
-    ];
-    const RIGHT_GRID = [
-      ['A13', 'A14', 'A15', 'R',   'R',   null,  null,  null,  null ],
-      ['B17', 'B18', 'B19', 'R',   'R',   'R',   'R',   null,  null ],
-      ['C22', 'C23', 'C24', 'C25', 'C26', 'R',   'R',   'R',   'R'  ],
-      ['D20', 'D21', 'D22', 'D23', 'D24', 'D25', 'D26', 'D27', 'D28'],
-      ['E3',  'E4',  null,  null,  null,  null,  null,  null,  null ]
-    ];
+    function escHtml(str) {
+      return String(str || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function sortSeatCodesNatural(list) {
+      return (list || []).slice().sort((a, b) => {
+        const ma = String(a).match(/^([A-Z]+)(\d+)$/);
+        const mb = String(b).match(/^([A-Z]+)(\d+)$/);
+        if (ma && mb) {
+          if (ma[1] !== mb[1]) return ma[1].localeCompare(mb[1]);
+          return Number(ma[2]) - Number(mb[2]);
+        }
+        return String(a).localeCompare(String(b));
+      });
+    }
 
     function initDefaultSessionAndClass() {
       const now = new Date();
@@ -497,10 +607,39 @@
       document.getElementById('sessBtn1700').className = 'sess-btn' + (sess === '17:00場' ? ' active' : '');
       const graceNote = (sess === '12:30場') ? '（12:40前準時，12:41起遲到）' : '（17:10前準時，17:11起遲到）';
       document.getElementById('sessionHintText').textContent = '目前點名：' + sess + ' ' + graceNote;
+      renderTodayScheduleBar();
 
       if (!skipReload && mode === 'seat') {
         loadSeatDashboard(currentSeatGroup);
       }
+    }
+
+    function renderTodayScheduleBar() {
+      const strip = document.getElementById('todaySchedStrip');
+      if (!strip) return;
+      if (!todayScheduleCache) {
+        strip.innerHTML = '<span>今日課程：尚無課表資料</span>';
+        return;
+      }
+      const dStr = (todayScheduleCache.todayYmd || '').slice(5) + ' (' + (todayScheduleCache.weekday || '') + ')';
+      const listA = (todayScheduleCache.A && todayScheduleCache.A[currentSession]) || [];
+      const listB = (todayScheduleCache.B && todayScheduleCache.B[currentSession]) || [];
+
+      const formatGrpPill = (grpName, arr) => {
+        if (!arr || arr.length === 0) {
+          return '<span class="sched-pill" style="color:#64748b;font-weight:600;">' + grpName + '：無排課</span>';
+        }
+        return arr.map(item => {
+          const noteTxt = item.isChanged ? ('【' + escHtml(item.note) + '】') : '';
+          return '<span class="sched-pill' + (item.isChanged ? ' alert' : '') + '">' +
+            grpName + '：' + escHtml(item.subject) + noteTxt + '</span>';
+        }).join('');
+      };
+
+      strip.innerHTML =
+        '<b>📅 今日 ' + escHtml(dStr) + ' ' + escHtml(currentSession) + '：</b>' +
+        formatGrpPill('校內A班', listA) +
+        formatGrpPill('校內B班', listB);
     }
 
     function playBeep() {
@@ -549,7 +688,7 @@
           catalogBooks = res.books;
           const dd = document.getElementById('bookDropdown');
           dd.innerHTML = '<option value="">-- 從書單下拉選擇講義加入 --</option>' +
-            catalogBooks.map(b => '<option value="' + b.code + '">' + b.code + '｜' + b.name + '</option>').join('');
+            catalogBooks.map(b => '<option value="' + escHtml(b.code) + '">' + escHtml(b.code) + '｜' + escHtml(b.name) + '</option>').join('');
         }
       } catch (e) {}
     }
@@ -569,11 +708,13 @@
         if (res && res.ok) {
           savedPass = p;
           localStorage.setItem(ADMIN_KEY, p);
+          if (res.todaySchedule) todayScheduleCache = res.todaySchedule;
           document.getElementById('loginBox').style.display = 'none';
           document.getElementById('mainBox').style.display = 'block';
           const today = new Date();
-          document.getElementById('searchDate').value =
-            today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
+          const todayIso = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
+          document.getElementById('searchDate').value = todayIso;
+          document.getElementById('schedDateInput').value = todayIso;
           initDefaultSessionAndClass();
           loadBookCatalog();
           initScanner();
@@ -609,11 +750,15 @@
       document.getElementById('tBook').className = 'tab' + (m === 'book' ? ' active' : '');
       document.getElementById('tSeat').className = 'tab' + (m === 'seat' ? ' active' : '');
       document.getElementById('tSearch').className = 'tab' + (m === 'search' ? ' active' : '');
+      document.getElementById('tAnnounce').className = 'tab' + (m === 'announce' ? ' active' : '');
+      document.getElementById('tSchedule').className = 'tab' + (m === 'schedule' ? ' active' : '');
 
       const isScan = (m === 'checkin' || m === 'book');
       document.getElementById('scanModeSection').style.display = isScan ? 'block' : 'none';
       document.getElementById('seatModeSection').style.display = (m === 'seat') ? 'block' : 'none';
       document.getElementById('searchModeSection').style.display = (m === 'search') ? 'block' : 'none';
+      document.getElementById('announceModeSection').style.display = (m === 'announce') ? 'block' : 'none';
+      document.getElementById('scheduleModeSection').style.display = (m === 'schedule') ? 'block' : 'none';
 
       if (isScan) {
         document.getElementById('batchBookSection').style.display = (m === 'book') ? 'block' : 'none';
@@ -630,6 +775,8 @@
         stopScannerIfRunning();
         if (m === 'seat') loadSeatDashboard(currentSeatGroup);
         if (m === 'search') switchSearchSub(searchSubTab);
+        if (m === 'announce') loadAnnouncementsList();
+        if (m === 'schedule') loadScheduleList();
       }
     }
 
@@ -641,13 +788,13 @@
       const bookItem = found ? { code: found.code, name: found.name } : { code: clean, name: clean };
 
       if (batchBooks.some(b => b.code === bookItem.code)) {
-        showTempToast('warn', '「' + bookItem.name + '」已在本次發書清單中');
+        showTempToast('warn', '「' + escHtml(bookItem.name) + '」已在本次發書清單中');
         return;
       }
       batchBooks.push(bookItem);
       playBeep();
       renderBatchList();
-      showTempToast('ok', '已加入清單：' + bookItem.name + ' (' + bookItem.code + ')');
+      showTempToast('ok', '已加入清單：' + escHtml(bookItem.name) + ' (' + escHtml(bookItem.code) + ')');
     }
 
     function removeBatchBook(code) {
@@ -690,8 +837,8 @@
 
       clearBtn.style.display = 'inline-block';
       wrap.innerHTML = batchBooks.map(b =>
-        '<div class="book-chip">' + b.name + ' (' + b.code + ')' +
-        '<span onclick="removeBatchBook(\'' + b.code + '\')">✕</span></div>'
+        '<div class="book-chip">' + escHtml(b.name) + ' (' + escHtml(b.code) + ')' +
+        '<span onclick="removeBatchBook(\'' + escHtml(b.code) + '\')">✕</span></div>'
       ).join('');
       hint.className = 'batch-hint';
       hint.textContent = '已鎖定以上 ' + batchBooks.length + ' 本講義！現在請直接掃描排隊學生的 QR Code，刷一位就自動領取全部 ' + batchBooks.length + ' 本。';
@@ -775,7 +922,7 @@
           const devices = await Html5Qrcode.getCameras();
           if (devices && devices.length > 1) {
             selectEl.innerHTML = devices.map((d, idx) =>
-              '<option value="' + d.id + '">' + (d.label || ('鏡頭 ' + (idx + 1))) + '</option>'
+              '<option value="' + escHtml(d.id) + '">' + escHtml(d.label || ('鏡頭 ' + (idx + 1))) + '</option>'
             ).join('');
             selectEl.style.display = 'block';
           }
@@ -786,7 +933,7 @@
           const devices = await Html5Qrcode.getCameras();
           if (devices && devices.length > 0) {
             selectEl.innerHTML = devices.map((d, idx) =>
-              '<option value="' + d.id + '">' + (d.label || ('鏡頭 ' + (idx + 1))) + '</option>'
+              '<option value="' + escHtml(d.id) + '">' + escHtml(d.label || ('鏡頭 ' + (idx + 1))) + '</option>'
             ).join('');
             selectEl.style.display = devices.length > 1 ? 'block' : 'none';
             const backCam = devices.find(d => /back|rear|environment|後/i.test(d.label));
@@ -847,11 +994,11 @@
       const area = document.getElementById('resultArea');
 
       if (mode === 'checkin') {
-        area.innerHTML = '<div class="res-card">報到處理中（' + currentSession + '）...</div>';
+        area.innerHTML = '<div class="res-card">報到處理中（' + escHtml(currentSession) + '）...</div>';
         try {
           const res = await callGasJsonp({ action: 'adminCheckin', pass: savedPass, code: cleanCode, session: currentSession });
           if (!res || !res.ok) {
-            area.innerHTML = '<div class="err-banner">' + ((res && res.message) || '查詢失敗') + '</div>';
+            area.innerHTML = '<div class="err-banner">' + escHtml((res && res.message) || '查詢失敗') + '</div>';
             return;
           }
           const st = res.student;
@@ -859,22 +1006,22 @@
           const isDup = (res.checkinStatus === 'already_checked_in');
           const bannerCls = isDup ? 'warn-banner' : (isLate ? 'warn-banner' : 'ok-banner');
           const bannerMsg = isDup
-            ? ('本場次（' + res.session + '）稍早已點名過（' + res.time + '｜狀態：' + res.status + '）')
-            : ('報到成功｜' + res.session + '【' + res.status + '】');
+            ? ('本場次（' + escHtml(res.session) + '）稍早已點名過（' + escHtml(res.time) + '｜狀態：' + escHtml(res.status) + '）')
+            : ('報到成功｜' + escHtml(res.session) + '【' + escHtml(res.status) + '】');
 
           area.innerHTML = '<div class="res-card">' +
             '<div class="' + bannerCls + '">' + bannerMsg + '</div>' +
             '<div class="stu-header">' +
               '<img class="stu-thumb" referrerpolicy="no-referrer" src="' + getAvatarUrl(st.avatar) + '">' +
               '<div>' +
-                '<div><b>' + st.name + '</b>（' + cleanCode + '）</div>' +
-                '<div style="font-size:13px;color:#475569;">' + (st.className || st.mainClass || '') + (st.seat ? (' ｜ 座位：<b>' + st.seat + '</b>') : '') + '</div>' +
-                '<div style="font-size:12px;color:#0284c7;margin-top:2px;">時間：' + res.time + '</div>' +
+                '<div><b>' + escHtml(st.name) + '</b>（' + escHtml(cleanCode) + '）</div>' +
+                '<div style="font-size:13px;color:#475569;">' + escHtml(st.className || st.mainClass || '') + (st.seat ? (' ｜ 座位：<b>' + escHtml(st.seat) + '</b>') : '') + '</div>' +
+                '<div style="font-size:12px;color:#0284c7;margin-top:2px;">時間：' + escHtml(res.time) + '</div>' +
               '</div>' +
             '</div>' +
           '</div>';
         } catch (err) {
-          area.innerHTML = '<div class="err-banner">' + err.message + '</div>';
+          area.innerHTML = '<div class="err-banner">' + escHtml(err.message) + '</div>';
         }
         return;
       }
@@ -898,13 +1045,13 @@
             session: currentSession
           });
           if (!res || !res.ok) {
-            area.innerHTML = '<div class="err-banner">' + ((res && res.message) || '登記失敗') + '</div>';
+            area.innerHTML = '<div class="err-banner">' + escHtml((res && res.message) || '登記失敗') + '</div>';
             return;
           }
           playBeep();
           renderBatchResult(res);
         } catch (err) {
-          area.innerHTML = '<div class="err-banner">' + err.message + '</div>';
+          area.innerHTML = '<div class="err-banner">' + escHtml(err.message) + '</div>';
         }
         return;
       }
@@ -913,7 +1060,7 @@
       try {
         const res = await callGasJsonp({ action: 'adminLookup', pass: savedPass, code: cleanCode, allowBook: '1' });
         if (!res || !res.ok) {
-          area.innerHTML = '<div class="err-banner">' + ((res && res.message) || '查詢失敗') + '</div>';
+          area.innerHTML = '<div class="err-banner">' + escHtml((res && res.message) || '查詢失敗') + '</div>';
           return;
         }
         if (res.targetType === 'book') {
@@ -923,7 +1070,7 @@
         currentStudent = res.student;
         renderIndividualBooks(currentStudent);
       } catch (err) {
-        area.innerHTML = '<div class="err-banner">' + err.message + '</div>';
+        area.innerHTML = '<div class="err-banner">' + escHtml(err.message) + '</div>';
       }
     }
 
@@ -936,33 +1083,33 @@
 
       let bannerHtml = '';
       if (newCount > 0) {
-        bannerHtml = '<div class="ok-banner">' + st.name + '｜成功登記領取 ' + newCount + ' 本講義' +
+        bannerHtml = '<div class="ok-banner">' + escHtml(st.name) + '｜成功登記領取 ' + newCount + ' 本講義' +
           (oldCount > 0 ? '（另有 ' + oldCount + ' 本先前已領）' : '') + '</div>';
       } else if (oldCount > 0) {
-        bannerHtml = '<div class="warn-banner">' + st.name + '｜這 ' + oldCount + ' 本先前都已領取過囉！</div>';
+        bannerHtml = '<div class="warn-banner">' + escHtml(st.name) + '｜這 ' + oldCount + ' 本先前都已領取過囉！</div>';
       } else {
-        bannerHtml = '<div class="err-banner" style="margin-top:0;margin-bottom:8px;">' + st.name + '｜書單中無此批講義（班別不符）</div>';
+        bannerHtml = '<div class="err-banner" style="margin-top:0;margin-bottom:8px;">' + escHtml(st.name) + '｜書單中無此批講義（班別不符）</div>';
       }
 
       let checkinHtml = '';
       if (res.checkinStatus === 'checked_in' || res.checkinStatus === 'updated') {
-        checkinHtml = '<div class="checkin-pill">已同步點名（' + res.session + '【' + res.status + '】｜' + res.checkinTime + '）</div>';
+        checkinHtml = '<div class="checkin-pill">已同步點名（' + escHtml(res.session) + '【' + escHtml(res.status) + '】｜' + escHtml(res.checkinTime) + '）</div>';
       } else if (res.checkinStatus === 'already_checked_in') {
-        checkinHtml = '<div class="checkin-pill dup">' + res.session + '稍早已點名（' + res.status + '｜' + res.checkinTime + '），本次不重複紀錄</div>';
+        checkinHtml = '<div class="checkin-pill dup">' + escHtml(res.session) + '稍早已點名（' + escHtml(res.status) + '｜' + escHtml(res.checkinTime) + '），本次不重複紀錄</div>';
       }
 
       let details = [];
-      if (newCount > 0) details.push('<div style="color:#166534;"><b>本次新領：</b>' + res.newlyIssued.join('、') + '</div>');
-      if (oldCount > 0) details.push('<div style="color:#92400e;"><b>先前已領：</b>' + res.alreadyReceived.join('、') + '</div>');
-      if (naCount > 0) details.push('<div style="color:#64748b;"><b>非該生班別書單：</b>' + res.notEligible.join('、') + '</div>');
+      if (newCount > 0) details.push('<div style="color:#166534;"><b>本次新領：</b>' + escHtml(res.newlyIssued.join('、')) + '</div>');
+      if (oldCount > 0) details.push('<div style="color:#92400e;"><b>先前已領：</b>' + escHtml(res.alreadyReceived.join('、')) + '</div>');
+      if (naCount > 0) details.push('<div style="color:#64748b;"><b>非該生班別書單：</b>' + escHtml(res.notEligible.join('、')) + '</div>');
 
       area.innerHTML = '<div class="res-card">' +
         bannerHtml + checkinHtml +
         '<div class="stu-header">' +
           '<img class="stu-thumb" referrerpolicy="no-referrer" src="' + getAvatarUrl(st.avatar) + '">' +
           '<div>' +
-            '<div><b>' + st.name + '</b>（' + st.mainId + '）</div>' +
-            '<div style="font-size:13px;color:#475569;">' + (st.className || st.mainClass || '') + (st.seat ? (' ｜ 座位：<b>' + st.seat + '</b>') : '') + '</div>' +
+            '<div><b>' + escHtml(st.name) + '</b>（' + escHtml(st.mainId) + '）</div>' +
+            '<div style="font-size:13px;color:#475569;">' + escHtml(st.className || st.mainClass || '') + (st.seat ? (' ｜ 座位：<b>' + escHtml(st.seat) + '</b>') : '') + '</div>' +
           '</div>' +
         '</div>' +
         '<div class="detail-list">' + details.join('') + '</div>' +
@@ -973,8 +1120,8 @@
       const area = document.getElementById('resultArea');
       const rows = (st.books || []).map(b =>
         '<div class="book-row">' +
-          '<span>' + b.name + ' <small style="color:#64748b;">(' + b.code + ')</small></span>' +
-          '<button class="btn-sm ' + (b.received ? 'btn-got' : 'btn-wait') + '" onclick="toggleBookBtn(this,' + st.rowIndex + ',\'' + b.code + '\')">' +
+          '<span>' + escHtml(b.name) + ' <small style="color:#64748b;">(' + escHtml(b.code) + ')</small></span>' +
+          '<button class="btn-sm ' + (b.received ? 'btn-got' : 'btn-wait') + '" onclick="toggleBookBtn(this,' + st.rowIndex + ',\'' + escHtml(b.code) + '\')">' +
             (b.received ? '已領取（點擊取消）' : '登記領取') +
           '</button>' +
         '</div>'
@@ -984,8 +1131,8 @@
         '<div class="stu-header">' +
           '<img class="stu-thumb" referrerpolicy="no-referrer" src="' + getAvatarUrl(st.avatar) + '">' +
           '<div>' +
-            '<div><b>' + st.name + '</b>（' + st.studentId + '）</div>' +
-            '<div style="font-size:13px;color:#475569;">' + (st.className || st.mainClass || '') + (st.seat ? (' ｜ 座位：<b>' + st.seat + '</b>') : '') + '</div>' +
+            '<div><b>' + escHtml(st.name) + '</b>（' + escHtml(st.studentId) + '）</div>' +
+            '<div style="font-size:13px;color:#475569;">' + escHtml(st.className || st.mainClass || '') + (st.seat ? (' ｜ 座位：<b>' + escHtml(st.seat) + '</b>') : '') + '</div>' +
           '</div>' +
         '</div>' +
         '<hr style="border:none;border-top:1px solid #e2e8f0;margin:8px 0;">' +
@@ -1011,7 +1158,7 @@
     }
 
     // ==========================================
-    // === 線上劃位控管與梯次設定（三階段總開關） ===
+    // === 線上劃位控管與分天梯次設定 ===
     // ==========================================
 
     function gasStrToDatetimeLocal(gasStr) {
@@ -1069,10 +1216,12 @@
       document.getElementById('cfgIntervalB').value = (cfg.intervalB !== undefined) ? cfg.intervalB : 10;
 
       if (settingsObj.groupA) {
-        document.getElementById('countInfoA').textContent = '共 ' + settingsObj.groupA.total + ' 人（分 ' + settingsObj.groupA.tiers.length + ' 梯）';
+        document.getElementById('countInfoA').textContent =
+          '已劃 ' + (settingsObj.groupA.seatedCount || 0) + ' / 待劃 ' + (settingsObj.groupA.remainingCount || 0) + ' 人（' + settingsObj.groupA.tiers.length + ' 梯）';
       }
       if (settingsObj.groupB) {
-        document.getElementById('countInfoB').textContent = '共 ' + settingsObj.groupB.total + ' 人（分 ' + settingsObj.groupB.tiers.length + ' 梯）';
+        document.getElementById('countInfoB').textContent =
+          '已劃 ' + (settingsObj.groupB.seatedCount || 0) + ' / 待劃 ' + (settingsObj.groupB.remainingCount || 0) + ' 人（' + settingsObj.groupB.tiers.length + ' 梯）';
       }
     }
 
@@ -1092,7 +1241,7 @@
       }
 
       btn.disabled = true;
-      btn.textContent = '儲存並計算梯次中...';
+      btn.textContent = '儲存並重算梯次中...';
       msgEl.style.display = 'none';
 
       try {
@@ -1124,63 +1273,26 @@
       }
     }
 
-    async function copyLineAnnouncement(group) {
-      if (!seatSettingsCache) {
-        alert('請先等待座位設定載入完成');
-        return;
-      }
-      const grpData = (group === 'B') ? seatSettingsCache.groupB : seatSettingsCache.groupA;
-      const text = grpData ? grpData.lineText : '';
-      if (!text) return;
-
-      try {
-        await navigator.clipboard.writeText(text);
-        playBeep();
-        alert('已複製【校內 ' + group + ' 班】LINE 梯次公告文案！可直接貼到群組發送。');
-      } catch (e) {
-        openTierPreviewModal(group);
-      }
-    }
-
-    function openTierPreviewModal(focusGroup) {
+    function openTierPreviewModal() {
       if (!seatSettingsCache) return;
       const textA = (seatSettingsCache.groupA && seatSettingsCache.groupA.lineText) || '';
       const textB = (seatSettingsCache.groupB && seatSettingsCache.groupB.lineText) || '';
 
-      document.getElementById('modalSeatHeader').textContent = 'LINE 群組梯次公告預覽（依最新儲存設定）';
+      document.getElementById('modalSeatHeader').textContent = '待劃位名單與分梯次時程預覽';
       document.getElementById('modalSeatBody').innerHTML =
-        '<div style="font-size:12.5px;color:#475569;margin-bottom:8px;">若剛修改過時間或人數，請先按「儲存劃位設定」再複製最新名單：</div>' +
-        '<div class="sec-label" style="margin-top:4px;">校內 A 班梯次公告：</div>' +
-        '<textarea id="taLineA" rows="7" readonly style="font-size:12.5px;line-height:1.45;background:#f8fafc;">' + textA + '</textarea>' +
-        '<button type="button" class="btn-copy-line" style="width:100%;margin-bottom:12px;" onclick="selectAndCopyTa(\'taLineA\',\'A\')">一鍵複製 A 班公告</button>' +
-        '<div class="sec-label" style="margin-top:4px;">校內 B 班梯次公告：</div>' +
-        '<textarea id="taLineB" rows="7" readonly style="font-size:12.5px;line-height:1.45;background:#f8fafc;">' + textB + '</textarea>' +
-        '<button type="button" class="btn-copy-line" style="width:100%;" onclick="selectAndCopyTa(\'taLineB\',\'B\')">一鍵複製 B 班公告</button>';
+        '<div style="font-size:12.5px;color:#475569;margin-bottom:8px;">已自動排除已完成劃位的同學，以下為本次待劃位同學的排隊梯次（修改參數後請先按「儲存劃位設定」更新）：</div>' +
+        '<div class="sec-label" style="margin-top:4px;">校內 A 班梯次明細：</div>' +
+        '<textarea rows="7" readonly style="font-size:12.5px;line-height:1.45;background:#f8fafc;">' + escHtml(textA) + '</textarea>' +
+        '<div class="sec-label" style="margin-top:4px;">校內 B 班梯次明細：</div>' +
+        '<textarea rows="7" readonly style="font-size:12.5px;line-height:1.45;background:#f8fafc;">' + escHtml(textB) + '</textarea>';
 
       document.getElementById('seatActionModal').style.display = 'flex';
-      if (focusGroup === 'A' || focusGroup === 'B') {
-        setTimeout(() => {
-          const el = document.getElementById('taLine' + focusGroup);
-          if (el) { el.focus(); el.select(); }
-        }, 80);
-      }
     }
 
-    function selectAndCopyTa(elId, grp) {
-      const el = document.getElementById(elId);
-      if (!el) return;
-      el.select();
-      el.setSelectionRange(0, 99999);
-      try {
-        document.execCommand('copy');
-        playBeep();
-        alert('已複製校內 ' + grp + ' 班公告文案！');
-      } catch (e) {
-        alert('請長按上方文字框全選並複製');
-      }
-    }
+    // ==========================================
+    // === 分頁 3：動態教室座位表點名與管理 ===
+    // ==========================================
 
-    // === 分頁 3：座位表點名與管理 ===
     async function loadSeatDashboard(group) {
       currentSeatGroup = group || 'A';
       document.getElementById('btnClassA').className = 'cls-btn' + (currentSeatGroup === 'A' ? ' active' : '');
@@ -1188,7 +1300,7 @@
 
       const wrap = document.getElementById('admClassroomWrap');
       const scrollEl = document.getElementById('admMapScroll');
-      wrap.innerHTML = '<div style="text-align:center;padding:30px;font-weight:700;color:#475569;">正在載入校內' + currentSeatGroup + '班（' + currentSession + '）座位表...</div>';
+      wrap.innerHTML = '<div style="text-align:center;padding:30px;font-weight:700;color:#475569;">正在從試算表讀取校內' + currentSeatGroup + '班（' + escHtml(currentSession) + '）最新座位配置...</div>';
 
       try {
         const res = await callGasJsonp({
@@ -1198,59 +1310,22 @@
           session: currentSession
         });
         if (!res || !res.ok) {
-          wrap.innerHTML = '<div class="err-banner">' + ((res && res.message) || '載入失敗') + '</div>';
+          wrap.innerHTML = '<div class="err-banner">' + escHtml((res && res.message) || '載入失敗') + '</div>';
           return;
         }
         seatDashData = res;
         if (res.seatSettings) {
           applySeatSettingsToUI(res.seatSettings);
         }
+        if (res.todaySchedule) {
+          todayScheduleCache = res.todaySchedule;
+          renderTodayScheduleBar();
+        }
         renderAdminClassroom();
         if (scrollEl) scrollEl.scrollLeft = 0;
       } catch (err) {
-        wrap.innerHTML = '<div class="err-banner">' + err.message + '</div>';
+        wrap.innerHTML = '<div class="err-banner">' + escHtml(err.message) + '</div>';
       }
-    }
-
-    function buildAdminZoneHtml(gridData, colCount, showLeftRowNum, showRightRowNum) {
-      const seatMap = seatDashData.seatMap || {};
-      let html = '<div class="adm-zone"><div class="adm-grid" style="grid-template-columns:' +
-        (showLeftRowNum ? '18px ' : '') + 'repeat(' + colCount + ', 46px)' + (showRightRowNum ? ' 18px' : '') + ';">';
-
-      if (showLeftRowNum) html += '<div class="acell head"></div>';
-      for (let c = 1; c <= colCount; c++) {
-        html += '<div class="acell head">' + c + '</div>';
-      }
-      if (showRightRowNum) html += '<div class="acell head"></div>';
-
-      for (let r = 0; r < 5; r++) {
-        if (showLeftRowNum) html += '<div class="acell head">' + (r + 1) + '</div>';
-        for (let c = 0; c < colCount; c++) {
-          const code = gridData[r][c];
-          if (!code) {
-            html += '<div class="acell aisle"></div>';
-          } else if (code === 'R') {
-            html += '<div class="acell res">保留</div>';
-          } else {
-            const stu = seatMap[code];
-            let cls = 'acell seat ';
-            let inner = '';
-            if (!stu) {
-              cls += 'empty';
-              inner = '<span class="scode">' + code + '</span><span>空位</span>';
-            } else {
-              cls += stu.status ? ('st-' + stu.status) : 'unmarked';
-              const dot = (stu.adminNote || stu.sessionNote) ? '<span class="snote-dot">●</span>' : '';
-              const stTag = stu.status ? ('<span class="sstat">' + stu.status + '</span>') : '<span class="sstat" style="opacity:0.5;">未點</span>';
-              inner = '<span class="scode">' + code + dot + '</span><span class="sname">' + stu.name + '</span>' + stTag;
-            }
-            html += '<div class="' + cls + '" onclick="openSeatActionModal(\'' + code + '\')">' + inner + '</div>';
-          }
-        }
-        if (showRightRowNum) html += '<div class="acell head">' + (r + 1) + '</div>';
-      }
-      html += '</div></div>';
-      return html;
     }
 
     function renderAdminClassroom() {
@@ -1271,13 +1346,71 @@
         '<span style="color:#dc2626;">未到 ' + cAbsent + '</span>' +
         '<span style="color:#475569;">未登記 ' + cUnmarked + '</span>';
 
+      const layout = seatDashData.seatLayout || {};
+      const grid = layout.grid || [];
+      const colIsAisle = layout.colIsAisle || [];
+      const seatMap = seatDashData.seatMap || {};
+
+      if (grid.length === 0) {
+        document.getElementById('admClassroomWrap').innerHTML =
+          '<div class="warn-banner">試算表「校內' + currentSeatGroup + '班座位表」尚未讀取到有效座位編號（如 A1、B2），請確認試算表內容。</div>';
+        return;
+      }
+
+      const numCols = grid[0].length;
+      const colWidths = ['22px'];
+      for (let c = 0; c < numCols; c++) {
+        colWidths.push(colIsAisle[c] ? '14px' : '48px');
+      }
+
+      let gridHtml = '<div class="adm-dyn-board"><div class="adm-grid" style="grid-template-columns:' + colWidths.join(' ') + ';">';
+
+      // 頂部欄號列（自動跳過走道編號）
+      gridHtml += '<div class="acell head"></div>';
+      let visibleColNum = 0;
+      for (let c = 0; c < numCols; c++) {
+        if (colIsAisle[c]) {
+          gridHtml += '<div class="acell aisle" style="height:22px;"></div>';
+        } else {
+          visibleColNum += 1;
+          gridHtml += '<div class="acell head">' + visibleColNum + '</div>';
+        }
+      }
+
+      // 各排座位
+      for (let r = 0; r < grid.length; r++) {
+        gridHtml += '<div class="acell head">' + (r + 1) + '</div>';
+        for (let c = 0; c < numCols; c++) {
+          const cell = grid[r][c] || { t: 'e' };
+          if (cell.t === 'e') {
+            gridHtml += '<div class="acell aisle"></div>';
+          } else if (cell.t === 'r') {
+            gridHtml += '<div class="acell res">保留</div>';
+          } else {
+            const code = cell.c;
+            const stu = seatMap[code];
+            let cls = 'acell seat ';
+            let inner = '';
+            if (!stu) {
+              cls += 'empty';
+              inner = '<span class="scode">' + escHtml(code) + '</span><span>空位</span>';
+            } else {
+              cls += stu.status ? ('st-' + stu.status) : 'unmarked';
+              const dot = (stu.adminNote || stu.sessionNote) ? '<span class="snote-dot">●</span>' : '';
+              const stTag = stu.status
+                ? ('<span class="sstat">' + escHtml(stu.status) + '</span>')
+                : '<span class="sstat" style="opacity:0.5;">未點</span>';
+              inner = '<span class="scode">' + escHtml(code) + dot + '</span><span class="sname">' + escHtml(stu.name) + '</span>' + stTag;
+            }
+            gridHtml += '<div class="' + cls + '" onclick="openSeatActionModal(\'' + escHtml(code) + '\')">' + inner + '</div>';
+          }
+        }
+      }
+      gridHtml += '</div></div>';
+
       document.getElementById('admClassroomWrap').innerHTML =
-        '<div class="adm-wb">白  板（校內 ' + currentSeatGroup + ' 班｜' + currentSession + '）</div>' +
-        '<div class="adm-zones">' +
-          buildAdminZoneHtml(LEFT_GRID, 9, true, false) +
-          buildAdminZoneHtml(MID_GRID, 12, false, false) +
-          buildAdminZoneHtml(RIGHT_GRID, 9, false, true) +
-        '</div>' +
+        '<div class="adm-wb">白  板（校內 ' + currentSeatGroup + ' 班｜' + escHtml(currentSession) + '）</div>' +
+        gridHtml +
         '<div class="adm-doors"><span>教室門口</span><span>教室門口</span></div>';
     }
 
@@ -1298,8 +1431,8 @@
       if (!stu) {
         const unseated = (seatDashData.students || []).filter(s => !s.seat);
         const optionsHtml = unseated.map(s => {
-          const rankTxt = s.rank ? ('｜第' + s.rank + '順位') : '';
-          return '<option value="' + s.rowIndex + '">' + s.name + '（' + s.mainId + rankTxt + '）</option>';
+          const rankTxt = s.rank ? ('｜當日第' + s.rank + '順位 (總#' + s.overallRank + ')') : '';
+          return '<option value="' + s.rowIndex + '">' + escHtml(s.name) + '（' + escHtml(s.mainId) + rankTxt + '）</option>';
         }).join('');
 
         bodyEl.innerHTML =
@@ -1310,33 +1443,34 @@
             '<div class="sec-label">直接指派尚未劃位的同學至此座位（依順位排列）：</div>' +
             '<div class="inline-act">' +
               '<select id="assignUnseatedSelect">' + optionsHtml + '</select>' +
-              '<button type="button" onclick="execAssignToEmptySeat(\'' + seatCode + '\')">安排入座</button>' +
+              '<button type="button" onclick="execAssignToEmptySeat(\'' + escHtml(seatCode) + '\')">安排入座</button>' +
             '</div>'
           ) : '<div style="font-size:13px;color:#64748b;text-align:center;">本班同學皆已劃位完畢</div>');
       } else {
         const seatMap = seatDashData.seatMap || {};
-        const seatOptions = ALL_SEAT_CODES.filter(c => c !== seatCode).map(c => {
+        const validList = sortSeatCodesNatural(seatDashData.validSeatsList || []);
+        const seatOptions = validList.filter(c => c !== seatCode).map(c => {
           const occupant = seatMap[c];
           const label = occupant ? (c + '（目前：' + occupant.name + '，將對調）') : (c + '（空位）');
-          return '<option value="' + c + '">' + label + '</option>';
+          return '<option value="' + escHtml(c) + '">' + escHtml(label) + '</option>';
         }).join('');
 
-        const noteVal = (stu.sessionNote || stu.adminNote || '').replace(/"/g, '&quot;');
-        const rankInfo = stu.rank
-          ? ('<div style="font-size:12px;color:#64748b;margin-top:2px;">劃位順位：第 ' + stu.rank + ' 順位（第 ' + stu.batchNum + ' 梯｜' + stu.unlockTimeStr + '）</div>')
+        const noteVal = escHtml(stu.sessionNote || stu.adminNote || '');
+        const rankInfo = stu.overallRank
+          ? ('<div style="font-size:12px;color:#64748b;margin-top:2px;">原始報名總序號：#' + stu.overallRank + '</div>')
           : '';
 
         bodyEl.innerHTML =
           '<div class="verify-card">' +
             '<img class="verify-photo" referrerpolicy="no-referrer" src="' + getAvatarUrl(stu.avatar) + '">' +
             '<div>' +
-              '<div style="font-size:19px;font-weight:900;">' + stu.name + '</div>' +
-              '<div style="font-size:13.5px;font-weight:700;color:#0369a1;margin:2px 0;">' + stu.mainId + '</div>' +
-              '<div style="font-size:12.5px;color:#475569;">班級：' + (stu.className || '--') + '</div>' +
+              '<div style="font-size:19px;font-weight:900;">' + escHtml(stu.name) + '</div>' +
+              '<div style="font-size:13.5px;font-weight:700;color:#0369a1;margin:2px 0;">' + escHtml(stu.mainId) + '</div>' +
+              '<div style="font-size:12.5px;color:#475569;">班級：' + escHtml(stu.className || '--') + '</div>' +
               rankInfo +
               '<div style="font-size:13px;margin-top:4px;font-weight:900;">' +
-                currentSession + '目前狀態：' +
-                (stu.status ? ('<span class="st-tag st-' + stu.status + '">' + stu.status + '</span>') : '<span style="color:#64748b;">尚未登記</span>') +
+                escHtml(currentSession) + '目前狀態：' +
+                (stu.status ? ('<span class="st-tag st-' + escHtml(stu.status) + '">' + escHtml(stu.status) + '</span>') : '<span style="color:#64748b;">尚未登記</span>') +
               '</div>' +
             '</div>' +
           '</div>' +
@@ -1376,7 +1510,6 @@
       document.getElementById('seatActionModal').style.display = 'flex';
     }
 
-    // 一鍵結算未到名單預覽彈窗
     function openBatchAbsentModal() {
       if (!seatDashData) return;
       const unmarked = (seatDashData.students || []).filter(s => !s.status);
@@ -1385,22 +1518,22 @@
 
       if (unmarked.length === 0) {
         bodyEl.innerHTML =
-          '<div class="ok-banner" style="margin:12px 0;">太棒了！校內' + currentSeatGroup + '班「' + currentSession + '」全班皆已完成狀態登記，沒有未登記的同學！</div>';
+          '<div class="ok-banner" style="margin:12px 0;">太棒了！校內' + currentSeatGroup + '班「' + escHtml(currentSession) + '」全班皆已完成狀態登記，沒有未登記的同學！</div>';
         document.getElementById('seatActionModal').style.display = 'flex';
         return;
       }
 
       const listHtml = unmarked.map(s =>
         '<div style="padding:6px 8px;border-bottom:1px solid #e2e8f0;display:flex;justify-content:space-between;font-size:13.5px;">' +
-          '<span><b>' + s.name + '</b>（' + s.mainId + '）</span>' +
-          '<span class="badge-seat">' + (s.seat || '未劃位') + '</span>' +
+          '<span><b>' + escHtml(s.name) + '</b>（' + escHtml(s.mainId) + '）</span>' +
+          '<span class="badge-seat">' + escHtml(s.seat || '未劃位') + '</span>' +
         '</div>'
       ).join('');
 
       const rowIds = unmarked.map(s => s.rowIndex).join(',');
 
       bodyEl.innerHTML =
-        '<div class="warn-banner">以下共 <b>' + unmarked.length + '</b> 位同學在今日「' + currentSession + '」尚未點名、也未請假，確認後將批次登記為【未到】：</div>' +
+        '<div class="warn-banner">以下共 <b>' + unmarked.length + '</b> 位同學在今日「' + escHtml(currentSession) + '」尚未點名、也未請假，確認後將批次登記為【未到】：</div>' +
         '<div style="max-height:240px;overflow-y:auto;border:1px solid #cbd5e1;border-radius:10px;margin-bottom:14px;">' + listHtml + '</div>' +
         '<button type="button" style="background:#dc2626;" onclick="execBatchMarkAbsent(this,\'' + rowIds + '\')">確定將這 ' + unmarked.length + ' 位登記為【未到】</button>';
 
@@ -1485,7 +1618,10 @@
       } catch (err) { alert(err.message); }
     }
 
+    // ==========================================
     // === 分頁 4：全勤統計與點名紀錄查詢 ===
+    // ==========================================
+
     function switchSearchSub(sub) {
       searchSubTab = sub;
       document.getElementById('subTabStats').className = 'sub-tab' + (sub === 'stats' ? ' active' : '');
@@ -1518,7 +1654,7 @@
           keyword: kw
         });
         if (!res || !res.ok) {
-          wrap.innerHTML = '<div class="err-banner">' + ((res && res.message) || '查詢失敗') + '</div>';
+          wrap.innerHTML = '<div class="err-banner">' + escHtml((res && res.message) || '查詢失敗') + '</div>';
           return;
         }
         document.getElementById('statsBanner').innerHTML =
@@ -1539,7 +1675,7 @@
                 : '<span class="notfull-badge">未全勤</span>');
           return '<div class="rec-item">' +
             '<div class="rec-top">' +
-              '<span>' + s.name + ' <small style="color:#64748b;">(' + s.mainId + '｜校內' + s.seatGroup + '班 ' + (s.seat || '未劃位') + ')</small></span>' +
+              '<span>' + escHtml(s.name) + ' <small style="color:#64748b;">(' + escHtml(s.mainId) + '｜校內' + escHtml(s.seatGroup) + '班 ' + escHtml(s.seat || '未劃位') + ')</small></span>' +
               badge +
             '</div>' +
             '<div class="mini-counts">' +
@@ -1550,11 +1686,11 @@
               '<span style="color:#dc2626;">未到 ' + c['未到'] + '</span>' +
               '<span style="color:#475569;">（共 ' + s.totalSessions + ' 堂）</span>' +
             '</div>' +
-            (s.adminNote ? ('<div style="color:#64748b;font-size:12px;margin-top:4px;">備註：' + s.adminNote + '</div>') : '') +
+            (s.adminNote ? ('<div style="color:#64748b;font-size:12px;margin-top:4px;">備註：' + escHtml(s.adminNote) + '</div>') : '') +
           '</div>';
         }).join('');
       } catch (err) {
-        wrap.innerHTML = '<div class="err-banner">' + err.message + '</div>';
+        wrap.innerHTML = '<div class="err-banner">' + escHtml(err.message) + '</div>';
       }
     }
 
@@ -1578,7 +1714,7 @@
           keyword: kwVal
         });
         if (!res || !res.ok) {
-          wrap.innerHTML = '<div class="err-banner">' + ((res && res.message) || '搜尋失敗') + '</div>';
+          wrap.innerHTML = '<div class="err-banner">' + escHtml((res && res.message) || '搜尋失敗') + '</div>';
           return;
         }
         searchDataCache = res;
@@ -1586,7 +1722,7 @@
         document.getElementById('subTabAbs').textContent = '當日未登記 (' + res.unmarkedList.length + ')';
         renderLogSubResults();
       } catch (err) {
-        wrap.innerHTML = '<div class="err-banner">' + err.message + '</div>';
+        wrap.innerHTML = '<div class="err-banner">' + escHtml(err.message) + '</div>';
       }
     }
 
@@ -1601,14 +1737,14 @@
         wrap.innerHTML = list.map(r =>
           '<div class="rec-item">' +
             '<div class="rec-top">' +
-              '<span>' + r.name + ' <small style="color:#64748b;">(' + r.studentId + ')</small></span>' +
+              '<span>' + escHtml(r.name) + ' <small style="color:#64748b;">(' + escHtml(r.studentId) + ')</small></span>' +
               '<div>' +
-                '<span class="badge-seat" style="margin-right:4px;">' + (r.seatGroup ? ('校內' + r.seatGroup + '班 ') : '') + (r.seat || '未劃位') + '</span>' +
-                '<span class="st-tag st-' + r.status + '">' + r.status + '</span>' +
+                '<span class="badge-seat" style="margin-right:4px;">' + (r.seatGroup ? ('校內' + escHtml(r.seatGroup) + '班 ') : '') + escHtml(r.seat || '未劃位') + '</span>' +
+                '<span class="st-tag st-' + escHtml(r.status) + '">' + escHtml(r.status) + '</span>' +
               '</div>' +
             '</div>' +
-            '<div style="color:#475569;font-size:12.5px;">場次：<b>' + r.session + '</b> ｜ 時間：' + r.time + ' ｜ ' + (r.method || r.scanType) + '</div>' +
-            (r.note ? ('<div style="color:#dc2626;font-size:12.5px;font-weight:700;margin-top:3px;">備註：' + r.note + '</div>') : '') +
+            '<div style="color:#475569;font-size:12.5px;">場次：<b>' + escHtml(r.session) + '</b> ｜ 時間：' + escHtml(r.time) + ' ｜ ' + escHtml(r.method || r.scanType) + '</div>' +
+            (r.note ? ('<div style="color:#dc2626;font-size:12.5px;font-weight:700;margin-top:3px;">備註：' + escHtml(r.note) + '</div>') : '') +
           '</div>'
         ).join('');
       } else {
@@ -1624,8 +1760,8 @@
         wrap.innerHTML = list.map(s =>
           '<div class="rec-item" style="display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:wrap;">' +
             '<div>' +
-              '<div style="font-weight:800;">' + s.name + ' <span class="badge-seat">校內' + s.seatGroup + '班 ' + (s.seat || '未劃位') + '</span></div>' +
-              '<div style="font-size:12px;color:#64748b;margin-top:2px;">' + s.mainId + ' ｜ ' + s.className + '</div>' +
+              '<div style="font-weight:800;">' + escHtml(s.name) + ' <span class="badge-seat">校內' + escHtml(s.seatGroup) + '班 ' + escHtml(s.seat || '未劃位') + '</span></div>' +
+              '<div style="font-size:12px;color:#64748b;margin-top:2px;">' + escHtml(s.mainId) + ' ｜ ' + escHtml(s.className) + '</div>' +
             '</div>' +
             '<div style="display:flex;gap:4px;">' +
               '<button class="btn-sm" style="background:#16a34a;padding:6px 9px;" onclick="quickSetFromSearch(' + s.rowIndex + ',\'出席\')">出席</button>' +
@@ -1653,6 +1789,318 @@
         playBeep();
         runRecordSearch();
       } catch (err) { alert(err.message); }
+    }
+
+    // ==========================================
+    // === 分頁 5：班級公告排程管理 ===
+    // ==========================================
+
+    function ymdSlashToDash(ymd) {
+      return String(ymd || '').trim().replace(/\//g, '-');
+    }
+
+    async function loadAnnouncementsList() {
+      const wrap = document.getElementById('annListWrap');
+      wrap.innerHTML = '<div style="text-align:center;padding:20px;color:#475569;font-weight:700;">載入班級公告中...</div>';
+      try {
+        const res = await callGasJsonp({ action: 'adminGetAnnouncements', pass: savedPass });
+        if (!res || !res.ok) {
+          wrap.innerHTML = '<div class="err-banner">' + escHtml((res && res.message) || '載入失敗') + '</div>';
+          return;
+        }
+        announcementsCache = res.list || [];
+        renderAnnouncementsList();
+      } catch (err) {
+        wrap.innerHTML = '<div class="err-banner">' + escHtml(err.message) + '</div>';
+      }
+    }
+
+    function renderAnnouncementsList() {
+      const wrap = document.getElementById('annListWrap');
+      if (announcementsCache.length === 0) {
+        wrap.innerHTML = '<div style="text-align:center;padding:24px;color:#64748b;">目前尚未建立任何班級公告</div>';
+        return;
+      }
+
+      const stateLabelMap = {
+        active: '● 上架顯示中',
+        upcoming: '⏳ 排程等待中',
+        expired: '已過期下架',
+        disabled: '已手動停用'
+      };
+
+      wrap.innerHTML = announcementsCache.map(item => {
+        const rangeTxt = (item.startDate || '即日起') + ' ～ ' + (item.endDate || '無期限');
+        const stLabel = stateLabelMap[item.runtimeState] || item.runtimeState;
+        return '<div class="rec-item">' +
+          '<div class="rec-top">' +
+            '<span>' + escHtml(item.title || '（無標題公告）') + '</span>' +
+            '<span class="ann-state ' + escHtml(item.runtimeState) + '">' + escHtml(stLabel) + '</span>' +
+          '</div>' +
+          '<div style="font-size:12px;color:#0369a1;font-weight:700;margin-bottom:5px;">' +
+            '對象：' + escHtml(item.targetGroup) + ' ｜ 區間：' + escHtml(rangeTxt) +
+          '</div>' +
+          '<div style="font-size:13px;color:#334155;white-space:pre-line;background:#fff;padding:8px;border-radius:8px;border:1px solid #e2e8f0;">' +
+            escHtml(item.content) +
+          '</div>' +
+          '<div class="item-actions">' +
+            '<button type="button" class="btn-mini-edit" onclick="editAnnouncement(\'' + escHtml(item.id) + '\')">修改內容 / 時間</button>' +
+            '<button type="button" class="btn-mini-del" onclick="deleteAnnouncement(\'' + escHtml(item.id) + '\')">刪除</button>' +
+          '</div>' +
+        '</div>';
+      }).join('');
+    }
+
+    function editAnnouncement(id) {
+      const item = announcementsCache.find(a => a.id === id);
+      if (!item) return;
+      document.getElementById('annEditId').value = item.id;
+      document.getElementById('annFormHeading').textContent = '編輯班級公告：' + (item.title || item.id);
+      document.getElementById('annTitleInput').value = item.title || '';
+      document.getElementById('annContentInput').value = item.content || '';
+      document.getElementById('annTargetSelect').value = item.targetGroup || '全體';
+      document.getElementById('annEnabledSelect').value = item.enabled ? '1' : '0';
+      document.getElementById('annStartInput').value = ymdSlashToDash(item.startDate);
+      document.getElementById('annEndInput').value = ymdSlashToDash(item.endDate);
+      document.getElementById('btnCancelAnnEdit').style.display = 'inline-block';
+      document.getElementById('announceModeSection').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function resetAnnForm() {
+      document.getElementById('annEditId').value = '';
+      document.getElementById('annFormHeading').textContent = '新增 / 排程班級公告（學生登入自動跳出）';
+      document.getElementById('annTitleInput').value = '';
+      document.getElementById('annContentInput').value = '';
+      document.getElementById('annTargetSelect').value = '全體';
+      document.getElementById('annEnabledSelect').value = '1';
+      document.getElementById('annStartInput').value = '';
+      document.getElementById('annEndInput').value = '';
+      document.getElementById('btnCancelAnnEdit').style.display = 'none';
+    }
+
+    async function saveAnnouncement() {
+      const id = document.getElementById('annEditId').value;
+      const title = document.getElementById('annTitleInput').value.trim();
+      const content = document.getElementById('annContentInput').value.trim();
+      const targetGroup = document.getElementById('annTargetSelect').value;
+      const enabled = document.getElementById('annEnabledSelect').value;
+      const startDate = document.getElementById('annStartInput').value;
+      const endDate = document.getElementById('annEndInput').value;
+
+      if (!title && !content) {
+        alert('請輸入公告標題或公告內容');
+        return;
+      }
+
+      const btn = document.getElementById('btnSaveAnn');
+      btn.disabled = true;
+      btn.textContent = '儲存公告中...';
+
+      try {
+        const res = await callGasJsonp({
+          action: 'adminSaveAnnouncement',
+          pass: savedPass,
+          id: id,
+          title: title,
+          content: content,
+          targetGroup: targetGroup,
+          startDate: startDate,
+          endDate: endDate,
+          enabled: enabled
+        });
+        if (!res || !res.ok) {
+          alert((res && res.message) || '儲存失敗');
+          return;
+        }
+        playBeep();
+        alert(res.message);
+        resetAnnForm();
+        announcementsCache = res.list || [];
+        renderAnnouncementsList();
+      } catch (err) {
+        alert(err.message);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '儲存並發布公告';
+      }
+    }
+
+    async function deleteAnnouncement(id) {
+      if (!confirm('確定要刪除這則班級公告嗎？')) return;
+      try {
+        const res = await callGasJsonp({ action: 'adminDeleteAnnouncement', pass: savedPass, id: id });
+        if (!res || !res.ok) { alert((res && res.message) || '刪除失敗'); return; }
+        playBeep();
+        announcementsCache = res.list || [];
+        renderAnnouncementsList();
+      } catch (err) {
+        alert(err.message);
+      }
+    }
+
+    // ==========================================
+    // === 分頁 6：A/B 班獨立課表管理 ===
+    // ==========================================
+
+    function switchSchedGroup(grp) {
+      currentSchedGroup = (grp === 'B') ? 'B' : 'A';
+      document.getElementById('btnSchedGroupA').className = 'cls-btn' + (currentSchedGroup === 'A' ? ' active' : '');
+      document.getElementById('btnSchedGroupB').className = 'cls-btn' + (currentSchedGroup === 'B' ? ' active' : '');
+      resetSchedForm();
+      loadScheduleList();
+    }
+
+    function setSchedNoteTag(tag) {
+      const inp = document.getElementById('schedNoteInput');
+      if (tag === '正常上課') {
+        inp.value = '正常上課';
+        return;
+      }
+      const cur = inp.value.trim();
+      if (!cur || cur === '正常上課') {
+        inp.value = tag;
+      } else if (!cur.includes(tag)) {
+        inp.value = cur + '｜' + tag;
+      }
+    }
+
+    async function loadScheduleList() {
+      const wrap = document.getElementById('schedListWrap');
+      const scope = document.getElementById('schedScopeSelect').value;
+      wrap.innerHTML = '<div style="text-align:center;padding:20px;color:#475569;font-weight:700;">載入校內 ' + currentSchedGroup + ' 班課表中...</div>';
+
+      try {
+        const res = await callGasJsonp({
+          action: 'adminGetSchedules',
+          pass: savedPass,
+          group: currentSchedGroup,
+          scope: scope
+        });
+        if (!res || !res.ok) {
+          wrap.innerHTML = '<div class="err-banner">' + escHtml((res && res.message) || '載入失敗') + '</div>';
+          return;
+        }
+        scheduleListCache = res.list || [];
+        if (res.todaySchedule) {
+          todayScheduleCache = res.todaySchedule;
+          renderTodayScheduleBar();
+        }
+        renderScheduleList();
+      } catch (err) {
+        wrap.innerHTML = '<div class="err-banner">' + escHtml(err.message) + '</div>';
+      }
+    }
+
+    function renderScheduleList() {
+      const wrap = document.getElementById('schedListWrap');
+      if (scheduleListCache.length === 0) {
+        wrap.innerHTML = '<div style="text-align:center;padding:24px;color:#64748b;">校內 ' + currentSchedGroup + ' 班目前尚無符合條件的課表資料</div>';
+        return;
+      }
+
+      wrap.innerHTML = scheduleListCache.map(item => {
+        const noteBadge = item.note
+          ? ('<span class="st-tag ' + (item.isChanged ? 'st-遲到' : 'st-出席') + '">' + escHtml(item.note) + '</span>')
+          : '<span class="notfull-badge">正常上課</span>';
+        return '<div class="rec-item">' +
+          '<div class="rec-top">' +
+            '<span>' + escHtml(item.date) + ' (' + escHtml(item.weekday) + ') ｜ <span style="color:#0369a1;">' + escHtml(item.session) + '</span></span>' +
+            noteBadge +
+          '</div>' +
+          '<div style="font-size:14.5px;font-weight:900;color:#0f172a;margin:4px 0;">' + escHtml(item.subject) + '</div>' +
+          '<div class="item-actions">' +
+            '<button type="button" class="btn-mini-edit" onclick="editScheduleItem(' + item.rowIndex + ')">調課 / 修改</button>' +
+            '<button type="button" class="btn-mini-del" onclick="deleteScheduleItem(' + item.rowIndex + ')">刪除</button>' +
+          '</div>' +
+        '</div>';
+      }).join('');
+    }
+
+    function editScheduleItem(rowIndex) {
+      const item = scheduleListCache.find(x => x.rowIndex === rowIndex);
+      if (!item) return;
+      document.getElementById('schedEditRow').value = item.rowIndex;
+      document.getElementById('schedFormHeading').textContent = '修改【校內 ' + currentSchedGroup + ' 班】課程（第 ' + item.rowIndex + ' 列）';
+      document.getElementById('schedDateInput').value = ymdSlashToDash(item.date);
+      document.getElementById('schedSessionSelect').value = item.session || '12:30場';
+      document.getElementById('schedSubjectInput').value = item.subject || '';
+      document.getElementById('schedNoteInput').value = item.note || '';
+      document.getElementById('btnCancelSchedEdit').style.display = 'inline-block';
+      document.getElementById('scheduleModeSection').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function resetSchedForm() {
+      document.getElementById('schedEditRow').value = '';
+      document.getElementById('schedFormHeading').textContent = '新增 / 修改【校內 ' + currentSchedGroup + ' 班】課程';
+      document.getElementById('schedSubjectInput').value = '';
+      document.getElementById('schedNoteInput').value = '';
+      document.getElementById('btnCancelSchedEdit').style.display = 'none';
+    }
+
+    async function saveScheduleItem() {
+      const rowIndex = document.getElementById('schedEditRow').value;
+      const dateVal = document.getElementById('schedDateInput').value;
+      const sessionVal = document.getElementById('schedSessionSelect').value;
+      const subjectVal = document.getElementById('schedSubjectInput').value.trim();
+      const noteVal = document.getElementById('schedNoteInput').value.trim();
+
+      if (!dateVal) { alert('請選擇上課日期'); return; }
+      if (!subjectVal) { alert('請輸入課程科目'); return; }
+
+      const btn = document.getElementById('btnSaveSched');
+      btn.disabled = true;
+      btn.textContent = '儲存課表中...';
+
+      try {
+        const res = await callGasJsonp({
+          action: 'adminSaveScheduleItem',
+          pass: savedPass,
+          group: currentSchedGroup,
+          rowIndex: rowIndex,
+          date: dateVal,
+          session: sessionVal,
+          subject: subjectVal,
+          note: noteVal
+        });
+        if (!res || !res.ok) {
+          alert((res && res.message) || '儲存失敗');
+          return;
+        }
+        playBeep();
+        alert(res.message);
+        resetSchedForm();
+        if (res.todaySchedule) {
+          todayScheduleCache = res.todaySchedule;
+          renderTodayScheduleBar();
+        }
+        loadScheduleList();
+      } catch (err) {
+        alert(err.message);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '儲存至課表';
+      }
+    }
+
+    async function deleteScheduleItem(rowIndex) {
+      if (!confirm('確定要從【校內 ' + currentSchedGroup + ' 班課表】刪除這堂課嗎？')) return;
+      try {
+        const res = await callGasJsonp({
+          action: 'adminDeleteScheduleItem',
+          pass: savedPass,
+          group: currentSchedGroup,
+          rowIndex: rowIndex
+        });
+        if (!res || !res.ok) { alert((res && res.message) || '刪除失敗'); return; }
+        playBeep();
+        if (res.todaySchedule) {
+          todayScheduleCache = res.todaySchedule;
+          renderTodayScheduleBar();
+        }
+        loadScheduleList();
+      } catch (err) {
+        alert(err.message);
+      }
     }
 
     window.onload = function() {
